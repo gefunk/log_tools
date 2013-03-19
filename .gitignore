@@ -7,3 +7,6 @@ test.php
 upload
 upload/*
 *.DS_Store
+assets/.DS_Store
+
+.DS_Store
