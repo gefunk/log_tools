@@ -8,7 +8,7 @@ class Customer extends CI_Controller {
 		$this->load->library('awslib');
 		$this->load->model('attachments/datastore');
 		$this->load->helper('form');
-		$this->load->model('admin/customermodel');
+		$this->load->model('customermodel');
 	}
 
 	public function index()
