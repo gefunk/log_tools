@@ -30,5 +30,9 @@ class Export extends CI_Controller {
 		}
 			
 	}
+	
+	public function another_function(){
+		echo "Hello";
+	}
 }
 
