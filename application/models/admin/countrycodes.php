@@ -8,11 +8,14 @@ class Countrycodes extends CI_Model
         parent::__construct();
     }
 
-	function get_country_codes()
+	function get_country_codes($array = FALSE)
 	{
 		$this->db->select('name, code')->from('country_codes'); 
 		$query = $this->db->get();
-	    return $query->result();
+		if($array)
+			return $query->result_array();
+		else
+	    	return $query->result();
 	}
 	
 }
