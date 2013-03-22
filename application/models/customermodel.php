@@ -21,5 +21,13 @@ class CustomerModel extends CI_Model
 	    return $query->result();
 	}
 	
+	function get_customer_default_currency($customer_id)
+	{
+		$this->db->select('default_currency')->from('customers')->where("id", $customer_id);
+		$query = $this->db->get();
+		$row = $query->row();
+		return $row->default_currency;
+	}
+	
 }
 /** end model **/

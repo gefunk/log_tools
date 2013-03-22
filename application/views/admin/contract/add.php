@@ -37,7 +37,7 @@
 			<span class="help-block">End date on the contract</span>
 			
 			
-		    <button type="submit" class="btn">Submit</button>
+		    <button type="submit" class="btn btn-primary">Submit</button>
 		  </fieldset>
 		</form>
 	</div>
