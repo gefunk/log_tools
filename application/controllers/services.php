@@ -40,13 +40,16 @@ class Services extends CI_Controller {
 	*/
 	public function list_of_cities()
 	{
-
+		//$this->output->enable_profiler(TRUE);
 		$query = $this->input->get('query');
 		$page = $this->input->get('page');
 		$page_size = $this->input->get('page_size');
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($this->referencemodel->search_cities($query, $page, $page_size, TRUE)));	
+		
+		
 	}
+	
 
 }

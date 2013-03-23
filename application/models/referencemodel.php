@@ -40,11 +40,10 @@ class ReferenceModel extends CI_Model
 	
 	function search_cities($search_term, $page=NULL, $page_size=NULL, $array=FALSE)
 	{
-		$this->db->select("rc.id, rc.city as city_name, usc.name as state, cc.name as country_name, cc.code as country_code");
-		$this->db->from('ref_cities rc');
-		$this->db->join('country_codes cc', 'rc.country_code = cc.code', 'left');
-		$this->db->join('ref_us_can_region_codes usc', 'rc.state_region = usc.iso_region', 'left');
-		$this->db->like('rc.city', $search_term);
+		$this->db->select("id, city_name, state, country_name, country_code");
+		$this->db->from('ref_cities_search');
+		$this->db->where("MATCH(search_term) AGAINST ('".$this->clean_search_term($search_term)."')");
+		
 		if(isset($page) && isset($page_size)){
 			if($page == 1){
 				// get the initial page
@@ -59,8 +58,8 @@ class ReferenceModel extends CI_Model
 		$data['results'] = $query->result_array();
 		
 		$this->db->select("count(*) as total");
-		$this->db->from('ref_cities rc');
-		$this->db->like('rc.city', $search_term);
+		$this->db->from('ref_cities_search');
+		$this->db->where("MATCH(search_term) AGAINST ('".$this->clean_search_term($search_term)."')");
 		$query = $this->db->get();
 		$data['total'] = $query->row()->total;
 		
@@ -69,6 +68,19 @@ class ReferenceModel extends CI_Model
 		
 	}
 	
+	/*
+	* utility function to replace white space with %
+	* and strips all commas out
+	*/
+	function clean_search_term($search_term){
+		// strip leading and ending whitespace and remove commas
+		$string = str_replace(",", "", trim($search_term));
+		//Clean multiple dashes or whitespaces
+	    //$string = preg_replace("/[\s]+/", " ", $string);
+	    //Convert whitespaces and underscore to %
+	    //$string = preg_replace("/[\s]/", "%", $string);
+	    return $string;
+	}
 	
 	
 }

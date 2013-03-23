@@ -44,7 +44,7 @@ class ChargeRulesModel extends CI_Model
 		$this->db->select("c.name as name, c.value as value, t.type as application_type, m.description as currency");
 		$this->db->from("charge_rules c");
 		$this->db->join('ref_charge_application_type t', 'c.application_type = t.id');
-		$this->db->join('currency_codes m', 'c.currency = m.id');
+		$this->db->join('ref_currency_codes m', 'c.currency = m.id');
 		$this->db->where('c.contract', $contract_id);
 		$query = $this->db->get();
 		return $query->result();
