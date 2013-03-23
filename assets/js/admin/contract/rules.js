@@ -128,7 +128,7 @@ function create_cities_list (multiple_rule) {
 		ajax: {
 		url: site_url+"/services/list_of_cities",
 		dataType: 'json',
-		quietMillis: 100,
+		quietMillis: 300,
 		data: function (term, page) { // page is the one-based page number tracked by Select2
 			return {
 				query: term, //search term
