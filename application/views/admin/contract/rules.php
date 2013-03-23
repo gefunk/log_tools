@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/select2.css" type="text/css" media="screen" title="no title" charset="utf-8">
 <div class="row-fluid">
 	<div class="span10">
 		<div id="contract-information">
@@ -5,8 +6,8 @@
 				<small>Customer:</small> <?php echo $customer; ?>
 				<small>Carrier:</small> <?php echo $carrier; ?></h2>
 		</div>
-		<?php echo validation_errors(); ?>
-		<?php echo form_open('admin/contract/addrules/'.$contract_number); ?>
+
+		<form>
 			<fieldset>
 			    <legend>Add Rules for Contract</legend>
 			

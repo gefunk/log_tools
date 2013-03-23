@@ -1,0 +1,15 @@
+li.result-city-flag {
+	display: inline;
+}
+
+li.result-city {
+	display: inline;
+}
+
+span.result-city-name {
+	margin-right: 3px;
+}
+
+span.result-city-state {
+	margin-right: 3px;
+}

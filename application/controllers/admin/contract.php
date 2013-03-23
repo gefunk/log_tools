@@ -69,7 +69,8 @@ class Contract extends CI_Controller {
 			if(isset($result)){
 				
 				$header_data['title'] = "Add Rules to Contract";
-				$footer_data['scripts'] = array('admin/contract/rules.js');
+				$header_data['page_css'] = array('admin/contract/rule.css');
+				$footer_data['scripts'] = array('select2.js','admin/contract/rules.js');
 				// set page data
 				$data['carrier'] = $result->carrier;
 				$data['contract_number'] = $result->contract_number;
