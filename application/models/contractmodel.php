@@ -34,9 +34,9 @@ class ContractModel extends CI_Model
 	*/
 	function get_contract_from_number($contract_number)
 	{
-		$this->db->select("customers.name as customer, customers.id as customer_id, contracts.id as contract_id, carriers.name as carrier, contracts.number as contract_number");
+		$this->db->select("customers.name as customer, customers.id as customer_id, contracts.id as contract_id, ref_carriers.name as carrier, ref_carriers.id as carrier_id, contracts.number as contract_number");
 		$this->db->from("contracts");
-		$this->db->join('carriers', 'contracts.carrier = carriers.id');
+		$this->db->join('ref_carriers', 'contracts.carrier = ref_carriers.id');
 		$this->db->join('customers', 'contracts.customer = customers.id');
 		$this->db->where("contracts.number", $contract_number);
 		$query = $this->db->get();

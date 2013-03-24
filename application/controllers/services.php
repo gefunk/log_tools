@@ -20,11 +20,11 @@ class Services extends CI_Controller {
 		    ->set_output(json_encode($countries));
 	}
 	
-	public function list_of_container_types()
+	public function list_of_container_types($carrier_id)
 	{
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->referencemodel->get_container_types(TRUE)));
+		    ->set_output(json_encode($this->referencemodel->get_container_types($carrier_id, TRUE)));
 	}
 	
 	public function list_of_currency_codes()
@@ -47,6 +47,23 @@ class Services extends CI_Controller {
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($this->referencemodel->search_cities($query, $page, $page_size, TRUE)));	
+		
+		
+	}
+	
+	/**
+	* pages through list of
+	*
+	*/
+	public function list_of_ports()
+	{
+		//$this->output->enable_profiler(TRUE);
+		$query = $this->input->get('query');
+		$page = $this->input->get('page');
+		$page_size = $this->input->get('page_size');
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($this->referencemodel->search_ports($query, $page, $page_size, TRUE)));	
 		
 		
 	}

@@ -41,15 +41,30 @@ class ChargeRulesModel extends CI_Model
 	*/
 	function get_charge_rules_for_contract($contract_id)
 	{
-		$this->db->select("c.name as name, c.value as value, t.type as application_type, m.description as currency");
+		$this->db->select("c.id as id, c.name as name, c.value as value, t.type as application_type, m.description as currency, rca.name as rule_type, rca.description as rule_description, rds.table as data_source");
 		$this->db->from("charge_rules c");
 		$this->db->join('ref_charge_application_type t', 'c.application_type = t.id');
 		$this->db->join('ref_currency_codes m', 'c.currency = m.id');
+		$this->db->join('charge_rule_application cra',  'cra.charge_rule = c.id');
+		$this->db->join('ref_charge_application_rules rca', 'cra.charge_application_rule = rca.id');
+		$this->db->join('ref_data_sources rds', 'rca.ref_data_source = rds.id');
 		$this->db->where('c.contract', $contract_id);
+		$this->db->group_by('id');
+		
 		$query = $this->db->get();
 		return $query->result();
 	}
 	
+	function get_charge_options_for_rule($charge_rule, $data_source_table)
+	{
+		$this->db->select("cc.name");
+		$this->db->from("charge_rule_application cra");
+		$this->db->join("charge_rules cr", "cra.charge_rule = cr.id");
+		$this->db->join($data_source_table." cc", "cra.value = cc.id");
+		$this->db->where("cr.id", $charge_rule);
+		$query = $this->db->get();
+		return $query->result();
+	}
 	/**
 	* get all charge application rules
 	* @return charge application rules: id, description, name 
@@ -123,6 +138,7 @@ class ChargeRulesModel extends CI_Model
 			// insert all the charge rule cases
 			$this->db->insert_batch('charge_rule_application', $data);
 		}
+		
 
 	}
 	
