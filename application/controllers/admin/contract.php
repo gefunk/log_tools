@@ -73,6 +73,7 @@ class Contract extends CI_Controller {
 				$footer_data['scripts'] = array('select2.js','admin/contract/rules.js');
 				// set page data
 				$data['carrier'] = $result->carrier;
+				$data['carrier_id'] = $result->carrier_id;
 				$data['contract_number'] = $result->contract_number;
 				$data['customer'] = $result->customer;
 				$data['application_rules'] = $this->chargerulesmodel->get_charge_application_rules();
@@ -129,9 +130,27 @@ class Contract extends CI_Controller {
 	}
 	
 	
-	public function getrules($contract_id)
+	public function getrules($contract_id=NULL)
 	{
-		
+		//$this->output->enable_profiler(TRUE);
+		if(!isset($contract_id))
+			$contract_id = $this->input->get('contract_id');
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($this->chargerulesmodel->get_charge_rules_for_contract($contract_id)));	
+		//echo json_encode($this->chargerulesmodel->get_charge_rules_for_contract($contract_id));
+	}
+	
+	public function getruleoptions($contract_id=NULL, $data_source=NULL)
+	{
+		if(!isset($contract_id) && (!isset($data_source))){
+			$contract_id = $this->input->get('contract_id');
+			$data_source = $this->input->get('data_source');			
+		}
+		//$this->output->enable_profiler(TRUE);
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($this->chargerulesmodel->get_charge_options_for_rule($contract_id, $data_source)));	
 	}
 
 }

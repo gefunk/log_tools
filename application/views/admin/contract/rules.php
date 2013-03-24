@@ -72,32 +72,27 @@
 			    <span class="help-block">Select when to apply this charge on this contract, When the port of destination is ... or the Port of Loading is ...</span>
 				
 
-				<button type="submit" class="btn btn-primary">Submit</button>
+				<button id="saverule" type="submit" class="btn btn-primary">Submit</button>
 			</fieldset>
 		</form><!-- end form  -->
-		<table class="table table-striped">
+		<table id="rules-list" class="table table-striped">
 			<caption>List of all the rules that have been entered for this contract</caption>
 			<thead>
 				<tr>
 					<th>Rule Name</th>
 					<th>Application type</th>
+					<th>Application Rule</th>
 					<th>Currency</th>
 					<th>Amount</th>
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach($charge_rules as $charge_rule): ?>
-				<tr>
-					<td><?php echo $charge_rule->name; ?></td>
-					<td><?php echo $charge_rule->application_type; ?></td>
-					<td><?php echo $charge_rule->currency; ?></td>
-					<td><?php echo $charge_rule->value; ?></td>
-				</tr>
-				<? endforeach; ?>
 			</tbody>
 		</table>
+	
 	</div>
 </div>
 <script type="text/javascript" charset="utf-8">
 	var contract_id = <?php echo $contract_id; ?>;
+	var carrier_id = <?php echo $carrier_id; ?>;
 </script>

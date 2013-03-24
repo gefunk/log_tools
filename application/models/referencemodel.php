@@ -10,7 +10,7 @@ class ReferenceModel extends CI_Model
 
 	function get_country_codes($array = FALSE)
 	{
-		$this->db->select('id, name, code')->from('country_codes'); 
+		$this->db->select('id, name, code')->from('ref_country_codes'); 
 		$query = $this->db->get();
 		if($array)
 			return $query->result_array();
@@ -28,9 +28,9 @@ class ReferenceModel extends CI_Model
 	    	return $query->result();
 	}
 	
-	function get_container_types($array = FALSE)
+	function get_container_types($carrier_id, $array = FALSE)
 	{
-		$this->db->select('id, container_type, carrier, description')->from('container_types'); 
+		$this->db->select('id, container_type, carrier, description')->from('ref_container_types')->where('carrier', $carrier_id); 
 		$query = $this->db->get();
 		if($array)
 			return $query->result_array();
@@ -67,6 +67,38 @@ class ReferenceModel extends CI_Model
 		
 		
 	}
+	
+	function search_ports($search_term, $page=NULL, $page_size=NULL, $array=FALSE)
+	{
+		$this->db->select("id, name, country_code, port_code, country_code, rail, road, airport, ocean, found");
+		$this->db->from('ref_ports');
+		$this->db->where("MATCH(search_term) AGAINST ('".$this->clean_search_term($search_term)."')");
+		$this->db->order_by("found", "desc");
+		
+		if(isset($page) && isset($page_size)){
+			if($page == 1){
+				// get the initial page
+				$this->db->limit($page_size);
+			}else{
+				// get the next page
+				$this->db->limit($page_size*$page, $page_size*($page-1));
+			}
+		}
+		
+		$query = $this->db->get();
+		$data['results'] = $query->result_array();
+		
+		$this->db->select("count(*) as total");
+		$this->db->from('ref_ports');
+		$this->db->where("MATCH(search_term) AGAINST ('".$this->clean_search_term($search_term)."')");
+		$query = $this->db->get();
+		$data['total'] = $query->row()->total;
+		
+		return $data;
+		
+		
+	}
+	
 	
 	/*
 	* utility function to replace white space with %
