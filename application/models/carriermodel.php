@@ -10,7 +10,7 @@ class CarrierModel extends CI_Model
 
 	function get_carriers()
 	{
-		$this->db->select('id, name')->from('carriers'); 
+		$this->db->select('id, name')->from('ref_carriers'); 
 		$query = $this->db->get();
 	    return $query->result();
 	}
