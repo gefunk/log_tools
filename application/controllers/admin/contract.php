@@ -70,7 +70,7 @@ class Contract extends CI_Controller {
 				
 				$header_data['title'] = "Add Rules to Contract";
 				$header_data['page_css'] = array('admin/contract/rule.css');
-				$footer_data['scripts'] = array('select2.js','admin/contract/rules.js');
+				$footer_data['scripts'] = array('select2.js','admin/contract/rules.js','cities.selector.js', 'countries.selector.js', 'container.selector.js', 'ports.selector.js');
 				// set page data
 				$data['carrier'] = $result->carrier;
 				$data['carrier_id'] = $result->carrier_id;
@@ -128,6 +128,33 @@ class Contract extends CI_Controller {
 				$currency, 			
 				$value);
 	}
+	
+	public function lanes($contract_number)
+	{
+		if(isset($contract_number)){
+			$result = $this->contractmodel->get_contract_from_number($contract_number);
+			if(isset($result)){
+				$header_data['title'] = "Add Rules to Contract";
+				$header_data['page_css'] = array('admin/contract/rule.css');
+				$footer_data['scripts'] = array('select2.js','cities.selector.js', 'countries.selector.js', 'containers.selector.js', 'ports.selector.js','admin/contract/lanes.js');
+				// set page data
+				$data['carrier'] = $result->carrier;
+				$data['carrier_id'] = $result->carrier_id;
+				$data['contract_number'] = $result->contract_number;
+				$data['customer'] = $result->customer;
+				$data['currencies'] = $this->currencycodes->get_currency_codes();
+				$data['customer_default_currency_code'] = $this->customermodel->get_customer_default_currency($result->customer_id);
+				
+				// load next view
+				$this->load->view('admin/header', $header_data);
+				$this->load->view('admin/contract/lanes', $data);
+				$this->load->view('admin/footer', $footer_data);
+			}else{
+				echo "Not a Valid Contract Number";
+			}
+		}// end if contract_number
+	}
+	
 	
 	
 	public function getrules($contract_id=NULL)
