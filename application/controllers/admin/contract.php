@@ -144,7 +144,8 @@ class Contract extends CI_Controller {
 				$data['customer'] = $result->customer;
 				$data['currencies'] = $this->currencycodes->get_currency_codes();
 				$data['customer_default_currency_code'] = $this->customermodel->get_customer_default_currency($result->customer_id);
-				
+				// save contract id for the next page
+				$data['contract_id'] = $result->contract_id;
 				// load next view
 				$this->load->view('admin/header', $header_data);
 				$this->load->view('admin/contract/lanes', $data);

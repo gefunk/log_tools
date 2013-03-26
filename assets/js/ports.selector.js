@@ -6,6 +6,7 @@
 * 
 */
 function create_ports_list (labelstr, appendto, id, multiple_rule) {
+	// if label is required
 	if(labelstr){
 		// set label and create select box
 		var label = $('<label>'+labelstr+'</label>');
@@ -13,11 +14,15 @@ function create_ports_list (labelstr, appendto, id, multiple_rule) {
 		$(label).appendTo(appendto);
 		
 	}
-	//var select = $('<select id="rule-app-add" multiple style="width:220px;"></select>');
-	var select2box = $('<input type="hidden" class="bigdrop" id="'+id+'" style="width:440px"/>')
+	// if use requires to create input on page
+	if(appendto){
+		//var select = $('<select id="rule-app-add" multiple style="width:220px;"></select>');
+		var select2box = $('<input type="hidden" class="bigdrop" id="'+id+'" style="width:440px"/>')
+		$(select2box).appendTo(appendto);
+	}
 
 	var page_size = 10;
-	$(select2box).appendTo(appendto);
+
 	$(id).select2({
 		placeholder: "Search for a port",
 		multiple: multiple_rule,
