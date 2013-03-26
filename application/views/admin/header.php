@@ -8,6 +8,10 @@
 		<link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" media="screen" />
 		<link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.css" rel="stylesheet" />
 		<link href="<?php echo base_url(); ?>assets/css/datepicker.css" rel="stylesheet" />
+		<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome.min.css">
+		<!--[if IE 7]>
+		<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome-ie7.min.css">
+		<![endif]-->
 		<?php
 		// way to pass in javascript to append to end of document
 		if(isset($page_css)){
