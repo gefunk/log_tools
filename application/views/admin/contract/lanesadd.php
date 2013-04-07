@@ -25,16 +25,23 @@
 	<div id="container-types" class="span5">
 		<label>Container Types</label>
 	</div>
-	<div class="span6 offset1">
-		<label>Cost</label>
+	<div class="span3 offset1">
+		<label>Base Container Charge</label>
 		<div class="span6 input-prepend input-append">
 			<span class="add-on">$</span>
-			<input class="span5" id="dollars" type="text" style="text-align:right;">
-			<input class="span2" id="cents" type="text" value="00">
+			<input id="dollars" type="text" style="text-align:right;width: 80%;">
+			<input id="cents" type="text" value="00" style="width:20%;">
 		</div>
-		
-		  
+	</div>
+	<div class="span3">
+		<label>Charge Code</label>
+		<input type="text" placeholder="Charge Code" id="charge_code" name="charge_code" />
+	</div>
+</div>
 
+<div class="row-fluid">
+	<div class="span2">
+		<button id="add-lane" type="button">Add Container Charge</button>
 	</div>
 </div>
 

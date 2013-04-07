@@ -142,4 +142,114 @@ class ChargeRulesModel extends CI_Model
 
 	}
 	
+	/**
+	* create a new lane in the database for a contract
+	* also create a base container charge for the lane
+	*/
+	function save_new_lane($contract_id, $from_port, $to_port, $value, $container_type, $cargo_type, $code)
+	{
+		$data = array('port_of_load' => $from_port,
+			'port_of_discharge' => $to_port,
+			'contract' => $contract_id);
+		// save the lane
+		$this->db->insert('contract_lanes', $data);	
+		// get the id of the lane
+		$lane_id = $this->db->insert_id();
+
+		// insert new charge rule, application type is special for container = 15
+		$data = array('contract' => $contract_id, 
+			'application_type' => 15,
+			'currency' => 5,
+			'value' => $value,
+			'name' => "Base Container Charge",
+			'code' => $code);
+		
+		$this->db->insert('charge_rules', $data);	
+		
+		// get charge rule to insert into charge_base_container table
+		$charge_rule_id = $this->db->insert_id();
+		
+		// insert special charge rule for container
+		$data = array("container" => $container_type,
+			'cargo' => $cargo_type,
+			'charge_rule_id' => $charge_rule_id);		
+		$this->db->insert('charge_base_container', $data);
+		
+		// attach the charge to the lane, by adding to charges_for_lane table
+		$this->save_charge_to_lane($charge_rule_id, $lane_id);
+		
+	}
+	
+	/*
+	* apply a charge to a lane
+	* @param charge_rule_id: the charge to associate with the lane
+	* @param lane_id: the lane to associate the charge to
+	*/
+	function save_charge_to_lane($charge_rule_id, $lane_id)
+	{
+		$data = array('charge_id' => $charge_rule_id, 'lane_id' => $lane_id);
+		$this->db->insert('charges_for_lane', $data);
+	}
+	
+	function get_lanes_for_contract($contract_id)
+	{
+		$this->db->select("cl.port_of_load as port_load, 
+							cl.port_of_discharge as port_discharge,
+							cl.id as lane_id,
+							cr.name as charge_name,
+							cr.code as charge_code,
+							cr.value as charge_amount,
+							rct.container_type as container_type,
+							rct.id as container_type_id,
+							rcargotypes.name as cargo_type,
+							rcargotypes.id as cargo_type_id");
+		$this->db->from("contract_lanes cl");
+		$this->db->join("charges_for_lane cfl", "cfl.lane_id = cl.id");
+		$this->db->join("charge_rules cr", "cfl.charge_id = cr.id");
+		$this->db->join("charge_base_container c", "c.charge_rule_id = cr.id");
+		$this->db->join("ref_container_types rct", "c.container = rct.id");
+		$this->db->join("ref_cargo_types rcargotypes", "rcargotypes.id = c.cargo");
+		$this->db->where('cl.contract', $contract_id);
+		
+		$query = $this->db->get();
+		$dbresults = $query->result_array();
+		
+		foreach($dbresults as &$result){
+			// get port load data
+			$this->db->select("rp.id as port_id,
+							rp.name as port_name, 
+							rcc.name as country_name,
+							rp.rail,
+							rp.road,
+							rp.airport,
+							rp.ocean, 
+							rp.found");
+			$this->db->from('ref_ports rp');
+			$this->db->join('ref_country_codes rcc', 'rp.country_code = rcc.code');
+			$this->db->where('rp.id', $result['port_load']);
+			$query = $this->db->get();
+			$result['port_load'] = $query->result_array();
+
+			// get port discharge data
+			$this->db->select("rp.id as port_id,
+							rp.name as port_name, 
+							rcc.name as country_name,
+							rp.rail,
+							rp.road,
+							rp.airport,
+							rp.ocean, 
+							rp.found");
+			$this->db->from('ref_ports rp');
+			$this->db->join('ref_country_codes rcc', 'rp.country_code = rcc.code');
+			$this->db->where('rp.id', $result['port_discharge']);
+			$query = $this->db->get();	
+			$result['port_discharge'] = $query->result_array();
+		}
+		
+		return $dbresults;
+
+	}
+	
+	
+	
 }

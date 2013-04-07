@@ -1,0 +1,53 @@
+
+div.result-row{
+	margin-bottom: 1em;
+	padding: 5px;
+	border-radius: 5px;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+
+}
+
+div.result-row:hover{
+	cursor: pointer;
+}
+div.result-row > div.row-fluid:first-child{
+	color: #0088CC;
+}
+
+div.result-row > div.result-detail{
+	margin-top: 0.5em;
+}
+
+
+button.button-input > span {
+	margin-left: 0.5em;
+}
+
+span.info{
+	color: gray;
+	font-size: 90%;
+}
+
+span.via-city{
+	color: gray;
+}
+
+#sell-rate{
+	font-size: 115%;
+}
+
+.primary-city{
+	font-size: 115%;
+}
+
+input.query-input {
+	width: 100%;
+}
+
+ul.subrate > li{
+	margin-right: 5px;
+	display: inline;
+}
