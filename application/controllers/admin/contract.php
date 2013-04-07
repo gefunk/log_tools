@@ -136,7 +136,7 @@ class Contract extends CI_Controller {
 			if(isset($result)){
 				$header_data['title'] = "Add Rules to Contract";
 				$header_data['page_css'] = array('admin/contract/rule.css');
-				$footer_data['scripts'] = array('select2.js','cities.selector.js', 'countries.selector.js', 'containers.selector.js', 'ports.selector.js','admin/contract/lanes.js');
+				$footer_data['scripts'] = array('select2.js','cities.selector.js', 'countries.selector.js', 'containers.selector.js', 'ports.selector.js','admin/contract/lanesview.js');
 				// set page data
 				$data['carrier'] = $result->carrier;
 				$data['carrier_id'] = $result->carrier_id;
@@ -146,9 +146,11 @@ class Contract extends CI_Controller {
 				$data['customer_default_currency_code'] = $this->customermodel->get_customer_default_currency($result->customer_id);
 				// save contract id for the next page
 				$data['contract_id'] = $result->contract_id;
+				// get the lanes for a contract
+				$data['lanes'] = $this->chargerulesmodel->get_lanes_for_contract($result->contract_id);
 				// load next view
 				$this->load->view('admin/header', $header_data);
-				$this->load->view('admin/contract/lanes', $data);
+				$this->load->view('admin/contract/lanesview', $data);
 				$this->load->view('admin/footer', $footer_data);
 			}else{
 				echo "Not a Valid Contract Number";
@@ -156,7 +158,17 @@ class Contract extends CI_Controller {
 		}// end if contract_number
 	}
 	
-	
+	public function savelane()
+	{
+		$contract_id = $this->input->post('contract_id');
+		$from_port = $this->input->post('from_port');
+		$to_port = $this->input->post('to_port'); 
+		$container_type = $this->input->post('container_type');
+		$value = $this->input->post('value');
+ 		$cargo_type = $this->input->post('cargo_type');
+		$code = $this->input->post('code');
+		$this->chargerulesmodel->save_new_lane($contract_id, $from_port, $to_port, $value, $container_type, $cargo_type, $code);
+	}
 	
 	public function getrules($contract_id=NULL)
 	{
@@ -179,6 +191,12 @@ class Contract extends CI_Controller {
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($this->chargerulesmodel->get_charge_options_for_rule($contract_id, $data_source)));	
+	}
+	
+	public function getlanes()
+	{
+		$this->output->enable_profiler(TRUE);
+		echo json_encode($this->chargerulesmodel->get_lanes_for_contract(1) );
 	}
 
 }
