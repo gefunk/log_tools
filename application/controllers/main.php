@@ -20,8 +20,8 @@ class Main extends CI_Controller {
 	public function index()
 	{
 		$header_data['title'] = "Query Rates";
-		$header_data['page_css'] = array('query.css');
-		$footer_data['scripts'] = array('query.js');
+		$header_data['page_css'] = array('query.css', 'select2.css');
+		$footer_data['scripts'] = array('select2.js', 'query.js', 'cities.selector.js', 'ports.selector.js');
 		$this->load->view('header', $header_data);
 		$this->load->view('queryrates');
 		$this->load->view('footer', $footer_data);
