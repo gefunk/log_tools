@@ -31,8 +31,63 @@ $(document).ready(function(){
 			$("div#filter-input").show("500");			
 		}
 
-	})
+	});
 	
+	
+	var page_size = 10;
+	// initialize selec2 on origin and destination
+	$("#origin, #destination").select2({
+		placeholder: "Search for a city",
+		multiple: false,
+		minimumInputLength: 4,
+		ajax: {
+		url: site_url+"/services/list_of_cities",
+		dataType: 'json',
+		quietMillis: 300,
+		data: function (term, page) { // page is the one-based page number tracked by Select2
+			return {
+				query: term, //search term
+				page_size: page_size, // page size
+				page: page // page number
+			};
+		},
+		results: function (data, page) {
+			var more = (page * page_size) < data.total;
+			// notice we return the value of more so Select2 knows if more results can be loaded
+			return {results: data.results, more: more};
+			}
+		},
+		formatResult: format_city_result, // omitted for brevity, see the source of this page
+		formatSelection: format_city, // omitted for brevity, see the source of this page
+		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+	});
+	// initialize seelct2 on ports
+	$("#limit-origin, #limit-destination").select2({
+		multiple: false,
+		minimumInputLength: 4,
+		ajax: {
+		url: site_url+"/services/list_of_ports",
+		dataType: 'json',
+		quietMillis: 300,
+		data: function (term, page) { // page is the one-based page number tracked by Select2
+			return {
+				query: term, //search term
+				page_size: page_size, // page size
+				page: page // page number
+			};
+		},
+		results: function (data, page) {
+			var more = (page * page_size) < data.total;
+			// notice we return the value of more so Select2 knows if more results can be loaded
+			return {results: data.results, more: more};
+			}
+		},
+		formatResult: format_port_result, // omitted for brevity, see the source of this page
+		formatSelection: format_port, // omitted for brevity, see the source of this page
+		dropdownCssClass: "bigdrop", // apply css that makes the dropdown taller
+		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
+	});
 	
 });
 
