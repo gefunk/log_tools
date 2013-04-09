@@ -14,15 +14,43 @@ class Contract extends CI_Controller {
 		$this->load->model("contractmodel");
 		$this->load->model('customermodel');
 		$this->load->model("admin/currencycodes");
+		$this->load->model("referencemodel");
 		
+	}
+
+	public function index($customer_id=NULL)
+	{
+		$header_data['title'] = "View Contracts";
+		$data['customers'] = $this->customermodel->get_customers();
+		if($customer_id != NULL){
+			$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
+			$data["customer_id"] = $customer_id;
+			$data["carriers"] = $this->referencemodel->get_carriers();
+		}
+		$footer_data["scripts"] = array("admin/contract/view.js");
+			
+		$this->load->view('admin/header', $header_data);
+		$this->load->view('admin/contract/view', $data);
+		$this->load->view('admin/footer', $footer_data);
 	}
 
 	/**
 	* add a new contract into the system
 	* accessible via /admin/contract/add
 	*/
-	public function add()
+	public function add($customer_id)
 	{
+		//$this->output->enable_profiler(TRUE);	
+		// page level data
+		$header_data['title'] = "View Contracts";
+		// pass javascript to footer
+		$footer_data["scripts"] = array("admin/contract/view.js");
+		// load data from database
+		$data["customer_id"] = $customer_id;
+		$data["carriers"] = $this->referencemodel->get_carriers();
+		$data['customers'] = $this->customermodel->get_customers();
+		
+		
 		// code igniter framework - validation rules
 		$this->form_validation->set_rules('contract_number', 'Contract Number', 'required');
 		$this->form_validation->set_rules('start_date', 'Start Date', 'required');
@@ -30,30 +58,55 @@ class Contract extends CI_Controller {
 
 		// validate
 		if ($this->form_validation->run() == FALSE){
-			$header_data['title'] = "Add New Contract";
-			// pass javascript to footer
-			$footer_data['scripts'] = array('admin/contract/add.js');
-			// load models needed
-			$this->load->model('carriermodel');
-			// load data from database
-			$data['customers'] = $this->customermodel->get_customers();
-			$data['carriers'] = $this->carriermodel->get_carriers();
+			$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
 			// load view
 			$this->load->view('admin/header', $header_data);
-			$this->load->view('admin/contract/add', $data);
+			$this->load->view('admin/contract/view', $data);
 			$this->load->view('admin/footer', $footer_data);		
 		}else{
 			// retrieve post variables
-			$customer = $this->input->post('customer');
+			$customer = $customer_id;
 			$carrier = $this->input->post('carrier');
 			$contract_number = $this->input->post('contract_number');
 			$start_date = $this->input->post('start_date');
 			$end_date = $this->input->post('end_date');
 			// add contract to database
-			$this->contractmodel->add_contract($contract_number, $start_date, $end_date,$customer,$carrier);
-			redirect('admin/customer/addrules/'.$contract_number);
+			$this->contractmodel->add_contract($contract_number, $this->get_sql_date($start_date), $this->get_sql_date($end_date) ,$customer,$carrier);
+			// retrieve contract
+			$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
+			// reload the view with success message;
+			$message['type'] = "success";
+			$message["body"] = "Added Contract Successfully!";
+			$header_data["messages"] = array($message);
+			$this->load->view('admin/header', $header_data);
+			$this->load->view('admin/contract/view', $data);
+			$this->load->view('admin/footer', $footer_data);
 		}
 		
+	}
+	
+	public function delete($customer_id, $contract_id)
+	{
+		
+		// delete contract
+		$this->contractmodel->delete($contract_id);
+		
+		
+		$header_data['title'] = "View Contracts";
+		// pass javascript to footer
+		$footer_data["scripts"] = array("admin/contract/view.js");
+		// load data from database
+		$data["customer_id"] = $customer_id;
+		$data["carriers"] = $this->referencemodel->get_carriers();
+		$data['customers'] = $this->customermodel->get_customers();
+		$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
+		// reload the view with success message;
+		$message['type'] = "success";
+		$message["body"] = "Deleted Contract Successfully!";
+		$header_data["messages"] = array($message);
+		$this->load->view('admin/header', $header_data);
+		$this->load->view('admin/contract/view', $data);
+		$this->load->view('admin/footer', $footer_data);
 	}
 	
 	/**
@@ -197,6 +250,14 @@ class Contract extends CI_Controller {
 	{
 		$this->output->enable_profiler(TRUE);
 		echo json_encode($this->chargerulesmodel->get_lanes_for_contract(1) );
+	}
+	
+	function get_sql_date($date)
+	{
+		$format = "m/j/Y";
+		$sql_date = date_parse_from_format ( $format , $date );
+		return $sql_date['year']."-".$sql_date['month']."-".$sql_date['day'];
+		
 	}
 
 }

@@ -46,6 +46,26 @@ class ContractModel extends CI_Model
 			return null;
 	}
 	
+	/*
+	* get all contracts for a customer
+	*/
+	function get_contracts_for_customer($customer_id)
+	{
+		$this->db->select("c.id, start_date, end_date, number, rcarriers.name as carrier_name");
+		$this->db->from("contracts c");
+		$this->db->join('ref_carriers rcarriers', 'rcarriers.id = c.carrier');
+		$this->db->where("c.customer", $customer_id);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
+	/*
+	* delete contract 
+	*/
+	function delete($contract_id)
+	{
+		$this->db->delete('contracts', array('id' => $contract_id)); 
+	}
 	
 }
 /** end model **/

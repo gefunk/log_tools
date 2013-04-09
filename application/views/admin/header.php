@@ -27,5 +27,35 @@
 		</script>
 	</head>
 	<body>
+		<div class="navbar navbar-static-top">
+		  <div class="navbar-inner">
+		    <a class="brand" href="#">Amfitir Contract Management Administration</a>
+		    <ul class="nav">
+		      <li class="dropdown">
+				 <a href="<?php echo site_url(); ?>/admin/customer" class="active">
+					Customers
+				 </a>
+			  </li>
+		      <li><a href="<?php echo site_url(); ?>/admin/contract">Contracts</a></li>
+		      <li><a href="#">Currencies</a></li>
+		    </ul>
+		  </div>
+		</div>
 		<div class="container-fluid">
+
+			<div id="messages" class="row-fluid">
+				<div class="span12">
+					<?php echo validation_errors('<div class="alert alert-error">', '</div>'); ?>
+					<?php if ( isset($messages) ) {?>
+						<?php foreach($messages as $message):
+						 	if($message['type'] == "success") { ?>
+								<div class="alert alert-success">
+									<?php echo $message['body']; ?>
+								</div>
+							<?php } ?>
+						<?php endforeach; ?>
+					<?php } // end if isset messages ?>
+				</div>
+			</div>
+
 			<div class="row-fluid">

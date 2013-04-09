@@ -34,14 +34,6 @@
 				<input type="hidden" name="limit-destination" id="limit-destination" placeholder="Limit Port of Destination to" style="width:226px"/>
 			</div>
 		
-			<div class="span4">
-				<label for="service_type">Service Type</label>
-				<select placeholder="Service Type">
-					<option value="0" style="color: gray;">-- Limit Service Type --</option>
-					<option value="cycy">CY/CY</option>
-					<option value="rycy">RY/CY</option>
-				</select>
-			</div>
 			
 		</div>
 		

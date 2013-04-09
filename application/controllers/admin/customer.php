@@ -9,14 +9,29 @@ class Customer extends CI_Controller {
 		$this->load->model('attachments/datastore');
 		$this->load->helper('form');
 		$this->load->model('customermodel');
+		$this->load->model("referencemodel");
 	}
 
 	public function index()
 	{
 		$data['customers'] = $this->customermodel->get_customers();
-		$this->load->view('admin/header');
+		$data['currency_codes'] = $this->referencemodel->get_currency_codes(FALSE);
+		$header_data['title'] = "Customers";
+		$this->load->view('admin/header', $header_data);
 		$this->load->view('admin/customers/view', $data);
 		$this->load->view('admin/footer');		
+	}
+	
+	/*
+	* add new customer
+	*/
+	public function add()
+	{
+		$this->output->enable_profiler(TRUE);
+		$this->customermodel->add($this->input->post("customer_name"),
+								  $this->input->post("currency_code"),
+								  $this->input->post("subdomain"));
+		redirect('admin/customer');
 	}
 	
 	public function users($customer_id)
@@ -25,6 +40,7 @@ class Customer extends CI_Controller {
 		$this->load->view('admin/header');
 		$this->load->view('admin/customers/users', $data);
 		$this->load->view('admin/footer');
+		
 	}
 	
 	public function upload()
