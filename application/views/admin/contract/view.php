@@ -1,8 +1,7 @@
 <!-- customer select box -->
 <div class="row-fluid">
 	<div class="span12">
-		<h1>View Contracts for Customer</h1>
-		<label for="customer">Select Customer</label>
+		<h4>Select Customer</h4>
 		<select name="customer" id="customer">
 				<option value = "0">-- Please Select --</option>
 			<?php foreach($customers as $customer): ?>
