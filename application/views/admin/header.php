@@ -7,7 +7,9 @@
 		<!-- Bootstrap -->
 		<link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet" media="screen" />
 		<link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.css" rel="stylesheet" />
+		<link href="<?php echo base_url(); ?>assets/css/global.css" rel="stylesheet" />
 		<link href="<?php echo base_url(); ?>assets/css/datepicker.css" rel="stylesheet" />
+		<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url(); ?>assets/img/favicon.ico" />
 		<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome.min.css">
 		<!--[if IE 7]>
 		<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome-ie7.min.css">
@@ -27,9 +29,9 @@
 		</script>
 	</head>
 	<body>
-		<div class="navbar navbar-static-top">
+		<div class="navbar navbar-fixed-top">
 		  <div class="navbar-inner">
-		    <a class="brand" href="#">Amfitir Contract Management Administration</a>
+		    <a class="brand" href="#"><img id="nav-logo" src="<?php echo base_url(); ?>assets/img/nav-logo.png" />Amfitir Administration</a>
 		    <ul class="nav">
 		      <li class="dropdown">
 				 <a href="<?php echo site_url(); ?>/admin/customer" class="active">

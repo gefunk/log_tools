@@ -1,6 +1,7 @@
 <div class="row-fluid">
 	<div class="span12">
-		<table>
+		<h1>Customers</h1>
+		<table class="table">
 			<tr>
 				<th>ID</th>
 				<th>Name</th>
