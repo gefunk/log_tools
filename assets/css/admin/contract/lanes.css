@@ -1,0 +1,29 @@
+ul.info{
+	margin-left: 0px;
+}
+
+ul.info li {
+	display: inline;
+}
+
+ul.info span{
+	margin-right: 3px;
+	margin-left: 3px;
+}
+
+span.origin {
+	color: #3A87AD;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	margin-right: 3px;
+}
+
+span.destination {
+	margin-left: 3px;
+	color: #3A87AD;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+div.lane-cost{
+	color: #468847;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}

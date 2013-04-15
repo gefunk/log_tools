@@ -34,7 +34,7 @@
 				<td><?php echo date('F d, Y', strtotime($row->end_date)); ?></td>
 				<td><?php echo $row->carrier_name; ?></td>				
 				<td>
-					<button data-id="<?php echo $row->id; ?>" class="btn btn-small btn-info contract-view">View</button>
+					<a href="<?php echo site_url().'/admin/contract/lanes/'.$row->number; ?>" class="btn btn-small btn-info contract-view">View</a>
 					<button data-id="<?php echo $row->id; ?>" class="btn btn-small btn-danger contract-delete">Delete</button>
 				</td>
 			</tr>

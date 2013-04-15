@@ -15,6 +15,7 @@ class Contract extends CI_Controller {
 		$this->load->model('customermodel');
 		$this->load->model("admin/currencycodes");
 		$this->load->model("referencemodel");
+		$this->load->model("lanemodel");
 		
 	}
 
@@ -188,22 +189,28 @@ class Contract extends CI_Controller {
 			$result = $this->contractmodel->get_contract_from_number($contract_number);
 			if(isset($result)){
 				$header_data['title'] = "Add Rules to Contract";
-				$header_data['page_css'] = array('admin/contract/rule.css');
-				$footer_data['scripts'] = array('select2.js','cities.selector.js', 'countries.selector.js', 'containers.selector.js', 'ports.selector.js','admin/contract/lanesview.js');
+				$header_data['page_css'] = array('select2.css', 'admin/contract/lanes.css');
+				$footer_data['scripts'] = array('select2.js','cities.selector.js', 'countries.selector.js', 'containers.selector.js', 'ports.selector.js','admin/contract/lanes.js');
 				// set page data
 				$data['carrier'] = $result->carrier;
 				$data['carrier_id'] = $result->carrier_id;
 				$data['contract_number'] = $result->contract_number;
+				$data['contract_id'] = $result->contract_id;
 				$data['customer'] = $result->customer;
 				$data['currencies'] = $this->currencycodes->get_currency_codes();
+				$data['leg_types'] = $this->referencemodel->get_leg_types();
+				$data['transport_types'] = $this->referencemodel->get_transport_types();
+				$data['cargo_types'] = $this->referencemodel->get_cargo_types();
+				$data['currencies'] = $this->referencemodel->get_currency_codes();
+				$data['container_types'] = $this->referencemodel->get_container_types($result->carrier_id);
 				$data['customer_default_currency_code'] = $this->customermodel->get_customer_default_currency($result->customer_id);
 				// save contract id for the next page
 				$data['contract_id'] = $result->contract_id;
 				// get the lanes for a contract
-				$data['lanes'] = $this->chargerulesmodel->get_lanes_for_contract($result->contract_id);
+				//$data['lanes'] = $this->chargerulesmodel->get_lanes_for_contract($result->contract_id);
 				// load next view
 				$this->load->view('admin/header', $header_data);
-				$this->load->view('admin/contract/lanesview', $data);
+				$this->load->view('admin/contract/lanes', $data);
 				$this->load->view('admin/footer', $footer_data);
 			}else{
 				echo "Not a Valid Contract Number";
@@ -211,17 +218,45 @@ class Contract extends CI_Controller {
 		}// end if contract_number
 	}
 	
+	// save lane to contract
 	public function savelane()
 	{
 		$contract_id = $this->input->post('contract_id');
-		$from_port = $this->input->post('from_port');
-		$to_port = $this->input->post('to_port'); 
+		$legs = $this->input->post("legs");
 		$container_type = $this->input->post('container_type');
 		$value = $this->input->post('value');
  		$cargo_type = $this->input->post('cargo_type');
-		$code = $this->input->post('code');
-		$this->chargerulesmodel->save_new_lane($contract_id, $from_port, $to_port, $value, $container_type, $cargo_type, $code);
+		$effective_date = $this->get_sql_date($this->input->post('effective_date'));
+		$currency_code = $this->input->post("currency");
+		$this->lanemodel->addlane($contract_id, $container_type, $value, $cargo_type, $effective_date, $legs, $currency_code);
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode("success"));
 	}
+	
+	public function deletelane()
+	{
+		$lane_id = $this->input->post("lane_id");
+		$this->lanemodel->deletelane($lane_id);
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode("success"));
+	}
+	
+	public function getlanes($contract_id){
+		//$this->output->enable_profiler(TRUE);
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($this->lanemodel->getlanes($contract_id)));
+	}
+	
+	public function getlanestest($contract_id=12)
+	{
+			$this->output->enable_profiler(TRUE);
+			//echo json_encode($this->lanemodel->getlanes($contract_id));
+			json_encode($this->lanemodel->getlanes($contract_id));
+	}
+	
 	
 	public function getrules($contract_id=NULL)
 	{
@@ -245,12 +280,12 @@ class Contract extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($this->chargerulesmodel->get_charge_options_for_rule($contract_id, $data_source)));	
 	}
-	
+	/*
 	public function getlanes()
 	{
 		$this->output->enable_profiler(TRUE);
 		echo json_encode($this->chargerulesmodel->get_lanes_for_contract(1) );
-	}
+	}*/
 	
 	function get_sql_date($date)
 	{
