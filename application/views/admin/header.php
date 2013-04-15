@@ -40,6 +40,7 @@
 			  </li>
 		      <li><a href="<?php echo site_url(); ?>/admin/contract">Contracts</a></li>
 		      <li><a href="#">Currencies</a></li>
+		 	  <li><a href="#">Carriers</a></li>
 		    </ul>
 		  </div>
 		</div>

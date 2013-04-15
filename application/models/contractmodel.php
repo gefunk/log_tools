@@ -67,5 +67,6 @@ class ContractModel extends CI_Model
 		$this->db->delete('contracts', array('id' => $contract_id)); 
 	}
 	
+	
 }
 /** end model **/

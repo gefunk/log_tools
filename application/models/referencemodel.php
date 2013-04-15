@@ -108,6 +108,34 @@ class ReferenceModel extends CI_Model
 	}
 	
 	
+	
+	/*
+	* list of transport types:
+	* container yard, rail, truck
+	*/
+	function get_transport_types()
+	{
+		$query = $this->db->get('ref_transport_types');
+		return $query->result();
+	}
+	
+	/*
+	* list of leg types:
+	* 1. origin, via, destination
+	*/
+	function get_leg_types()
+	{
+		$query = $this->db->get('ref_leg_types');
+		return $query->result();
+	}
+	
+	
+	function get_cargo_types()
+	{
+		$query = $this->db->get("ref_cargo_types");
+		return $query->result();
+	}
+	
 	/*
 	* utility function to replace white space with %
 	* and strips all commas out
