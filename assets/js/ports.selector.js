@@ -55,11 +55,29 @@ function format_port_result (port) {
 	if(!port.country_code) return port.name;
 	else{ 
 		
+		
+		var icons = "<tr><td colspan=2>";
+		
+		if(port.ocean == 1){
+			icons += "<img class='transport-icon' src='"+base_url+"assets/img/transport_icons/ship_32.png' />";
+		}
+		if(port.airport == 1){
+			icons += "<img class='transport-icon' src='"+base_url+"assets/img/transport_icons/plane_32.png' />";
+		}
+		if(port.rail == 1){
+			icons += "<img class='transport-icon' src='"+base_url+"assets/img/transport_icons/train_32.png' />";
+		}
+		if(port.road){
+			icons += "<img class='transport-icon' src='"+base_url+"assets/img/transport_icons/road_32.png' />";
+		}
+		
+		icons += "</tr></td>";
 		var formatted_html = "<table>"
 								+"<tr>"
 									+"<td><img class='flag' src='"+base_url+"assets/img/flags_iso/64/" + port.country_code.toLowerCase() + ".png' /></td>"
 		 							+"<td><table><tr><td><strong>"+port.name+"</strong></td></tr>"
-									+"<tr><td class='muted'>"+port.country_code+port.port_code+"</td></tr></table></td></tr></table>";
+									+"<tr><td class='muted'>"+port.country_code+port.port_code+"</td></tr></table></td></tr>"
+									+icons+"</table>";
 		return formatted_html;
 		}					
 }

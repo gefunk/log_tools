@@ -55,6 +55,7 @@ $(document).ready(function(){
 		
 	});
 	
+	// clear button click
 	$("#clear-lane").click(function(){
 		clear_lane_input();
 	});
@@ -63,6 +64,14 @@ $(document).ready(function(){
 	$("#route").on("click", "button.delete-route", function(){
 		$(this).parents("tr").remove();
 	});
+	
+	
+	
+	// currency code change handler
+	$("#currency_code").change(function(){
+		$("#amount").siblings("span.add-on").html($(this).find(":selected").data("symbol"));
+	});
+	
 	
 	// delete lane on delete button click
 	$("#lanes").on("click", "button.lane-delete", function(){
@@ -136,9 +145,12 @@ function load_lanes(){
 		{
 			if (data.hasOwnProperty(key)){
 				var id = data[key].id;
-				var cost = data[key].value + " " + data[key].currency;
+				var cost = data[key].currency_symbol+data[key].value + " " + data[key].currency;
 				var container_type = data[key].container;
+				var container_description = data[key].container_description;
 				var cargo = data[key].cargo;
+				var cargo_description = data[key].cargo_description;
+				var date = data[key].effective_date;
 				
 				var legs = data[key].legs;
 				var route = "";
@@ -157,7 +169,11 @@ function load_lanes(){
 				var parent_open = "<tr data-id="+id+"><td>";
 				var cost_html = '<div class="pull-right"><div class="lane-cost">'+cost+'</div><button class="btn btn-danger btn-mini pull-right lane-delete">Delete</button></div>';
 				var route_html = '<div class="route">'+route+'</div>';
-				var info_html = '<ul class="info"><li><span class="label">container</span>'+container_type+'</li><li><span class="label">cargo</span>'+cargo+'</li></ul>';
+				var info_html = '<ul class="info">'
+								+'<li><a href="#" class="desc" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="'+container_description+'">'+container_type+'</a></li>'
+								+'<li><a href="#" class="desc" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="'+cargo_description+'">'+cargo+'</a></li>'
+								+'<li><span class="label">effective on</span>'+date+'</li>'
+								+'</ul>';
 				var parent_close = "</td></tr>";
 				
 				// add to table
@@ -165,5 +181,10 @@ function load_lanes(){
 			}
 		}
 		
+		
+		// enable popover
+		$("a.desc").popover();
 	});
+	
+	
 }

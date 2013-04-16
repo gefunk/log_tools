@@ -10,3 +10,12 @@ div.container-fluid {
 button > i {
 	margin-right: 3px;
 }
+
+.transport-icon {
+	width: 24px;
+	height: 24px;
+}
+
+li.select2-highlighted img.transport-icon{
+	color: white;
+}

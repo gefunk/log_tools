@@ -11,11 +11,12 @@ class LaneModel extends CI_Model
 
 	function getlanes($contract_id)
 	{
-		$this->db->select('cl.id, rct.container_type as container, cl.value, rcc.code as currency, rcart.name as cargo');
+		$this->db->select('cl.id, cl.effective_date as effective_date, rct.container_type as container, rct.description as container_description, cl.value, rcc.code as currency, rcc.symbol as currency_symbol, rcart.name as cargo, rcart.description as cargo_description');
 		$this->db->from('contract_lanes cl');
 		$this->db->join('ref_container_types rct', 'cl.container = rct.id');
 		$this->db->join('ref_cargo_types rcart','cl.cargo = rcart.id');
 		$this->db->join('ref_currency_codes rcc','cl.currency = rcc.id');
+		$this->db->order_by("cl.id", "desc");
 		$query = $this->db->get();
 		$dbresults = $query->result_array();
 		
@@ -101,7 +102,8 @@ class LaneModel extends CI_Model
 		$this->db->select("found")->from('ref_ports')->where('id', $port_id);
 		$query = $this->db->get();
 		if($query->num_rows() > 0){
-			if($query->row()->found == 1){
+			$row = $query->row();
+			if($row->found == '1'){
 				$data = array("found" => 1);
 				$this->db->where('id', $port_id);
 				$this->db->update('ref_ports', $data);

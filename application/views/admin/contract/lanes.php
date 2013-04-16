@@ -1,15 +1,8 @@
 
+
 <div class="row-fluid">
 	<div class="span12">
 		<h1>Lanes</h1>
-	</div> <!-- end span 12 -->
-</div>
-
-
-<div class="row-fluid">
-	<div class="span12">
-		<table id="lanes" class="table table-hover">
-		</table>
 	</div> <!-- end span 12 -->
 </div>
 
@@ -69,7 +62,7 @@
 				<select id="cargo_type" name="cargo_type">
 					<option value="0">-- Select Cargo --</option>
 					<?php foreach($cargo_types as $type): ?>
-						<option value="<?php echo $type->id; ?>"><?php echo $type->description; ?></option>
+						<option value="<?php echo $type->id; ?>"><?php echo $type->name." - ".$type->description; ?></option>
 					<?php endforeach; ?>
 				</select>
 			</div>
@@ -92,7 +85,9 @@
 		<div class="span2">
 			<select id="currency_code">
 				<?php foreach($currencies as $currency): ?>
-					<option value="<?php echo $currency->id ?>"><?php echo $currency->code." - ".$currency->description ?></option>
+					<option value="<?php echo $currency->id ?>" data-symbol="<?php echo $currency->symbol; ?>" <?php if($currency->code == "USD") { echo "SELECTED='true'"; } ?>>
+						<?php echo $currency->code." - ".$currency->description ?>
+					</option>
 				<?php endforeach; ?>
 			</select>
 		</div>
@@ -108,3 +103,11 @@
 	<input type="hidden" id="contract_id" value="<?php echo $contract_id ?>" />
 	
 </div><!-- end well -->
+
+<div class="row-fluid">
+	<div class="span12">
+		<table id="lanes" class="table table-hover">
+		</table>
+	</div> <!-- end span 12 -->
+</div>
+
