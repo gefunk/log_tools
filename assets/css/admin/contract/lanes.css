@@ -4,11 +4,12 @@ ul.info{
 
 ul.info li {
 	display: inline;
+	margin-left: 10px;
 }
 
 ul.info span{
 	margin-right: 3px;
-	margin-left: 3px;
+	
 }
 
 span.origin {

@@ -28,7 +28,7 @@ class ReferenceModel extends CI_Model
 	
 	function get_currency_codes($array = FALSE)
 	{
-		$this->db->select('id, description, code')->from('ref_currency_codes'); 
+		$this->db->select('id, description, code, symbol')->from('ref_currency_codes'); 
 		$query = $this->db->get();
 		if($array)
 			return $query->result_array();
