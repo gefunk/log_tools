@@ -1,3 +1,5 @@
+
+
 /**
 * creates a port list selec2 box
 * @param appendto element to add the selec2 box
@@ -59,16 +61,16 @@ function format_port_result (port) {
 		var icons = "<tr><td colspan=2>";
 		
 		if(port.ocean == 1){
-			icons += "<img class='transport-icon' src='"+base_url+"assets/img/transport_icons/ship_32.png' />";
+			icons += "<span class='transport-icon transport-ocean' title='This is an ocean port'></span>";
 		}
 		if(port.airport == 1){
-			icons += "<img class='transport-icon' src='"+base_url+"assets/img/transport_icons/plane_32.png' />";
+			icons += "<span class='transport-icon transport-air' title='There is an airport here'></span>";
 		}
 		if(port.rail == 1){
-			icons += "<img class='transport-icon' src='"+base_url+"assets/img/transport_icons/train_32.png' />";
+			icons += "<span class='transport-icon transport-rail' title='Rail Road Connection'></span>";
 		}
 		if(port.road){
-			icons += "<img class='transport-icon' src='"+base_url+"assets/img/transport_icons/road_32.png' />";
+			icons += "<span class='transport-icon transport-road' title='There is a road way here'></span>";
 		}
 		
 		icons += "</tr></td>";
