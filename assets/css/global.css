@@ -11,11 +11,47 @@ button > i {
 	margin-right: 3px;
 }
 
-.transport-icon {
+
+
+
+
+/* used for ports selector */
+span.transport-icon {
 	width: 24px;
 	height: 24px;
+	display: inline-block;
 }
 
-li.select2-highlighted img.transport-icon{
-	color: white;
+li.select2-highlighted div.transport-icon{
+	
+}
+
+span.transport-ocean {
+	background: url('../../assets/img/transport_icons/ship_24.png');
+}
+
+li.select2-highlighted span.transport-ocean {
+	background: url('../../assets/img/transport_icons/ship_24_select.png');
+}
+
+span.transport-air {
+	background: url('../../assets/img/transport_icons/plane_24.png');
+}
+li.select2-highlighted span.transport-air {
+	background: url('../../assets/img/transport_icons/plane_24_select.png');
+}
+
+
+span.transport-road {
+	background: url('../../assets/img/transport_icons/road_24.png');
+}	
+li.select2-highlighted span.transport-road {
+	background: url('../../assets/img/transport_icons/road_24_select.png');
+}
+
+span.transport-rail {
+	background: url('../../assets/img/transport_icons/train_24.png');
+}
+li.select2-highlighted span.transport-rail {
+	background: url('../../assets/img/transport_icons/train_24_select.png');
 }
