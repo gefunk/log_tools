@@ -160,7 +160,12 @@ function load_lanes(){
 						route += "&rarr;"
 					}
 					if(legs.hasOwnProperty(leg)){
-						route += "<span class='"+legs[leg].leg_type+"'>"+legs[leg].location + ", " + legs[leg].country_code+"</span>";
+						var leg_name = legs[leg].location;
+						if(legs[leg].state){
+							leg_name += ", "+legs[leg].state;
+						}
+						leg_name += ", " + legs[leg].country_code;
+						route += "<span class='"+legs[leg].leg_type+"'>"+ leg_name +"</span>";
 					}
 				}
 				

@@ -219,6 +219,20 @@ class Contract extends CI_Controller {
 	}
 	
 	// save lane to contract
+	/*
+	cargo_type	1
+	container_type	1
+	contract_id	12
+	currency	5
+	effective_date	04/15/2013
+	legs[0][leg_type]	1
+	legs[0][location]	69334
+	legs[0][transport]	1
+	legs[1][leg_type]	2
+	legs[1][location]	22550
+	legs[1][transport]	1
+	value	2025.00
+	*/
 	public function savelane()
 	{
 		$contract_id = $this->input->post('contract_id');
@@ -232,6 +246,26 @@ class Contract extends CI_Controller {
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode("success"));
+	}
+	
+	public function savelanetest(){
+		$this->output->enable_profiler(TRUE);
+		$contract_id = 12;
+		$legs = array(
+						0 => array('leg_type' => 1, 'transport' => 1, 'location' => 69334),
+						1 => array('leg_type' => 2, 'transport' => 2, 'location' => 22550)
+					);
+		$container_type = 1;
+		$value = 2025.00;
+ 		$cargo_type = 1;
+		$effective_date = $this->get_sql_date('04/15/2013');
+		$currency_code = 5;
+		$this->lanemodel->addlane($contract_id, $container_type, $value, $cargo_type, $effective_date, $legs, $currency_code);
+	}
+	
+	public function foundportest(){
+		$this->output->enable_profiler(TRUE);
+		$this->lanemodel->found_port(22550);
 	}
 	
 	public function deletelane()

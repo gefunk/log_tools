@@ -2,21 +2,16 @@
 
 class Main extends CI_Controller {
 
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
+    function __construct()
+    {
+        // Call the Model constructor
+        parent::__construct();
+		$this->load->library('map');
+		
+		$this->load->model('querymodel');
+		$this->load->model('lanemodel');
+    }
+
 	public function index()
 	{
 		$header_data['title'] = "Query Rates";
@@ -25,6 +20,33 @@ class Main extends CI_Controller {
 		$this->load->view('header', $header_data);
 		$this->load->view('queryrates');
 		$this->load->view('footer', $footer_data);
+	}
+	
+	public function searchlanes($origin_city_id, $destination_city_id, $customer_id)
+	{
+		$search_lanes = ($this->querymodel->search_lanes($origin_city_id, $destination_city_id, $customer_id));
+		$search_lanes['lane_detail'] = $this->lanemodel->get_lanes_by_lane_id($search_lanes['lanes']);
+			$this->output
+			    ->set_content_type('application/json')
+			    ->set_output(json_encode($search_lanes));
+	}
+	
+	public function testsearchlanes()
+	{
+		$this->output->enable_profiler(TRUE);
+		$origin_city_id = 2457684;
+		$destination_city_id = 2338691;
+		$customer_id = 9;
+		$search_lanes = ($this->querymodel->search_lanes($origin_city_id, $destination_city_id, $customer_id));
+		$search_lanes['lane_detail'] = $this->lanemodel->get_lanes_by_lane_id($search_lanes['lanes']);
+		echo var_dump($search_lanes);
+		
+	}
+	
+	public function testclosest($city_id)
+	{
+		$this->output->enable_profiler(TRUE);
+		echo var_dump($this->querymodel->find_closest_ports_to_city($city_id, 9));
 	}
 }
 
