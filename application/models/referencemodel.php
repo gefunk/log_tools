@@ -78,8 +78,10 @@ class ReferenceModel extends CI_Model
 	
 	function search_ports($search_term, $page=NULL, $page_size=NULL, $array=FALSE)
 	{
-		$this->db->select("id, name, country_code, port_code, country_code, rail, road, airport, ocean, found");
-		$this->db->from('ref_ports');
+		$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
+		$this->db->from('ref_ports rp');
+		$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
+		$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
 		$this->db->where("MATCH(search_term) AGAINST ('".$this->clean_search_term($search_term)."')");
 		$this->db->order_by("found", "desc");
 		
@@ -150,6 +152,36 @@ class ReferenceModel extends CI_Model
 	    return $string;
 	}
 	
+	/*
+	* calculate haversine distance formula
+	* distance provided based on lat long
+	* @param longitude of first location
+	* @param latitude of first location
+	* @param longitude of second location
+	* @param latitude of second location
+	* @param optional unit of measure "mi" or "km"
+	* @return distance between points
+	*/
+	function distance($long_1,$lat_1,$long_2,$lat_2, $unit="mi")
+	{
+		$earth_radius = 3963.1676; // in miles
+		if($unit != "mi"){
+			$earth_radius =  6335.437; // in km
+		}
+		
+		$sin_lat   = sin(deg2rad($lat_2  - $lat_1)  / 2.0);
+		$sin2_lat  = $sin_lat * $sin_lat;
+
+		$sin_long  = sin(deg2rad($long_2 - $long_2) / 2.0);
+		$sin2_long = $sin_long * $sin_long;
+
+		$cos_lat_1 = cos($lat_1);
+		$cos_lat_2 = cos($lat_2);
+		
+		$sqrt      = sqrt($sin2_lat + ($cos_lat_1 * $cos_lat_2 * $sin2_long));
+		$distance  = 2.0 * $earth_radius * asin($sqrt);
+		return $distance;
+	}
 	
 }
 /** end model **/

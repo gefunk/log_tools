@@ -74,10 +74,16 @@ function format_port_result (port) {
 		}
 		
 		icons += "</tr></td>";
+		
+		var port_name = port.name;
+		if(port.state){
+			port_name += ", "+port.state+" ("+port.state_code+")";
+		}
+		
 		var formatted_html = "<table>"
 								+"<tr>"
 									+"<td><img class='flag' src='"+base_url+"assets/img/flags_iso/64/" + port.country_code.toLowerCase() + ".png' /></td>"
-		 							+"<td><table><tr><td><strong>"+port.name+"</strong></td></tr>"
+		 							+"<td><table><tr><td><strong>"+port_name+"</strong></td></tr>"
 									+"<tr><td class='muted'>"+port.country_code+port.port_code+"</td></tr></table></td></tr>"
 									+icons+"</table>";
 		return formatted_html;
@@ -85,5 +91,9 @@ function format_port_result (port) {
 }
 
 function format_port (port) {
-	return port.name+", "+port.country_code;
+	var port_name = port.name;
+	if(port.state)
+		port_name += ", "+port.state;
+	port_name += ", "+port.country_code;
+	return port_name;
 }

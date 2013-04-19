@@ -12,7 +12,7 @@
 				<input type="hidden" class="query-input" name="destination" id="destination" placeholder="Destination city" style="width:226px;">			
 			</div>
 			<div class="span4">
-				<button type="button" class="btn btn-primary button-input"><i class="icon-search"></i><span>Find Rates</span></button>
+				<button type="button" id="search" class="btn btn-primary button-input"><i class="icon-search"></i><span>Find Rates</span></button>
 				<button id="filter" type="button" class="btn button-input"><i class="icon-filter"></i><span>Filter</span></button>			
 			</div>
 		</div>
@@ -85,7 +85,7 @@
 			</div>
 			<div class="rate-subtext">
 				<div class="span3">
-					<span class="info">service type:</span>
+					<span class="info">service:</span>
 						CY / CY
 				</div>
 				<div class="span3">
@@ -93,7 +93,7 @@
 							General Cargo
 				</div>
 				<div class="span3">
-						<span class="info">shipment type:</span>
+						<span class="info">container:</span>
 						FCL - 40
 				</div>
 			</div>
