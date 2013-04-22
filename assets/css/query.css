@@ -57,3 +57,9 @@ label{
 	color: #1E347B;
 	text-shadow: 0 1px 0 #FFFFFF;
 }
+
+div#filters{
+	border-bottom: 1px solid #EEEEEE;
+	padding-bottom: 1em;
+	margin-bottom: 1em;
+}

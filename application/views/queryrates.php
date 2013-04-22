@@ -72,6 +72,23 @@
 	
 </div><!-- query input selection -->
 
+<div id="filters">
+	<div class="row-fluid">
+		<div class="btn-group">
+	    	<a class="btn btn-small btn-info dropdown-toggle" data-toggle="dropdown" href="#">
+	    		Sort
+	    		<i class="icon-sort"></i>
+	    	</a>
+	    	<ul class="dropdown-menu">
+				<li><a href="#">by distance to origin</a></li>
+				<li><a href="#">by distance to destination</a></li>
+				<li><a href="#">by cost</a></li>
+				<li><a href="#">by price</a></li>
+	    	</ul>
+	    </div>
+	</div>
+</div>
+
 <div class="result-row">
 	
 

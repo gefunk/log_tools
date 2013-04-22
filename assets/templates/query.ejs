@@ -1,0 +1,70 @@
+<% for (var lane_index in lane_detail) { 
+	var lane = lane_detail[lane_index];
+	%>
+
+	<div class="result-row" data-lane-id="<%= lane.id %>">
+		<div class="row-fluid">
+			<div class="span1 carrier-logo">
+				<img src="<%= base_url %>assets/img/carriers/<%= lane.carrier_image %>" width="64px" height="64px">
+			</div>
+			<div class="span9 rate-body">
+				<div class="rate-heading">
+					<span id="origin-city" class="via-city"><%= origin_name %></span>
+					&rarr;
+					<% 
+						var legs = lane.legs;
+						for(leg in legs){
+							var leg_name = legs[leg].location;
+							if(legs[leg].state){
+								leg_name += ', '+legs[leg].state;
+							}
+							leg_name += ', '+legs[leg].country_code;
+							var popover_text = legs[leg].transport_type;
+							var class_name = "via-city";
+							var data = "";
+							if(legs[leg].leg_type == "origin" ){
+								class_name = "primary-city origin-port";
+								data = 'data-origin-distance="'+origin_ports[legs[leg].location_id]+'"';
+								popover_text += "\n"+origin_ports[legs[leg].location_id]+" from origin";
+							}else if( legs[leg].leg_type == "destination" ){
+								class_name = "primary-city destination-port";
+								data = 'data-destination-distance="'+dest_ports[legs[leg].location_id]+'"';
+								popover_text += "\n"+dest_ports[legs[leg].location_id]+" from destination";
+							}
+						
+					%>
+					<a <%= data %> data-toggle="popover" data-trigger="hover" data-placement="top" data-content="<%= popover_text %>" class="<%= class_name %>"> <%= leg_name %></a>&rarr;
+					<% 	} // end for %>	
+					<span id="destination-city"  class="via-city"><%= dest_name %></span>
+					
+					<div class="rate-subtext">
+						<div class="span3">
+							<span class="info">date:</span>
+							<%= lane.effective_date %>
+						</div>
+						<div class="span3">
+							<span class="info">commodity:</span>
+							<a href="#" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="<%= lane.cargo_description %>" class="cargo"><%= lane.cargo %></a>
+						</div>
+						<div class="span3">
+							<span class="info">container:</span>
+							<a href="#" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="<%= lane.container_description %>" class="shipcontainer"><%= lane.container %></a>
+						</div>
+					</div><!-- end rate subtext -->
+				</div><!-- end rate-heading -->
+				
+				
+				
+				
+			</div><!-- end class rate-body -->	
+			<div class="span2 rate-price">
+				<div id="sell-rate"><span class="info">sell:</span>$1700</div>
+				<div id="buy-rate"><span class="info">base:</span><%= lane.currency_symbol %> <%= lane.value %> <%= lane.currency %></div>
+				<div id="margin">
+					<span class="info">margin:</span>$100</div>
+				</div>
+			</div>
+
+		</div><!-- end parent row -->
+	</div>
+<% } // end overall for %>
