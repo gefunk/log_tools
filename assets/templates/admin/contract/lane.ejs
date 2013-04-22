@@ -1,0 +1,38 @@
+
+<tr data-id="<%= id %>">
+	<td>
+		<div class="pull-right">
+			<div class="lane-cost"><%= value %></div>
+			<button class="btn btn-danger btn-mini pull-right lane-delete"><i icon="icon-delte"></i>Delete</button>
+		</div>
+	
+		<div class="route">
+			<% 	for(var leg in legs){ 
+					// add state into lage name
+					var leg_name = legs[leg].location;
+					if(legs[leg].state){
+						leg_name += ", "+legs[leg].state;
+					}
+					leg_name += ", " + legs[leg].country_code;
+			%>
+				 <span class='<%= legs[leg].leg_type %>'><%= leg_name %></span>
+			<% } %>
+		</div>
+		<ul class="info">
+			<li>
+				<a href="#" class="desc" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="<%= container_description %>'">
+					<%= container %>
+				</a>
+			</li>
+			<li>
+				<a href="#" class="desc" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="<%= cargo_description %>">
+					<%= cargo %>
+				</a>
+			</li>
+			<li>
+				<span class="label">effective on</span>
+				<%= effective_date %>
+			</li>
+		</ul>
+	</td>
+</tr>

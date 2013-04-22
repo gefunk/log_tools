@@ -141,52 +141,10 @@ function load_lanes(){
 
 	$.get(site_url+"/admin/contract/getlanes/"+contract_id, function(data){
 		
-		for (var key in data)
-		{
-			if (data.hasOwnProperty(key)){
-				var id = data[key].id;
-				var cost = data[key].currency_symbol+data[key].value + " " + data[key].currency;
-				var container_type = data[key].container;
-				var container_description = data[key].container_description;
-				var cargo = data[key].cargo;
-				var cargo_description = data[key].cargo_description;
-				var date = data[key].effective_date;
-				
-				var legs = data[key].legs;
-				var route = "";
-				for(var leg in legs){
-					// add right arrows to show direction
-					if(route.length > 0){
-						route += "&rarr;"
-					}
-					if(legs.hasOwnProperty(leg)){
-						var leg_name = legs[leg].location;
-						if(legs[leg].state){
-							leg_name += ", "+legs[leg].state;
-						}
-						leg_name += ", " + legs[leg].country_code;
-						route += "<span class='"+legs[leg].leg_type+"'>"+ leg_name +"</span>";
-					}
-				}
-				
-
-				// create html	
-				var parent_open = "<tr data-id="+id+"><td>";
-				var cost_html = '<div class="pull-right"><div class="lane-cost">'+cost+'</div><button class="btn btn-danger btn-mini pull-right lane-delete">Delete</button></div>';
-				var route_html = '<div class="route">'+route+'</div>';
-				var info_html = '<ul class="info">'
-								+'<li><a href="#" class="desc" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="'+container_description+'">'+container_type+'</a></li>'
-								+'<li><a href="#" class="desc" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="'+cargo_description+'">'+cargo+'</a></li>'
-								+'<li><span class="label">effective on</span>'+date+'</li>'
-								+'</ul>';
-				var parent_close = "</td></tr>";
-				
-				// add to table
-				$("#lanes").append(parent_open+cost_html+route_html+info_html+parent_close);
-			}
-		}
-		
-		
+		var html = "";
+		for(var index = 0; index < data.length; index++)
+			html += new EJS({url: base_url+'assets/templates/admin/contract/lane.ejs'}).render(data[index]);
+		$("#lanes").append(html);
 		// enable popover
 		$("a.desc").popover();
 	});

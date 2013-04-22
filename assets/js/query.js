@@ -129,7 +129,6 @@ function search_lanes () {
 }
 
 function parse_search_response (data) {
-	console.log(data);
 	
 	var origin = $("#origin").select2("data");
 	var origin_name = origin.city_name;
@@ -144,20 +143,32 @@ function parse_search_response (data) {
 	dest_name += ", "+destination.country_code;
 	
 	var lanes = data.lane_detail;
+	
+	data.origin_name = origin_name;
+	data.dest_name = dest_name;
+	data.base_url = base_url;
+	
+	console.log(data);
+	
+	/*
 	for(lane in lanes){
-		var html = '<div class="result-row">';
+		var html = '<div class="result-row" data-lane-id="'+lanes[lane].id+'">';
 		html += '<div class="row-fluid">';
 		html += format_carrier(lanes[lane]);
-		html += add_rate_body()+format_rate_heading(origin_name, lanes[lane].legs, dest_name);
+		html += add_rate_body()+format_rate_heading(origin_name, lanes[lane].legs, dest_name, data.origin_ports, data.dest_ports);
 		html += format_rate_subtext(lanes[lane]);
 		html += close_rate_body();
 		html += format_price(lanes[lane]);
 		html += '</div><!-- end parent row -->';
 		html += '</div>';
 		$("div.container-fluid").append(html);
-	}
+	}*/
 	
+	var html = new EJS({url: base_url+'assets/templates/query.ejs'}).render(data);
+	console.log(html);
+	$("div.container-fluid").append(html);
 	
+	$('a.shipcontainer, a.cargo, a.primary-city').popover();
 }
 
 function format_carrier (lane) {
@@ -175,7 +186,7 @@ function close_rate_body (argument) {
 	return '</div><!-- end class rate-body -->';
 }
 
-function format_rate_heading (origin, legs, destination) {
+function format_rate_heading (origin, legs, destination, origin_ports, dest_ports) {
 		var html = '<div class="rate-heading">';
 		html += '<span id="origin-city" class="via-city">'+origin+'</span>&rarr;';
 		var leg_html = '';
@@ -186,16 +197,24 @@ function format_rate_heading (origin, legs, destination) {
 				leg_name += ', '+legs[leg].state;
 			}
 			leg_name += ', '+legs[leg].country_code;
-			leg_name += ' ('+legs[leg].transport_type+')';
-			console.log("leg name", leg_name);
+			var popover_text = legs[leg].transport_type;
+			//console.log("leg name", leg_name);
 			var class_name = "via-city";
-			if(legs[leg].leg_type == "origin" || legs[leg].leg_type == "destination" ){
-				class_name = "primary-city";
+			var data = "";
+			if(legs[leg].leg_type == "origin" ){
+				class_name = "primary-city origin-port";
+				data = 'data-origin-distance="'+origin_ports[legs[leg].location_id]+'"';
+				popover_text += "\n"+origin_ports[legs[leg].location_id]+" from "+origin;
+				//console.log("Origin Ports: ", origin_ports[legs[leg].location_id], " Location id: ", legs[leg].location_id, " Origin Ports ", origin_ports);
+			}else if( legs[leg].leg_type == "destination" ){
+				class_name = "primary-city destination-port";
+				data = 'data-destination-distance="'+dest_ports[legs[leg].location_id]+'"';
+				popover_text += "\n"+dest_ports[legs[leg].location_id]+" from "+destination;
 			}
 			if(leg_html.length > 0){
 				leg_html += "&rarr;";
 			}
-			leg_html += '<span class="'+class_name+'">'+leg_name+'</span>';
+			leg_html += '<a '+data+' data-toggle="popover" data-trigger="hover" data-placement="top" data-content="'+popover_text+'" class="'+class_name+'">'+leg_name+'</a>';
 		}
 		html += leg_html+'&rarr;<span id="destination-city"  class="via-city">'+destination+'</span>';
 		html += '</div>';
@@ -208,10 +227,10 @@ function format_rate_subtext (lane) {
 	html +=	'<span class="info">date:</span>'+lane.effective_date;
 	html += '</div>';
 	html += '<div class="span3">';
-	html += '<span class="info">commodity:</span>'+lane.cargo;
+	html += '<span class="info">commodity:</span><a href="#" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="'+lane.cargo_description+'" class="cargo">'+lane.cargo+"</a>";
 	html += '</div>';
 	html +=	'<div class="span3">';
-	html += '<span class="info">container:</span>'+lane.container;
+	html += '<span class="info">container:</span><a href="#" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="'+lane.container_description+'" class="shipcontainer">'+lane.container+'</a>';
 	html += '</div>';
 	html += '</div>';
 	return html;

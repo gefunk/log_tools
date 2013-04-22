@@ -60,7 +60,7 @@ class LaneModel extends CI_Model
 		$dbresults = $query->result_array();
 		
 		foreach($dbresults as &$lane){
-			$this->db->select('rp.name as location, rusrc.name as state, rp.country_code as country_code, rtt.name as transport_type, rlt.name as leg_type');
+			$this->db->select('rp.id as location_id, rp.name as location, rusrc.name as state, rp.country_code as country_code, rtt.name as transport_type, rlt.name as leg_type');
 			$this->db->from('contract_lane_legs cll');
 			$this->db->join('ref_ports rp','rp.id = cll.location');
 			$this->db->join('ref_us_can_region_codes rusrc','rusrc.iso_region = rp.state_code', "left");
