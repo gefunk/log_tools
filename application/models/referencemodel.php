@@ -48,9 +48,18 @@ class ReferenceModel extends CI_Model
 	
 	function search_cities($search_term, $page=NULL, $page_size=NULL, $array=FALSE)
 	{
+		
+		$search_terms = $this->clean_search_term($search_term);
+
+		$match_string = "";
+		
+		foreach($search_terms as $term){
+			$match_string .= $term." ";
+		}
+		
 		$this->db->select("id, city_name, state, country_name, country_code");
 		$this->db->from('ref_cities_search');
-		$this->db->where("MATCH(search_term) AGAINST ('".$this->clean_search_term($search_term)."')");
+		$this->db->where("MATCH(search_term) AGAINST ('$match_string') IN BOOLEAN MODE");
 		
 		if(isset($page) && isset($page_size)){
 			if($page == 1){
@@ -67,7 +76,7 @@ class ReferenceModel extends CI_Model
 		
 		$this->db->select("count(*) as total");
 		$this->db->from('ref_cities_search');
-		$this->db->where("MATCH(search_term) AGAINST ('".$this->clean_search_term($search_term)."')");
+		$this->db->where("MATCH(search_term) AGAINST ('$match_string')  IN BOOLEAN MODE");
 		$query = $this->db->get();
 		$data['total'] = $query->row()->total;
 		
@@ -78,11 +87,20 @@ class ReferenceModel extends CI_Model
 	
 	function search_ports($search_term, $page=NULL, $page_size=NULL, $array=FALSE)
 	{
+		
+		$search_terms = $this->clean_search_term($search_term);
+
+		$match_string = "";
+		
+		foreach($search_terms as $term){
+			$match_string .= $term." ";
+		}
+		
 		$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
 		$this->db->from('ref_ports rp');
 		$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
 		$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
-		$this->db->where("MATCH(search_term) AGAINST ('".$this->clean_search_term($search_term)."')");
+		$this->db->where("MATCH(search_term) AGAINST ('$match_string')");
 		$this->db->order_by("found", "desc");
 		
 		if(isset($page) && isset($page_size)){
@@ -98,9 +116,11 @@ class ReferenceModel extends CI_Model
 		$query = $this->db->get();
 		$data['results'] = $query->result_array();
 		
+
+		
 		$this->db->select("count(*) as total");
 		$this->db->from('ref_ports');
-		$this->db->where("MATCH(search_term) AGAINST ('".$this->clean_search_term($search_term)."')");
+		$this->db->where("MATCH(search_term) AGAINST ('$match_string')");
 		$query = $this->db->get();
 		$data['total'] = $query->row()->total;
 		
@@ -144,12 +164,14 @@ class ReferenceModel extends CI_Model
 	*/
 	function clean_search_term($search_term){
 		// strip leading and ending whitespace and remove commas
-		$string = str_replace(",", "", trim($search_term));
+		//$string = str_replace(",", "", trim($search_term));
+		
 		//Clean multiple dashes or whitespaces
 	    //$string = preg_replace("/[\s]+/", " ", $string);
 	    //Convert whitespaces and underscore to %
 	    //$string = preg_replace("/[\s]/", "%", $string);
-	    return $string;
+		// convert search term into split array
+	    return preg_split("/[\s,]+/", $search_term);
 	}
 	
 	/*
