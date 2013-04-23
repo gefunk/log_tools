@@ -9,7 +9,7 @@
 			</div>
 			<div class="span9 rate-body">
 				<div class="rate-heading">
-					<span id="origin-city" class="via-city"><%= origin_name %></span>
+					<span class="via-city origin-city"><%= origin_name %></span>
 					&rarr;
 					<% 
 						var legs = lane.legs;
@@ -19,23 +19,24 @@
 								leg_name += ', '+legs[leg].state;
 							}
 							leg_name += ', '+legs[leg].country_code;
-							var popover_text = legs[leg].transport_type;
+							var service = legs[leg].transport_type;
+							var distance_text = "";
 							var class_name = "via-city";
 							var data = "";
 							if(legs[leg].leg_type == "origin" ){
 								class_name = "primary-city origin-port";
 								data = 'data-origin-distance="'+origin_ports[legs[leg].location_id]+'"';
-								popover_text += "\n"+origin_ports[legs[leg].location_id]+" from origin";
+								distance_text = origin_ports[legs[leg].location_id]+" from origin";
 							}else if( legs[leg].leg_type == "destination" ){
 								class_name = "primary-city destination-port";
 								data = 'data-destination-distance="'+dest_ports[legs[leg].location_id]+'"';
-								popover_text += "\n"+dest_ports[legs[leg].location_id]+" from destination";
+								distance_text = dest_ports[legs[leg].location_id]+" from destination";
 							}
 						
 					%>
-					<a <%= data %> data-toggle="popover" data-trigger="hover" data-placement="top" data-content="<%= popover_text %>" class="<%= class_name %>"> <%= leg_name %></a>&rarr;
+					<a <%= data %> data-service="<%= service %>" class="<%= class_name %>"> <%= leg_name %></a>&rarr;
 					<% 	} // end for %>	
-					<span id="destination-city"  class="via-city"><%= dest_name %></span>
+					<span id="destination-city"  class="via-city destination-city"><%= dest_name %></span>
 					
 					<div class="rate-subtext">
 						<div class="span3">

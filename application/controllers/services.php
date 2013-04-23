@@ -51,6 +51,15 @@ class Services extends CI_Controller {
 		
 	}
 	
+	public function test_list_of_cities(){
+		$this->output->enable_profiler(TRUE);
+		$query = 'Atlanta GA';
+		$page = 1;
+		$page_size = 10;
+		echo json_encode($this->referencemodel->search_cities($query, $page, $page_size, TRUE));
+		
+	}
+	
 	/**
 	* pages through list of
 	*

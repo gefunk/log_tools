@@ -112,8 +112,36 @@ $(document).ready(function(){
 		escapeMarkup: function (m) { return m; } // we do not want to escape markup since we are displaying html in results
 	});
 	
+	
+	// load search on default
+	//$.get(site_url+"/main/searchlanes/2457684/2338747/9", parse_search_response);
+	
+	
+	$("div.container-fluid").on("click", "a.origin-port", function(e){
+		console.log("clicked");
+		e.stopPropagation();
+	
+		$(this).popover({
+			html: true,
+			placement: "top",
+			content: get_origin_info,
+			delay: { show: 500, hide: 100 },
+			trigger: 'manual',
+			container: $(this)
+		});
+		$(this).popover('show');
+	});
+	
 });
 
+
+function get_origin_info(element) {
+	var service = $(element).data("service"); 
+	var distance = $(element).data("origin-distance"); 
+	var origin_city = $(element).siblings("span.origin-city").text();
+	var content = "<p>"+service+"</p><p>"+ distance + " from " + origin_city + "</p>";
+	return content;
+}
 
 function search_lanes () {
 	
@@ -149,100 +177,20 @@ function parse_search_response (data) {
 	data.base_url = base_url;
 	
 	console.log(data);
-	
-	/*
-	for(lane in lanes){
-		var html = '<div class="result-row" data-lane-id="'+lanes[lane].id+'">';
-		html += '<div class="row-fluid">';
-		html += format_carrier(lanes[lane]);
-		html += add_rate_body()+format_rate_heading(origin_name, lanes[lane].legs, dest_name, data.origin_ports, data.dest_ports);
-		html += format_rate_subtext(lanes[lane]);
-		html += close_rate_body();
-		html += format_price(lanes[lane]);
-		html += '</div><!-- end parent row -->';
-		html += '</div>';
-		$("div.container-fluid").append(html);
-	}*/
+
 	
 	var html = new EJS({url: base_url+'assets/templates/query.ejs'}).render(data);
-	console.log(html);
+	
 	$("div.container-fluid").append(html);
 	
-	$('a.shipcontainer, a.cargo, a.primary-city').popover();
-}
+	$('a.shipcontainer, a.cargo').popover();
+	
+	
 
-function format_carrier (lane) {
-	var html = '<div class="span1 carrier-logo">';
-	html += '<img src="'+base_url+'assets/img/carriers/'+lane.carrier_image+'" width="64px" height="64px">';
-	html += '</div>';
-	return html;
-}
-
-function add_rate_body () {
-	return '<div class="span9 rate-body">';
-}
-
-function close_rate_body (argument) {
-	return '</div><!-- end class rate-body -->';
-}
-
-function format_rate_heading (origin, legs, destination, origin_ports, dest_ports) {
-		var html = '<div class="rate-heading">';
-		html += '<span id="origin-city" class="via-city">'+origin+'</span>&rarr;';
-		var leg_html = '';
-		for(leg in legs){
-			var leg_name = legs[leg].location;
-			
-			if(legs[leg].state){
-				leg_name += ', '+legs[leg].state;
-			}
-			leg_name += ', '+legs[leg].country_code;
-			var popover_text = legs[leg].transport_type;
-			//console.log("leg name", leg_name);
-			var class_name = "via-city";
-			var data = "";
-			if(legs[leg].leg_type == "origin" ){
-				class_name = "primary-city origin-port";
-				data = 'data-origin-distance="'+origin_ports[legs[leg].location_id]+'"';
-				popover_text += "\n"+origin_ports[legs[leg].location_id]+" from "+origin;
-				//console.log("Origin Ports: ", origin_ports[legs[leg].location_id], " Location id: ", legs[leg].location_id, " Origin Ports ", origin_ports);
-			}else if( legs[leg].leg_type == "destination" ){
-				class_name = "primary-city destination-port";
-				data = 'data-destination-distance="'+dest_ports[legs[leg].location_id]+'"';
-				popover_text += "\n"+dest_ports[legs[leg].location_id]+" from "+destination;
-			}
-			if(leg_html.length > 0){
-				leg_html += "&rarr;";
-			}
-			leg_html += '<a '+data+' data-toggle="popover" data-trigger="hover" data-placement="top" data-content="'+popover_text+'" class="'+class_name+'">'+leg_name+'</a>';
-		}
-		html += leg_html+'&rarr;<span id="destination-city"  class="via-city">'+destination+'</span>';
-		html += '</div>';
-		return html;
-}
-
-function format_rate_subtext (lane) {
-	var html = '<div class="rate-subtext">';
-	html +=	'<div class="span3">';
-	html +=	'<span class="info">date:</span>'+lane.effective_date;
-	html += '</div>';
-	html += '<div class="span3">';
-	html += '<span class="info">commodity:</span><a href="#" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="'+lane.cargo_description+'" class="cargo">'+lane.cargo+"</a>";
-	html += '</div>';
-	html +=	'<div class="span3">';
-	html += '<span class="info">container:</span><a href="#" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="'+lane.container_description+'" class="shipcontainer">'+lane.container+'</a>';
-	html += '</div>';
-	html += '</div>';
-	return html;
-}
-
-function format_price (lane) {
-	var html = '<div class="span2 rate-price">';
-	html +=	'<div id="sell-rate"><span class="info">sell:</span>$1700</div>';
-	html +=	'<div id="buy-rate"><span class="info">base:</span>'+lane.currency_symbol + lane.value+" "+lane.currency+'</div>';
-	html += '<div id="margin">';
-	html += '<span class="info">margin:</span>$100</div>';
-	html += '</div>';
-	html += '</div>';
-	return html;
+	
+	/*
+	$('a.origin-city').popover({
+		html: data-toggle="popover" data-trigger="hover" data-placement="top" data-content="<%= popover_text %>"
+	});
+	*/
 }
