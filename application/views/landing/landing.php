@@ -28,7 +28,7 @@
                 <a href="/" class="brand">Amfitir</a>
                     <ul class="nav">
                         <li class="active"><a href="#">Home</a></li>
-                        <li><a href="<?php echo site_url().'/contact'; ?>">Contact</a></li>
+                        <li><a href="<?php echo site_url('contact'); ?>">Contact</a></li>
                     </ul>
             </div>
         </div>
@@ -157,7 +157,7 @@
 
     <div class="row">
         <div class="span12 center graded">
-            <a href="<?php echo site_url().'/contact'; ?>" class="signup">Contact Us</a>
+            <a href="<?php echo site_url('contact'); ?>" class="signup">Contact Us</a>
         </div>
     </div>
 </div>
@@ -183,7 +183,7 @@
         </div>
         <div class="span4">
             
-            <form class="form-horizontal" action="<?php echo site_url().'/welcome/save_newsletter'; ?>" method="POST">
+            <form class="form-horizontal" action="<?php echo site_url('welcome/save_newsletter'); ?>" method="POST">
                 <h4>Sign up to the newsletter</h4>
                 <div class="input-prepend">
                     <span class="add-on"><i class="icon-envelope"></i></span><input name="email" type="text" id="inputIcon" class="span2" placeholder="Email address">
@@ -202,7 +202,7 @@
                 <li><a href="#">Support</a></li>
                 <li><a href="#">Privacy Policy</a></li>
                 <li><a href="#">Jobs</a></li>
-                <li><a href="<?php echo site_url().'/contact'; ?>">Contact</a></li>
+                <li><a href="<?php echo site_url('contact'); ?>">Contact</a></li>
             </ul>           
         </div>
     </div>
