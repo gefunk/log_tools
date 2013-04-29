@@ -1,5 +1,5 @@
 
-<div id="query-selection" class="well">
+<div id="query-selection">
 	
 	<div class="row-fluid">
 		<div class="span12">
@@ -11,12 +11,11 @@
 				<label for="Destination">Destination</label>
 				<input type="hidden" class="query-input" name="destination" id="destination" placeholder="Destination city" style="width:226px;">			
 			</div>
-			<div class="span4">
-				<button type="button" id="search" class="btn btn-primary button-input"><i class="icon-search"></i><span>Find Rates</span></button>
-				<button id="filter" type="button" class="btn button-input"><i class="icon-filter"></i><span>Filter</span></button>			
-			</div>
+			
 		</div>
 	</div>
+	
+
 
 	<div id="filter-input">
 		<div class="row-fluid">
@@ -63,13 +62,24 @@
 			</div>
 		</div>
 		
+		
+
+		
 		<div class="row-fluid">
 			
 			
 
 		</div>
+	</div><!-- end filter -->
+
+	<div id="query-action">
+		<div class="row-fluid">
+			<div class="span4">
+				<button type="button" id="search" class="btn btn-primary button-input"><i class="icon-search"></i><span>Find Rates</span></button>
+				<button id="filter" type="button" class="btn button-input"><i class="icon-filter"></i><span>Filter</span></button>			
+			</div>
+		</div>
 	</div>
-	
 </div><!-- query input selection -->
 
 <div id="filters">
