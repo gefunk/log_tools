@@ -7,8 +7,8 @@
     <meta name="description" content="">
     <meta name="author" content="recursive.com.au">
 
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/general.css" rel="stylesheet">
         
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600" rel="stylesheet">
@@ -36,13 +36,13 @@
     <div class="row">
         <div class="feature span12">
             <h1 class="motto">Ocean Contract Management is <strong>Amfitir</strong>.</h1>
-            <h2 class="subheader">Be more efficient with your rates!</h2>
+            <h2 class="subheader">Be efficient with your rates!</h2>
             <img id="feature-screenshot" src="<?php echo base_url(); ?>assets/img/pics/main.png" alt="screenshot" />
         </div>
     </div>
     <div class="row">
         <div class="span12 graded center">
-            <p>You'll be amazed by Producto. Never has performant node.js NoSQL CoffeeScript LLVM compiling been so easy.</p>
+            <p>Amfitir converts your ocean contracts from convoluted paper documents to an easy to use, searchable rate interface.</p>
         </div>
     </div>
 </div>
@@ -87,7 +87,7 @@
                 <article class="span6 offset1">
                     <h3>World class Rate Engine.</h3>
                     <p>
-						Our rate engine factors in all facets from all your contracts to provide you the best quote for your customer. The rate engine calculates in your rates in milliseconds allowing you to provide a fast turnaround for quotations.
+						Our rate engine factors in all facets from all your contracts to provide you the best quote for your customer. The rate engine calculates in your rates in milliseconds allowing you to be more responsive to your customer's needs.
                     </p>
                 </article>
                 <div class="span4">
@@ -105,88 +105,51 @@
             </div>
             <div class="row">
                 <article class="span6 offset1">
-                    <h3>Use this as a base.</h3>
-                    <p>Tablet publishing HTML5 mobile first really simple syndication meetups white board walls.
-                    User experience iterate algorithm gamification semantic web value add market research stealth.
-                    Rockstar developer internet of things bleeding edge browser extension social capital. 
+                    <h3>People Power.</h3>
+                    <p>We hire the right people! Our people have experience at carriers and other large NVOCC's. You can be assured that your contract will be analyzed and translated by industry experts. We also have support staff off-shore to ensure quick turnaround times on amendments.
                     </p>
                 </article>
                 <div class="span4">
-                    <img src="<?php echo base_url(); ?>assets/img/pics/placeholder_200.png" alt="placeholder" />
+                    <img src="<?php echo base_url(); ?>assets/img/pics/peope-icon.png" alt="placeholder" />
                 </div>
             </div>
+			<div class="row">
+                <div class="span4 offset1">
+                    <img src="<?php echo base_url(); ?>assets/img/pics/flexible-icon.png" alt="placeholder" />
+                </div>
+                <article class="span6">
+                    <h3>Flexible Platform.</h3>
+                    <p>We are proud to have a platform that is extremely flexible to meet every one of our customer needs. Our platform is capable of maintaining profit margins by different levels of your business: by Contract, Customer, Shipping lane. We also have services that provide up to the second currency conversion built directly into the platform. All our settings are manageable directly via our Settings Interface. We also support a variety of integration choices, into other ERP systems, CRM's  and Billing Systems.</p>
+                </article>
+            </div>
+			 <div class="row">
+	                <article class="span6 offset1">
+	                    <h3>Speed.</h3>
+	                    <p>We hire the right people! Our people have experience at carriers and other large NVOCC's. You can be assured that your contract will be analyzed and translated by industry experts. We also have support staff off-shore to ensure quick turnaround times.
+	                    </p>
+	                </article>
+	                <div class="span4">
+	                    <img src="<?php echo base_url(); ?>assets/img/pics/speed.png" alt="placeholder" />
+	                </div>
+	            </div>
+			</div>
         </div>
     </div>
 </div>    
 <div class="container">
-    <h2>Optional <strong>pricing</strong> table.</h2>
-    <div class="row pricing">
-        
-        <div class="span3">
-            <div class="well">
-                <h3>Basic</h3>
-                <ul>
-                    <li>1 user</li>
-                    <li>1 project</li>
-                    <li>1GB storage</li>
-                </ul>
-                <h4>$24/month</h4>
-            </div>
-        </div>
 
-        <div class="span3">
-            <div class="spot">Best<br/>value!</div>
-            <div class="well highlighted">
-                <h3>Plus</h3>
-                <ul>
-                    <li>5 users</li>
-                    <li>5 projects</li>
-                    <li>5GB storage</li>
-                </ul>
-                <h4>$36/month</h4>
-            </div>
-        </div>
-
-        <div class="span3">
-            <div class="well">
-                <h3>Pro</h3>
-                <ul>
-                    <li>10 users</li>
-                    <li>20 projects</li>
-                    <li>15GB storage</li>
-                </ul>
-                <h4>$50/month</h4>
-            </div>
-        </div>
-
-        <div class="span3">
-            <div class="well">
-                <h3>Premium</h3>
-                <ul>
-                    <li>Unlimited users</li>
-                    <li>Unlimited projects</li>
-                    <li>50GB storage</li>
-                </ul>
-                <h4>$80/month</h4>
-            </div>
-        </div>
-        
-    </div>
     <div class="row">
         <div class="span12 center graded">
-            <a href="#" class="signup">Sign up now</a>
+            <a href="#" class="signup">Contact Us</a>
         </div>
     </div>
 </div>
 <div class="container">
-    <h2>Final pitch.</h2>
+    <h2>Our Success is <strong>your success.</strong></h2>
     <div class="row">
         <div class="span12 box">
             <article class="span10 offset1">
-            <p>Sandboxing UDID content management system ruby on rails continuous deployment big data infographic.
-            Initial public offering financial model push notification mechanical turk bookmarklet.
-            Term sheet convertible note colluding bootstrapping.
-            Cloud computing subscription model out of the box proactive solution.  </p>
+            <p>We want to work with you! At Amfitir we take a partnership approach to every client that we work with. We know that our success lies with your success. Our people are committed to helping you get the most out of your contracts.</p>
             <p>And if you're not satisfied, you can cancel for free at any time within your 30-day trial.</p>
             </article>
         </div>
@@ -197,7 +160,7 @@
     <div class="row">
         <div class="span8">
             <h4>About us</h4>
-            <p>Producto Corp was founded in 2012 by Frank Upfield and Nathan Kent-Young to take advantage of the latest technologies in order to aid viral B2B synergy.</p>
+            <p>Amfitir.com was founded in 2013 by <strong>R2 LLC</strong> to meet a need for efficient contract management for Ocean Transportation Intermediaries.</p>
             <p></p>
             
         </div>
