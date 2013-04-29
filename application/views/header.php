@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-		<title><?php echo $title ?> - Amfitir Contract Managment</title>
+		<title><?php echo $title ?> - Amfitir</title>
 		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <!-- bootstrap -->
 	    <link href="<?php echo base_url(); ?>assets/css/bootstrap.css" rel="stylesheet" />
@@ -57,7 +57,7 @@
 		<!-- navbar -->
 	    <div class="navbar navbar-inverse">
 	        <div class="navbar-inner">
-	            <a class="brand" href="index.html"><img src="<?php echo base_url(); ?>assets/img/nav-logo.png">Amfitir Rate Management</a>
+	            <a class="brand" href="index.html"><img src="<?php echo base_url(); ?>assets/img/nav-logo.png">Amfitir Rate Manager</a>
 
 	            <!-- shows same menu as sidebar but for mobile devices -->
 	            <button type="button" class="btn btn-navbar visible-phone" data-toggle="collapse" data-target=".nav-collapse">
@@ -121,14 +121,20 @@
 	                    <div class="arrow_border"></div>
 	                </div>
 	                <a class="tab1" href="index.html">
-	                    <i class="sidebar-home"></i>
-	                    <span>Home</span>
+	                    <i class="sidebar-forms"></i>
+	                    <span>Rates</span>
 	                </a>
-	            </li>            
+	            </li>       
+				<li class="">
+	                <a class="tab2" href="chart-showcase.html">
+	                    <i class="sidebar-tables"></i>
+	                    <span>Contracts</span>
+	                </a>
+	            </li>     
 	            <li class="">
 	                <a class="tab2" href="chart-showcase.html">
 	                    <i class="sidebar-charts"></i>
-	                    <span>Charts</span>
+	                    <span>Analytics</span>
 	                </a>
 	            </li>
 	            <li class="">
@@ -138,51 +144,15 @@
 	                </a>
 	            </li>
 	            <li class="">
-	                <a class="tab3" href="form-showcase.html">
-	                    <i class="sidebar-forms"></i>
-	                    <span>Forms</span>
-	                </a>
-	            </li>
-	            <li class="">
-	                <a class="tab4" href="gallery.html">
-	                    <i class="sidebar-gallery"></i>
-	                    <span>Gallery</span>
-	                </a>
-	            </li>
-	            <li class="">
-	                <a class="tab5" href="icons.html">
-	                    <i class="sidebar-widgets"></i>
-	                    <span>Icons</span>
-	                </a>
-	            </li>
-	            <li class="">
-	                <a class="tab6" href="calendar.html">
-	                    <i class="sidebar-calendar"></i>
-	                    <span>Calendar</span>
-	                </a>
-	            </li>
-	            <li class="">
-	                <a class="tab7" href="tables.html">
-	                    <i class="sidebar-tables"></i>
-	                    <span>Tables</span>
-	                </a>
-	            </li>
-	            <li class="">
-	                <a class="tab8" href="ui-elements.html">
-	                    <i class="sidebar-ui"></i>
-	                    <span>UI Elements</span>
-	                </a>
-	            </li>
-	            <li class="">
 	                <a class="tab9" href="personal-info.html">
 	                    <i class="sidebar-gear"></i>
-	                    <span>My Info</span>
+	                    <span>Settings</span>
 	                </a>
 	            </li>
 	            <li class="">
 	                <a class="tab10" href="signin.html">
 	                    <i class="sidebar-logout"></i>
-	                    <span>Login page</span>
+	                    <span>Logout</span>
 	                </a>
 	            </li>
 	        </ul>
