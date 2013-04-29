@@ -28,7 +28,7 @@
                 <a href="/" class="brand">Amfitir</a>
                     <ul class="nav">
                         <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">Contact</a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#contact-modal">Contact</a></li>
                     </ul>
             </div>
         </div>
@@ -87,7 +87,7 @@
                 <article class="span6 offset1">
                     <h3>World class Rate Engine.</h3>
                     <p>
-						Our rate engine factors in all facets from all your contracts to provide you the best quote for your customer. The rate engine calculates in your rates in milliseconds allowing you to be more responsive to your customer's needs.
+						Our rate engine factors in all facets from all your contracts to provide you the best quote for your customer. The rate engine calculates in your rates in milliseconds allowing you to be responsive to your customer's needs. Our engine also keeps track of rate requests and allows you to gain visibility into your ocean contracts.
                     </p>
                 </article>
                 <div class="span4">
@@ -140,7 +140,7 @@
 
     <div class="row">
         <div class="span12 center graded">
-            <a href="#" class="signup">Contact Us</a>
+            <a href="#" class="signup" data-toggle="modal" data-target="#contact-modal">Contact Us</a>
         </div>
     </div>
 </div>
@@ -192,6 +192,34 @@
          
 </div>
 
+<div id="contact-modal" class="modal hide fade">
+    <form>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h3>Contact Us</h3>
+  </div>
+  <div class="modal-body">
+
+
+	    <label>Your Name</label>
+	    <input type="text" placeholder="Your Name...">
+
+	    <label>Your Email</label>
+    	<input type="text" placeholder="Email Address...">
+
+	    <label>Your Phone</label>
+	    <input type="text" placeholder="Phone Number...">
+
+		<label>Anything else</label>
+		<textarea placeholder="We would love to hear from you..."></textarea>
+
+  </div>
+  <div class="modal-footer">
+    <a href="#" class="btn">Send us a note!</a>
+  </div>
+	</form>
+</div>
+
 	<script type="text/javascript">
 
 	  var _gaq = _gaq || [];
@@ -206,6 +234,14 @@
 	  })();
 
 	</script>
+	
+	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
+	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript">
+	
+	</script>
+	
 
 </body>
 </html>
