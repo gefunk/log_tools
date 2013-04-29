@@ -3,24 +3,41 @@
 class Welcome extends CI_Controller {
 
 	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -  
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in 
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
-	public function index()
+	*	Default endpoint to landing page
+	*/
+	public function index($showalert="")
 	{
-		$this->load->view('landing');
+		if(isset($showalert))
+			$data['alert'] = $showalert;
+		$this->load->view('landing/landing', $data);
 	}
+	
+	public function contact()
+	{
+		$this->load->view('landing/contact');
+	}
+	
+	public function save_contact()
+	{
+		$this->load->model("leadsmodel");
+		$name = $this->input->post("name");
+		$email = $this->input->post("email");
+		$phone = $this->input->post("phone");
+		$message = $this->input->post("message");		
+		$ipaddr = $this->input->ip_address();
+		$this->leadsmodel->save_contact($name,$email,$phone,$message,$ipaddr);
+		redirect('welcome/index/contact', 'location');
+	}
+	
+	public function save_newsletter()
+	{
+		$this->load->model("leadsmodel");
+		$email = $this->input->post("email");
+		$this->leadsmodel->save_newsletter($email);
+		redirect('welcome/index/newsletter', 'location');
+	}
+	
+	
 }
 
 /* End of file welcome.php */
