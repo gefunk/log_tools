@@ -202,7 +202,7 @@
                 <li><a href="#">Support</a></li>
                 <li><a href="#">Privacy Policy</a></li>
                 <li><a href="#">Jobs</a></li>
-                <li><a href="#">Contact</a></li>
+                <li><a href="<?php echo site_url().'/contact'; ?>">Contact</a></li>
             </ul>           
         </div>
     </div>
