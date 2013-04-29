@@ -106,7 +106,7 @@
             <div class="row">
                 <article class="span6 offset1">
                     <h3>People Power.</h3>
-                    <p>We hire the right people! Our people have experience at carriers and other large NVOCC's. You can be assured that your contract will be analyzed and translated by industry experts. We also have support staff off-shore to ensure quick turnaround times on amendments.
+                    <p>We hire the right people! Our people have experience at carriers and other large NVOCC's. You can be assured that your contract will be analyzed and translated by industry experts. We also have support staff off-shore to ensure quick turnaround times on contract amendments.
                     </p>
                 </article>
                 <div class="span4">
@@ -119,13 +119,13 @@
                 </div>
                 <article class="span6">
                     <h3>Flexible Platform.</h3>
-                    <p>We are proud to have a platform that is extremely flexible to meet every one of our customer needs. Our platform is capable of maintaining profit margins by different levels of your business: by Contract, Customer, Shipping lane. We also have services that provide up to the second currency conversion built directly into the platform. All our settings are manageable directly via our Settings Interface. We also support a variety of integration choices, into other ERP systems, CRM's  and Billing Systems.</p>
+                    <p>We are proud to have a platform that is extremely flexible to meet every one of our customer needs. Our platform is capable of maintaining profit margins by different levels of your business: by Contract, Customer, Shipping lane. We also have services that provide up to the second currency conversion built directly into the platform. You can create your own harmonized codes and tarriffs. All our settings are manageable directly via our Settings Interface. Amfitir also supports a variety of integration choices, into other ERP systems, CRM's  and Billing Systems.</p>
                 </article>
             </div>
 			 <div class="row">
 	                <article class="span6 offset1">
-	                    <h3>Speed.</h3>
-	                    <p>We hire the right people! Our people have experience at carriers and other large NVOCC's. You can be assured that your contract will be analyzed and translated by industry experts. We also have support staff off-shore to ensure quick turnaround times.
+	                    <h3>Speed and Security.</h3>
+	                    <p>Our service is built on the fastest cloud interface in the world. Our service is engineered to provide incredibly quick response times by using the latest technology and bleeding edge internet techniques. You can be ensured that your rates will be secure in our system because we use <strong>Secure Services Layer (SSL)</strong> protocol to  keep your information secure. Your data will also be safe from data loss, because we keep a secure copy in a different geographic zone of all your information. With Amfitir, you can be assured you will never experience downtime.
 	                    </p>
 	                </article>
 	                <div class="span4">
@@ -149,8 +149,8 @@
     <div class="row">
         <div class="span12 box">
             <article class="span10 offset1">
-            <p>We want to work with you! At Amfitir we take a partnership approach to every client that we work with. We know that our success lies with your success. Our people are committed to helping you get the most out of your contracts.</p>
-            <p>And if you're not satisfied, you can cancel for free at any time within your 30-day trial.</p>
+            <p>Most Importantly! We want to work with you! At Amfitir we take a partnership approach to every client that we work with. We know that our success lies with your success. Our people are committed to helping you get the most out of your contracts.</p>
+            <p>We will do everything possible to provide the best service for your business.</p>
             </article>
         </div>
     </div>
@@ -191,6 +191,21 @@
     </div>
          
 </div>
+
+	<script type="text/javascript">
+
+	  var _gaq = _gaq || [];
+	  _gaq.push(['_setAccount', 'UA-39338064-1']);
+	  _gaq.push(['_setDomainName', 'amfitir.com']);
+	  _gaq.push(['_trackPageview']);
+
+	  (function() {
+	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	  })();
+
+	</script>
 
 </body>
 </html>
