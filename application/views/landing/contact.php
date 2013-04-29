@@ -34,7 +34,7 @@
                 <a href="/" class="brand">Amfitir</a>
                     <ul class="nav">
                         <li><a href="<?php echo site_url(); ?>">Home</a></li>
-                        <li class="active"><a href="<?php echo site_url().'/contact'; ?>">Contact</a></li>
+                        <li class="active"><a href="<?php echo site_url('contact'); ?>">Contact</a></li>
                     </ul>
             </div>
         </div>
@@ -42,7 +42,7 @@
 	<div class="row">
         <div class="span12 box drop-shadow">
 			<h1 class="motto">Contact <strong>Us!</strong></h1>
-            <form id="contact-us" action="<?php echo site_url().'/welcome/save_contact' ?>" method="POST">
+            <form id="contact-us" action="<?php echo site_url('welcome/save_contact') ?>" method="POST">
 				<fieldset>
 					<legend>All the good Stuff!</legend>
 					
