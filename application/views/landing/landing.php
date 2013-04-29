@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Amfitir</title>
+    <title>Amfitir - Ocean Contract Management</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="recursive.com.au">
+    <meta name="description" content="Amfitir - Ocean Contract Management" />
+    <meta name="author" content="Amfitir.com">
 
     <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/general.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/landing/landing.css" rel="stylesheet">
         
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600" rel="stylesheet">
     <link href="http://fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300" rel="stylesheet" type="text/css">
@@ -28,11 +28,28 @@
                 <a href="/" class="brand">Amfitir</a>
                     <ul class="nav">
                         <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#" data-toggle="modal" data-target="#contact-modal">Contact</a></li>
+                        <li><a href="<?php echo site_url().'/contact'; ?>">Contact</a></li>
                     </ul>
             </div>
         </div>
     </nav>
+	<?php if(isset($alert)){ ?>
+	<div class="row alerts">
+		<?php if($alert == "contact"){ ?>
+		<div "thanks-contact" class="offset2 span8 alert alert-success">
+		  <button type="button" class="close" data-dismiss="alert">&times;</button>
+		  <h4>Thank you for Contacting Us!</h4>
+		  <p>We will get back to you <strong>ASAP</strong> - that is as soon as possible!</p>
+		</div>
+		<?php } elseif($alert == "newsletter") { ?>
+		<div id="thanks-news" class="offset2 span8 alert alert-success">
+		  <button type="button" class="close" data-dismiss="alert">&times;</button>
+		  <h4>Thank you for signing up to the newsletter!</h4>
+		  <p>We hope you enjoy !</p>
+		</div>
+		<?php } // end alert == contact or newsletter ?>
+	</div>
+	<?php } // end isset alert ?>
     <div class="row">
         <div class="feature span12">
             <h1 class="motto">Ocean Contract Management is <strong>Amfitir</strong>.</h1>
@@ -140,7 +157,7 @@
 
     <div class="row">
         <div class="span12 center graded">
-            <a href="#" class="signup" data-toggle="modal" data-target="#contact-modal">Contact Us</a>
+            <a href="<?php echo site_url().'/contact'; ?>" class="signup">Contact Us</a>
         </div>
     </div>
 </div>
@@ -166,10 +183,10 @@
         </div>
         <div class="span4">
             
-            <form class="form-horizontal">
+            <form class="form-horizontal" action="<?php echo site_url().'/welcome/save_newsletter'; ?>" method="POST">
                 <h4>Sign up to the newsletter</h4>
                 <div class="input-prepend">
-                    <span class="add-on"><i class="icon-envelope"></i></span><input type="text" id="inputIcon" class="span2" placeholder="Email address">
+                    <span class="add-on"><i class="icon-envelope"></i></span><input name="email" type="text" id="inputIcon" class="span2" placeholder="Email address">
                 </div>
                     
                 <button class="btn">Sign up</button>
@@ -192,33 +209,7 @@
          
 </div>
 
-<div id="contact-modal" class="modal hide fade">
-    <form>
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <h3>Contact Us</h3>
-  </div>
-  <div class="modal-body">
 
-
-	    <label>Your Name</label>
-	    <input type="text" placeholder="Your Name...">
-
-	    <label>Your Email</label>
-    	<input type="text" placeholder="Email Address...">
-
-	    <label>Your Phone</label>
-	    <input type="text" placeholder="Phone Number...">
-
-		<label>Anything else</label>
-		<textarea placeholder="We would love to hear from you..."></textarea>
-
-  </div>
-  <div class="modal-footer">
-    <a href="#" class="btn">Send us a note!</a>
-  </div>
-	</form>
-</div>
 
 	<script type="text/javascript">
 
@@ -237,11 +228,7 @@
 	
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
 	<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
-	
-	<script type="text/javascript">
-	
-	</script>
-	
+		
 
 </body>
 </html>

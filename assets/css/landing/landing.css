@@ -411,7 +411,7 @@ form h4 {
 .graded {
     min-height:40px;
     padding-bottom:100px;
-    background:url("../img/bg/graded2.png") bottom center repeat-x;
+    background:url("../../img/bg/graded2.png") bottom center repeat-x;
 }
 
 .drop-shadow {
