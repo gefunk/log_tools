@@ -7,9 +7,31 @@ class Welcome extends CI_Controller {
 	*/
 	public function index($showalert="")
 	{
-		if(isset($showalert))
-			$data['alert'] = $showalert;
-		$this->load->view('landing/landing', $data);
+		
+		/*
+		* check if a customer is access via their subdomain
+		*/
+		$subdomain = array_shift(explode(".",$_SERVER['HTTP_HOST'])); 
+		if($subdomain && $subdomain != '' && $subdomain != 'www'){
+			// only load model when needed
+			$this->load->model("customermodel");
+			$customer_id = $this->customermodel->get_customer_by_domain($subdomain);
+			if($customer_id != null){
+				// forward to customer login page
+				echo $customer_id;
+			}else{
+				// regular flow, no customer id found
+				if(isset($showalert))
+					$data['alert'] = $showalert;
+				$this->load->view('landing/landing', $data);
+			}
+		}else{
+			// regular flow no customer id found
+			if(isset($showalert))
+				$data['alert'] = $showalert;
+			$this->load->view('landing/landing', $data);
+		}
+		
 	}
 	
 	public function contact()
