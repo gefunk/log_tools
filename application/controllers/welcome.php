@@ -18,7 +18,8 @@ class Welcome extends CI_Controller {
 			$customer_id = $this->customermodel->get_customer_by_domain($subdomain);
 			if($customer_id != null){
 				// forward to customer login page
-				echo $customer_id;
+				$data["customer_id"] = $customer_id;
+				$this->load->view("signin", $data);
 			}else{
 				// regular flow, no customer id found
 				if(isset($showalert))

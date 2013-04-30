@@ -52,5 +52,20 @@ class CustomerModel extends CI_Model
 		}
 		return $customer_id;
 	}
+	
+	function get_customer_group($id)
+	{
+		$this->db->select("group")->from("customers")->where("id", $id);
+		$query = $this->db->get();
+		$customer_group = NULL;
+		if ($query->num_rows() > 0)
+		{
+		   foreach ($query->result() as $row)
+		   {
+				$customer_group = $row->group;
+			}
+		}
+		return $customer_group;
+	}
 }
 /** end model **/
