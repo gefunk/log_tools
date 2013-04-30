@@ -42,8 +42,8 @@ $route['default_controller'] = "welcome";
 $route['404_override'] = '';
 
 $route['contact'] = "welcome/contact";
-$route['register/:num'] = "main/register/$1";
-$route['signin/:num'] = "main/signin/$1";
+$route['register/(:num)'] = "main/register/$1";
+$route['signin/(:num)'] = "main/signin/$1";
 
 
 /* End of file routes.php */
