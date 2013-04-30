@@ -31,6 +31,11 @@ class Main extends CI_Controller {
 			    ->set_output(json_encode($search_lanes));
 	}
 	
+	public function signin()
+	{
+		$this->load->view("signin");
+	}
+	
 	public function testsearchlanes()
 	{
 		$this->output->enable_profiler(TRUE);

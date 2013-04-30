@@ -38,5 +38,19 @@ class CustomerModel extends CI_Model
 		return $row->default_currency;
 	}
 	
+	function get_customer_by_domain($domain)
+	{
+		$this->db->select("id")->from("customers")->where("subdomain", $domain);
+		$query = $this->db->get();
+		$customer_id = NULL;
+		if ($query->num_rows() > 0)
+		{
+		   foreach ($query->result() as $row)
+		   {
+				$customer_id = $row->id;
+			}
+		}
+		return $customer_id;
+	}
 }
 /** end model **/
