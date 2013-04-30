@@ -49,7 +49,7 @@
 
         <div class="span4 no-account">
             <p>Don't have an account?</p>
-            <a href="signup.html">Sign up</a>
+            <a href="../register/<?php echo $customer_id ?>">Sign up</a>
         </div>
     </div>
 

@@ -10,6 +10,8 @@ class Main extends CI_Controller {
 		
 		$this->load->model('querymodel');
 		$this->load->model('lanemodel');
+		$this->load->model('customermodel');
+		$this->load->library("ion_auth");
     }
 
 	public function index()
@@ -31,10 +33,55 @@ class Main extends CI_Controller {
 			    ->set_output(json_encode($search_lanes));
 	}
 	
-	public function signin()
-	{
-		$this->load->view("signin");
+	public function signin($customer_id){
+		$data["customer_id"] = $customer_id;
+		$this->load->view("signin", $data);
 	}
+	
+	public function login_user($customer_id)
+	{
+		$identity = $this->input->post("identity");
+		$password = $this->input->post("password");
+		$remember = $this->input->post("remember");
+		if($this->ion_auth->login($identity, $password, $remember)){
+			//successful login
+			
+		}else{
+			// unsuccessful login
+		}
+		
+	}
+	
+	public function register($customer_id)
+	{
+		$data['customer_id'] = $customer_id;
+		$data['customer_group'] = $this->customermodel->get_customer_group($customer_id);
+		$this->load->view("register", $data);
+	}
+	
+	/**
+	* register user
+	*/
+	public function register_user($customer_group){
+
+		if(isset($customer_group)){
+			$password = $this->input->post("password");
+			$email = $this->input->post("email");
+			$first_name = $this->input->post("first_name");
+			$larst_name = $this->input->post("last_name");
+			$additional_data = array(
+				'first_name' => $first_name,
+				'last_name' => $last_name,
+			);
+			// group 2 signifies members, customer groups the user by customer
+			$group = array('2', $customer_group);
+			$this->ion_auth->register($username, $password, $email, $additional_data, $group);
+		}else{
+			// show error page
+		
+		}
+	}
+	
 	
 	public function testsearchlanes()
 	{
