@@ -1,9 +1,12 @@
 
-<tr data-id="<%= id %>">
+<tr class="lane" data-id="<%= id %>">
 	<td>
 		<div class="pull-right">
 			<div class="lane-cost"><%= value %></div>
-			<button class="btn btn-danger btn-mini pull-right lane-delete"><i icon="icon-delte"></i>Delete</button>
+
+			<button class="btn btn-danger btn-mini pull-right lane-delete" title="Delete Lane"><i class="icon-trash"></i></button>
+			<button class="btn btn-mini pull-right lane-edit" title="Edit Lane"><i class="icon-edit"></i></button>
+			<button class="btn btn-info btn-mini pull-right lane-rule" title="Add Rule For Lane"><i class="icon-pencil"></i></button>
 		</div>
 	
 		<div class="route">
@@ -16,16 +19,17 @@
 					leg_name += ", " + legs[leg].country_code;
 			%>
 				 <span class='<%= legs[leg].leg_type %>'><%= leg_name %></span>
+				<% if(legs.length > leg+1) { %> &rarr; <%} %>
 			<% } %>
 		</div>
 		<ul class="info">
 			<li>
-				<a href="#" class="desc" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="<%= container_description %>'">
+				<a href="#" class="desc" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="<%= container_description %>'">
 					<%= container %>
 				</a>
 			</li>
 			<li>
-				<a href="#" class="desc" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="<%= cargo_description %>">
+				<a href="#" class="desc" data-toggle="popover" data-trigger="hover" data-placement="top" data-content="<%= cargo_description %>">
 					<%= cargo %>
 				</a>
 			</li>
@@ -34,5 +38,23 @@
 				<%= effective_date %>
 			</li>
 		</ul>
+		
+		<% if(rules != undefined){%>
+		<table class="table offset1 span8 lane-rules">
+			<%
+				for(var rule_index in rules){
+					var rule = rules[rule_index];
+			%>
+			<tr data-id="<%= rule.id %>">
+				<td><%= rule.charge_code %> - <%= rule.charge_description %></td>
+				<td><span class="label">effective</span><%= rule.effective_date %></td>
+				<td><span class="label">expiration</span><%= rule.expiration_date %></td>
+				<td><%= rule.currency_symbol %><%= rule.amount %></td>
+				<td><%= rule.notes %></td>
+				<td><button class="btn btn-mini btn-danger delete-lane-charge"><i class="icon-trash"></i></button></td>
+			</tr>
+			<% 	} %>
+		</table>
+		<% } %>
 	</td>
 </tr>

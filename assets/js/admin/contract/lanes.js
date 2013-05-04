@@ -75,9 +75,54 @@ $(document).ready(function(){
 	
 	// delete lane on delete button click
 	$("#lanes").on("click", "button.lane-delete", function(){
+		$lanerow = $(this).parents("tr");
+		var data = { lane_id : $lanerow.data('id') };
+		$.post(site_url+"/admin/contract/deletelane", data).done(function(){ 
+			$lanerow.hide('slow');
+			$lanerow.remove(); 
+		});
+	});
+	
+	// Edit Lane
+	
+	// Show Rule input on Add Rule Button click
+	$("#lanes").on("click", "button.lane-rule", function(){
+		var $parent = $(this).parents('td');
+		if($parent.hasClass("lane-rule-active")){
+			$parent.removeClass('lane-rule-active');
+			$parent.find("div.lane-rule-entry").parent("div").remove();
+		}else{
+			// retrieve list of charge codes
+			$.get(site_url+"/services/list_of_charge_codes/"+carrier_id, function(results){
+				var data = {
+					charge_codes : results,
+					currencies : currencies
+				};
+				var html = new EJS({url: base_url+'assets/templates/admin/contract/lane-rule-add.ejs'}).render(data);
+				$parent.addClass("lane-rule-active").append(html);
+				// add date picker to date field
+				$parent.find("#rule-effective-date, #rule-expires-date").datepicker();
+			});
+			
+			
+		}
+	});
+	
+	// Click handler for rule button delete
+	$("#lanes").on("click", "button.delete-lane-charge", function(){
+		var $row = $(this).parents("tr:first");
+		console.log("This is the row I selected to delete", $row);
+		var data = { charge_lane_id : $row.data("id") };
+		$.post(site_url+"/admin/contract/deletelanecharge/", data)
+		.done(function(data){
+			// delete row from UI
+			$table = $row.parents("table.lane-rules");
+			$row.remove();
+			if($table.children("tr").length <= 0)
+				$table.remove();
+		});
 
-		var data = { lane_id : $(this).parents("tr").data('id') };
-		$.post(site_url+"/admin/contract/deletelane", data).done(function(){ load_lanes(); });
+
 	});
 	
 	// handle add lane
@@ -112,12 +157,46 @@ $(document).ready(function(){
 		});
 	});
 	
+	// add rule to lane
+	$("#lanes").on("click", "button#save-rule", function(){
+		// get parent table cell
+		var $parent = $(this).parents("td");
+		// get data from input fields
+		var data = {
+			lane_id : $(this).parents("tr").data("id"),
+			charge_code : $(this).siblings("select#rule-charge_code").val(),
+			currency : $(this).siblings("select#rule-currency").val(),
+			amount : $(this).siblings("input#rule-amount").val(),
+			effective : $(this).siblings("input#rule-effective-date").val(),
+			expires : $(this).siblings("input#rule-expires-date").val(),
+			notes : $(this).siblings("textarea#rule-notes").val()
+		};
+		$.post(site_url+"/admin/contract/savelanecharge", data)
+		.done(function(data){
+			// add rule to line
+			console.log("td parent", $parent);
+			$parent.removeClass('lane-rule-active').find("div.lane-rule-entry").parent().remove();
+			var html = new EJS({url: base_url+'assets/templates/admin/contract/lane-rule.ejs'}).render({rule: data});
+			// add the saved rule to the individual lane
+			console.log("Table lane rules exists", $parent.children("table.lane-rules").length);
+			if($parent.children("table.lane-rules").length > 0){
+				$parent.children("table.lane-rules").append(html);
+			}else{
+				$parent.append('<table class="table offset1 span8 lane-rules">'+html+'</table>');
+			}
+		});
+	});
+	
+	
 	
 	// load lanes
 	load_lanes();
 	
 });
 
+/**
+* clear input area
+**/
 function clear_lane_input(){
 	$("#route tr:not(:first)").remove();
 	$("#transport-type").val(0);
@@ -140,14 +219,21 @@ function load_lanes(){
 	var contract_id = $("#contract_id").val();
 
 	$.get(site_url+"/admin/contract/getlanes/"+contract_id, function(data){
-		
+		$("#lanes").hide();
 		var html = "";
-		for(var index = 0; index < data.length; index++)
+		for(var index = 0; index < data.length; index++){
 			html += new EJS({url: base_url+'assets/templates/admin/contract/lane.ejs'}).render(data[index]);
+			
+		}
+			
+		
 		$("#lanes").append(html);
 		// enable popover
 		$("a.desc").popover();
+		
+		$("#lanes").show("slow");
 	});
-	
-	
+		
 }
+
+

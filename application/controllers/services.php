@@ -77,5 +77,12 @@ class Services extends CI_Controller {
 		
 	}
 	
+	public function list_of_charge_codes($carrier_id)
+	{
+			$this->output
+			    ->set_content_type('application/json')
+			    ->set_output( json_encode($this->referencemodel->get_charge_codes_for_carrier($carrier_id)));
+	}
+	
 
 }

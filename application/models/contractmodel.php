@@ -55,6 +55,7 @@ class ContractModel extends CI_Model
 		$this->db->from("contracts c");
 		$this->db->join('ref_carriers rcarriers', 'rcarriers.id = c.carrier');
 		$this->db->where("c.customer", $customer_id);
+		$this->db->where("c.deleted", "0");		
 		$query = $this->db->get();
 		return $query->result();
 	}
@@ -64,7 +65,7 @@ class ContractModel extends CI_Model
 	*/
 	function delete($contract_id)
 	{
-		$this->db->delete('contracts', array('id' => $contract_id)); 
+		$this->db->update('contracts', array("deleted" => "1"), array('id' => $contract_id)); 
 	}
 	
 	

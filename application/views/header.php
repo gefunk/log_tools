@@ -5,16 +5,16 @@
 		<title><?php echo $title ?> - Amfitir</title>
 		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <!-- bootstrap -->
-	    <link href="<?php echo base_url(); ?>assets/css/bootstrap.css" rel="stylesheet" />
-	    <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.css" rel="stylesheet" />
-	    <link href="<?php echo base_url(); ?>assets/css/bootstrap-overrides.css" type="text/css" rel="stylesheet" />
+	    <link href="<?php echo base_url(); ?>assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
+	    <link href="<?php echo base_url(); ?>assets/css/bootstrap/bootstrap-responsive.css" rel="stylesheet" />
+	    <link href="<?php echo base_url(); ?>assets/css/bootstrap/bootstrap-overrides.css" type="text/css" rel="stylesheet" />
 
 	    <!-- libraries -->
 	    <link href="<?php echo base_url(); ?>assets/css/lib/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />
 		<!-- font awesome -->
-		<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome.min.css">
+		<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome/font-awesome.min.css">
 		<!--[if IE 7]>
-		<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome-ie7.min.css">
+		<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome/font-awesome-ie7.min.css">
 		<![endif]-->
 		
 	    <!-- global styles -->

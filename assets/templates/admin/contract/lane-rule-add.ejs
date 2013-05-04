@@ -1,0 +1,28 @@
+<div class="row-fluid">
+	<div class="lane-rule-entry span12">
+		<h5>Add Rule to this lane</h5>
+		<label>Charge Code</label>
+		<select name="rule-charge_code" id="rule-charge_code" placeholder="Charge Code">
+			<option value='0'>-- Select Charge Code --</option>
+			<% for(var code in charge_codes){ %>
+			<option value="<%=  charge_codes[code].id %>"><%= charge_codes[code].code %> - <%= charge_codes[code].description %></option>	
+			<% } %>	
+		</select>
+		<label>Currency</label>
+		<select name="rule-currency" id="rule-currency" placeholder="Currency">
+			<option value='0'>-- Select Currency --</option>
+			<% for(var i=0; i < currencies.length; i++) { %>
+				<option value="<%= currencies[i].id %>"><%= currencies[i].code %> - <%= currencies[i].desc %></option>
+			<% } %>
+		</select>
+		<label>amount</label>	
+		<input type="text" name="rule-amount" value="" id="rule-amount" placeholder="Amount" />
+		<label>effective date</label>
+		<input type="text" name="rule-effective-date" id="rule-effective-date" />
+		<label>expires date</label>
+		<input type="text" name="rule-expires-date" id="rule-expires-date" />
+		<label>Notes</label>	
+	 	<textarea name="notes" rows="8" cols="40" placeholder="Additional Notes" id="rule-notes" name="rule-notes"></textarea>
+		<button id="save-rule" class="btn btn-primary btn-small">Add Rule</button>
+	</div>	
+</div>
