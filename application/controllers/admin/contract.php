@@ -10,12 +10,13 @@ class Contract extends CI_Controller {
 		$this->form_validation->set_error_delimiters('<div class="alert alert-error fade in"><button type="button" class="close" data-dismiss="alert">&times;</button>', '</div>');
 		// model used in multiple places, used to load charge rules
 		// and associated metadata
-		$this->load->model("chargerulesmodel");
+
 		$this->load->model("contractmodel");
 		$this->load->model('customermodel');
 		$this->load->model("admin/currencycodes");
 		$this->load->model("referencemodel");
 		$this->load->model("lanemodel");
+		$this->load->model("rulemodel");
 		
 	}
 
@@ -86,6 +87,9 @@ class Contract extends CI_Controller {
 		
 	}
 	
+	/**
+	* delete a contract from the system
+	*/
 	public function delete($customer_id, $contract_id)
 	{
 		
@@ -111,78 +115,51 @@ class Contract extends CI_Controller {
 	}
 	
 	/**
-	* add rules to a contract
-	* @param the contract id of the contract
+	* get the rules which are saved only for this lane
 	*/
-	public function addrules($contract_number)
+	public function getlanecharges($lane_id)
 	{
-		//$this->output->enable_profiler(TRUE);
-		// validate
-		if(isset($contract_number)){
-			$result = $this->contractmodel->get_contract_from_number($contract_number);
-			if(isset($result)){
-				
-				$header_data['title'] = "Add Rules to Contract";
-				$header_data['page_css'] = array('admin/contract/rule.css');
-				$footer_data['scripts'] = array('select2.js','admin/contract/rules.js','cities.selector.js', 'countries.selector.js', 'container.selector.js', 'ports.selector.js');
-				// set page data
-				$data['carrier'] = $result->carrier;
-				$data['carrier_id'] = $result->carrier_id;
-				$data['contract_number'] = $result->contract_number;
-				$data['customer'] = $result->customer;
-				$data['application_rules'] = $this->chargerulesmodel->get_charge_application_rules();
-				$data['application_types'] = $this->chargerulesmodel->get_charge_application_types();
-				$data['currencies'] = $this->currencycodes->get_currency_codes();
-				$data['customer_default_currency_code'] = $this->customermodel->get_customer_default_currency($result->customer_id);
-				$data['charge_rules'] = $this->chargerulesmodel->get_charge_rules_for_contract($result->contract_id);
-				// save contract id for the next page
-				$data['contract_id'] = $result->contract_id;
-				// load next view
-				$this->load->view('admin/header', $header_data);
-				$this->load->view('admin/contract/rules', $data);
-				$this->load->view('admin/footer', $footer_data);
-				
-
-			}
-		}else{
-			
-			echo "Not a Valid Contract Number";
-		}
-		
-	}
-	/*
-	json from UI
-	contract_id : contract_id,
-	name : name,
-	application_type : rule_application_type,
-	currency : currency,
-	value : value,
-	application_rule : rule_application,
-	application_cases : rule_application_cases
-	*/
-	public function saverule()
-	{
-		//$this->output->enable_profiler(TRUE);
-		$contract_id = $this->input->post('contract_id');
-		$rule_name = $this->input->post('name');
-		$rule_code = $this->input->post('code');
-		$currency = $this->input->post('currency');
-		$value = $this->input->post('value');
-		$application_rule = $this->input->post('application_rule');
-		$application_type = $this->input->post('application_type');
-		$application_cases = $this->input->post('application_cases');
-		// save into db
-		$this->chargerulesmodel->save_rule(
-				$contract_id, 
-				$rule_name, 
-				$application_rule,
-				$application_type, 
-				$application_cases,
-				$rule_code,
-				$currency, 			
-				$value);
+			$this->output
+			    ->set_content_type('application/json')
+			    ->set_output(json_encode($this->rulemodel->get_rule_for_lane($lane_id)));
 	}
 	
+	
+	/*
+	* add a rule to a lane
+	*/
+	public function savelanecharge()
+	{
+		//$this->output->enable_profiler(TRUE);
+		$lane_id = $this->input->post('lane_id');
+		$charge_code = $this->input->post('charge_code');
+		$effective = $this->get_sql_date($this->input->post('effective'));
+		$expires = $this->get_sql_date($this->input->post('expires'));
+		$currency = $this->input->post('currency');
+		$value = $this->input->post('amount');
+		$notes = $this->input->post('notes');		
+		// save into db
+		$rule = $this->rulemodel->add_lane_rule($lane_id,$charge_code, $effective,$expires, $currency,$value,$notes);
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($rule));
+	}
+	
+	/*
+	* delete a lane charge 
+	*/
+	public function deletelanecharge()
+	{
+		$charge_lane_id = $this->input->post("charge_lane_id");
+		$this->rulemodel->delete_lane_rule($charge_lane_id);
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode("success"));
+	}
+	
+	/**
+	* load the lanes UI
+	*/
 	public function lanes($contract_number)
 	{
 		if(isset($contract_number)){
@@ -247,27 +224,7 @@ class Contract extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode("success"));
 	}
-	
-	public function savelanetest(){
-		$this->output->enable_profiler(TRUE);
-		$contract_id = 12;
-		$legs = array(
-						0 => array('leg_type' => 1, 'transport' => 1, 'location' => 69334),
-						1 => array('leg_type' => 2, 'transport' => 2, 'location' => 22550)
-					);
-		$container_type = 1;
-		$value = 2025.00;
- 		$cargo_type = 1;
-		$effective_date = $this->get_sql_date('04/15/2013');
-		$currency_code = 5;
-		$this->lanemodel->addlane($contract_id, $container_type, $value, $cargo_type, $effective_date, $legs, $currency_code);
-	}
-	
-	public function foundportest(){
-		$this->output->enable_profiler(TRUE);
-		$this->lanemodel->found_port(22550);
-	}
-	
+		
 	public function deletelane()
 	{
 		$lane_id = $this->input->post("lane_id");
@@ -277,49 +234,33 @@ class Contract extends CI_Controller {
 		    ->set_output(json_encode("success"));
 	}
 	
+	public function testdeletelane(){
+		$this->output->enable_profiler(TRUE);
+		$this->lanemodel->deletelane("24");
+	}
+	
 	public function getlanes($contract_id){
 		//$this->output->enable_profiler(TRUE);
-		$this->output
-		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->lanemodel->getlanes($contract_id)));
-	}
-	
-	public function getlanestest($contract_id=12)
-	{
-			$this->output->enable_profiler(TRUE);
-			//echo json_encode($this->lanemodel->getlanes($contract_id));
-			json_encode($this->lanemodel->getlanes($contract_id));
-	}
-	
-	
-	public function getrules($contract_id=NULL)
-	{
-		//$this->output->enable_profiler(TRUE);
-		if(!isset($contract_id))
-			$contract_id = $this->input->get('contract_id');
-		$this->output
-		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->chargerulesmodel->get_charge_rules_for_contract($contract_id)));	
-		//echo json_encode($this->chargerulesmodel->get_charge_rules_for_contract($contract_id));
-	}
-	
-	public function getruleoptions($contract_id=NULL, $data_source=NULL)
-	{
-		if(!isset($contract_id) && (!isset($data_source))){
-			$contract_id = $this->input->get('contract_id');
-			$data_source = $this->input->get('data_source');			
+		
+		$lanes = $this->lanemodel->getlanes($contract_id);
+		
+		foreach($lanes as &$lane){
+			$lane_id = $lane['id'];
+			$lane['rules'] = $this->rulemodel->get_lane_rule_for_lane($lane_id);
 		}
-		//$this->output->enable_profiler(TRUE);
+		
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->chargerulesmodel->get_charge_options_for_rule($contract_id, $data_source)));	
+		    ->set_output(json_encode($lanes));
 	}
-	/*
-	public function getlanes()
+	
+	/**
+	* rules
+	**/
+	public function rules($contract_number)
 	{
-		$this->output->enable_profiler(TRUE);
-		echo json_encode($this->chargerulesmodel->get_lanes_for_contract(1) );
-	}*/
+		# code...
+	}
 	
 	function get_sql_date($date)
 	{

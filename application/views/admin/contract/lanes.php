@@ -111,3 +111,17 @@
 	</div> <!-- end span 12 -->
 </div>
 
+<!-- values to pass to javascript -->
+<script type="text/javascript" charset="utf-8">
+	var carrier_id = "<?php echo $carrier_id ?>";
+	var currencies = Array();
+	<?php foreach($currencies as $currency){?>
+		currencies.push(
+			{
+				id : '<?php echo $currency->id; ?>', 
+				code: '<?php echo $currency->code; ?>',
+				desc: '<?php echo $currency->description?>'
+			}
+		);
+	<?php } ?>
+</script>

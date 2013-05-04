@@ -158,6 +158,14 @@ class ReferenceModel extends CI_Model
 		return $query->result();
 	}
 	
+	
+	function get_charge_codes_for_carrier($carrier_id)
+	{
+		$this->db->select("code, description, id")->from("ref_charge_codes")->where('carrier', $carrier_id);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
 	/*
 	* utility function to replace white space with %
 	* and strips all commas out

@@ -9,14 +9,18 @@ class LaneModel extends CI_Model
 		$this->load->library('map');
     }
 
-
+	/**
+	* get all lanes on a contract
+	*/
 	function getlanes($contract_id)
 	{
-		$this->db->select('cl.id, cl.effective_date as effective_date, rct.container_type as container, rct.description as container_description, cl.value, rcc.code as currency, rcc.symbol as currency_symbol, rcart.name as cargo, rcart.description as cargo_description');
-		$this->db->from('contract_lanes cl');
-		$this->db->join('ref_container_types rct', 'cl.container = rct.id');
-		$this->db->join('ref_cargo_types rcart','cl.cargo = rcart.id');
+		$this->db->select("cl.id, date_format(cl.effective_date, '%M %D, %Y') as effective_date, rct.container_type as container, rct.description as container_description, cl.value, rcc.code as currency, rcc.symbol as currency_symbol, rcart.name as cargo, rcart.description as cargo_description", FALSE);
+		$this->db->from("contract_lanes cl");
+		$this->db->join("ref_container_types rct", "cl.container = rct.id");
+		$this->db->join("ref_cargo_types rcart","cl.cargo = rcart.id");
 		$this->db->join('ref_currency_codes rcc','cl.currency = rcc.id');
+		$this->db->where('cl.contract',$contract_id);
+		$this->db->where('cl.deleted',"0");
 		$this->db->order_by("cl.id", "desc");
 		$query = $this->db->get();
 		$dbresults = $query->result_array();
@@ -47,7 +51,7 @@ class LaneModel extends CI_Model
 		}
 		$lane_ids_sql = rtrim($lane_ids_sql, ',');
 		
-		$this->db->select('cl.id, cl.effective_date as effective_date, rct.container_type as container, rct.description as container_description, cl.value, rcc.code as currency, rcc.symbol as currency_symbol, rcart.name as cargo, rcart.description as cargo_description, carrier.name as carrier_name, carrier.image as carrier_image');
+		$this->db->select("cl.id, DATE_FORMAT(cl.effective_date,'%M %D, %Y') as effective_date, rct.container_type as container, rct.description as container_description, cl.value, rcc.code as currency, rcc.symbol as currency_symbol, rcart.name as cargo, rcart.description as cargo_description, carrier.name as carrier_name, carrier.image as carrier_image", FALSE);
 		$this->db->from('contract_lanes cl');
 		$this->db->join('ref_container_types rct', 'cl.container = rct.id');
 		$this->db->join('ref_cargo_types rcart','cl.cargo = rcart.id');
@@ -123,14 +127,21 @@ class LaneModel extends CI_Model
 	
 	/*
 	* delete lane
+	* and associated contract lane legs
+	* and associated contract lange charges
 	*/
 	function deletelane($lane_id)
 	{
+		$data = array("deleted" => "1");
+		// contract lane legs
 		$this->db->where('contract_lane', $lane_id);
-		$this->db->delete('contract_lane_legs');
-		
+		$this->db->update('contract_lane_legs', $data);
+		// contract lane charges
 		$this->db->where('id', $lane_id);
-		$this->db->delete('contract_lanes');
+		$this->db->update('charge_lane_rule', $data);
+		// contract lane
+		$this->db->where('id', $lane_id);
+		$this->db->update('contract_lanes', $data);
 	}
 
 	

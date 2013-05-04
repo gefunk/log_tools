@@ -2,9 +2,11 @@
 			</div> <!-- end of the container div -->
 		</div><!-- end content div -->
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
+		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js"></script>
-		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/ejs_production.js"></script>
+		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/ejs/ejs_fulljslint.js"></script>
+		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/ejs/ejs.js"></script>
 
 		<?php
 		// way to pass in javascript to append to end of document
