@@ -7,8 +7,8 @@
     <meta name="description" content="Amfitir - Ocean Contract Management" />
     <meta name="author" content="Amfitir.com">
 
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/landing/landing.css" rel="stylesheet">
         
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700,600" rel="stylesheet">
