@@ -93,6 +93,26 @@
 		</div>
 	</div>
 	
+	<!-- classifications for lane -->
+	<div class="row-fluid">
+		<div class="span4">
+			<select id="tariff" name="tariff">
+				<option value="0">-- Select Tariff --</option>
+				<?php foreach($tariffs as $type): ?>
+					<option value="<?php echo $type->id; ?>"><?php echo $type->code." - ".$type->name; ?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+		<div class="span4">
+			<select id="service" name="service">
+				<option value="0">-- Select Carrier Service --</option>
+				<?php foreach($services as $type): ?>
+					<option value="<?php echo $type->id; ?>"><?php echo $type->code." - ".$type->name; ?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+	</div>
+	
 	<div class="row-fluid">
 		<div class="span4">
 			<button id="add-lane" class="btn btn-primary"><i class="icon-plus-sign"></i>Add Lane</button>

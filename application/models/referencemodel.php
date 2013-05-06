@@ -54,12 +54,16 @@ class ReferenceModel extends CI_Model
 		$match_string = "";
 		
 		foreach($search_terms as $term){
-			$match_string .= $term." ";
+			// only include wildcard if search term has more than 4 characters
+			$match_string .= "+".$term.(strlen($term) > 4 ? "*" : "" )." ";
 		}
+		// remove trailing space
+		$match_string = rtrim($match_string);
 		
 		$this->db->select("id, city_name, state, country_name, country_code");
 		$this->db->from('ref_cities_search');
-		$this->db->where("MATCH(search_term) AGAINST ('$match_string') IN BOOLEAN MODE");
+		$this->db->where("MATCH(search_term) AGAINST ('$match_string' IN BOOLEAN MODE)");
+		$this->db->order_by('population', 'desc');
 		
 		if(isset($page) && isset($page_size)){
 			if($page == 1){
@@ -76,7 +80,7 @@ class ReferenceModel extends CI_Model
 		
 		$this->db->select("count(*) as total");
 		$this->db->from('ref_cities_search');
-		$this->db->where("MATCH(search_term) AGAINST ('$match_string')  IN BOOLEAN MODE");
+		$this->db->where("MATCH(search_term) AGAINST ('$match_string'  IN BOOLEAN MODE)");
 		$query = $this->db->get();
 		$data['total'] = $query->row()->total;
 		
@@ -163,6 +167,34 @@ class ReferenceModel extends CI_Model
 	{
 		$this->db->select("code, description, id")->from("ref_charge_codes")->where('carrier', $carrier_id);
 		$query = $this->db->get();
+		return $query->result();
+	}
+	
+	/**
+	* get a list of tariffs for carrier
+	* e.g: MAEU-521 - USA to Mexico
+	*/
+	function get_tarriffs_for_carrier($carrier_id)
+	{
+		$this->db->select("code, name, id")->from("ref_carrier_tariffs")->where('carrier', $carrier_id);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
+	/**
+	* get a list of services for carrier
+	* e.g. USW1 - US west to China Service
+	*/
+	function get_services_for_carrier($carrier_id)
+	{
+		$this->db->select("code, name, id")->from("ref_carrier_services")->where('carrier', $carrier_id);
+		$query = $this->db->get();
+		return $query->result();
+	}
+	
+	function get_charge_conditions()
+	{
+		$query = $this->db->get("ref_charge_condition");
 		return $query->result();
 	}
 	

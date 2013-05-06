@@ -7,21 +7,7 @@
 * @param multiple_rule multiple selection for ports
 * 
 */
-function create_ports_list (labelstr, appendto, id, multiple_rule) {
-	// if label is required
-	if(labelstr){
-		// set label and create select box
-		var label = $('<label>'+labelstr+'</label>');
-		// add elements to page
-		$(label).appendTo(appendto);
-		
-	}
-	// if use requires to create input on page
-	if(appendto){
-		//var select = $('<select id="rule-app-add" multiple style="width:220px;"></select>');
-		var select2box = $('<input type="hidden" class="bigdrop" id="'+id+'" style="width:440px"/>')
-		$(select2box).appendTo(appendto);
-	}
+function create_ports_list (id, multiple_rule) {
 
 	var page_size = 10;
 
