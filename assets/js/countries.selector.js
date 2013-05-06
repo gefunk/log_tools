@@ -1,13 +1,7 @@
 
 // list of countries input box
-function create_countries_list (labelstr, appendto, id, multiple_rule) {
-		// set label and create select box
-		var label = $('<label>'+labelstr+'</label>');
-		//var select = $('<select id="rule-app-add" multiple style="width:220px;"></select>');
-		var select2box = $('<input type="hidden" class="bigdrop" id="'+id+'" style="width:220px"/>')
-		// add elements to page
-		$(label).appendTo(appendto);
-		$(select2box).appendTo(appendto);
+function create_countries_list (id, multiple_rule) {
+
 		// get list of countries from service
 		$.get(site_url+"/services/list_of_countries", function(countries){
 			// use data returned from get array to make select2 element

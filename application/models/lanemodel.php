@@ -88,7 +88,7 @@ class LaneModel extends CI_Model
 	$cargo_type = $this->input->post('cargo_type');
 	$effective_date = $this->get_sql_date($this->input->post('effective_date'));
 	*/
-	function addlane($contract_id, $container_type, $value, $cargo_type, $effective_date, $legs, $currency_code)
+	function addlane($contract_id, $container_type, $value, $cargo_type, $effective_date, $legs, $currency_code, $service, $tariff)
 	{
 		$lane = array(
 			'contract' => $contract_id,
@@ -96,7 +96,9 @@ class LaneModel extends CI_Model
 			'cargo' => $cargo_type,
 			'container' => $container_type,
 			'effective_date' => $effective_date,
-			'currency' => $currency_code
+			'currency' => $currency_code,
+			'tariff' => $tariff,
+			'carrier_service' => $service
 		);
 		
 		// insert lane

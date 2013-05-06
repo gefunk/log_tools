@@ -2,16 +2,9 @@
 *
 * 
 */
-function create_cities_list (labelstr, appendto, id, multiple_rule) {
-
-	// set label and create select box
-	var label = $('<label>'+labelstr+'</label>');
-	//var select = $('<select id="rule-app-add" multiple style="width:220px;"></select>');
-	var select2box = $('<input type="hidden" class="bigdrop" id="'+id+'" style="width:440px"/>')
-	// add elements to page
-	$(label).appendTo(appendto);
+function create_cities_list (id, multiple_rule) {
+	console.log("Should be created", $(id));
 	var page_size = 10;
-	$(select2box).appendTo(appendto);
 	$(id).select2({
 		placeholder: "Search for a city",
 		multiple: multiple_rule,

@@ -7,6 +7,14 @@ class RuleModel extends CI_Model
         // Call the Model constructor
         parent::__construct();
     }
+
+
+
+
+	/**
+	* SECTION - LANE RULES
+	*/
+	
 	/**
 	* CREATE TABLE `charge_lane_rule` (
 	*  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,

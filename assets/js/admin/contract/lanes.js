@@ -147,7 +147,9 @@ $(document).ready(function(){
 			effective_date : $("#effective_date").val(),
 			legs : legs,
 			value : $("#amount").val(),
-			currency : $("#currency_code").val()
+			currency : $("#currency_code").val(),
+			tariff : $("#tariff").val(),
+			service : $("#service").val()
 		};
 		
 		// save data
