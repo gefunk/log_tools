@@ -1,7 +1,13 @@
 <div class="row-fluid">
 	<h1>Charges</h1>
-	<div class="span10 well">
-		<div class="span3">
+	
+</div>
+
+<div class="row-fluid">
+
+	<div class="span12 well">
+		<h4>Add Condition</h4>
+		<div class="span4">
 			<div class="btn-group">
 		    	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 					Select a condition
@@ -25,7 +31,7 @@
 		    </div>
 		</div><!-- end selection of charge -->
 		
-		<div id="rule-holder" class="span7">
+		<div id="rule-holder" class="span6">
 			<div id="rule-desc">
 				
 			</div>
@@ -38,12 +44,10 @@
 			<button id="add-charge-rule" class="btn btn-primary"><i class="icon-plus"></i>Add</button>
 		</div>
 		
-	</div>	
-</div>
+	</div>
 
-<div class="row-fluid">
-	<h3>Condition(s)</h3>
 	<div id="conditions" class="span12">
+	<h3>Condition(s)</h3>
 		No Rules Yet
 	</div>
 </div>
