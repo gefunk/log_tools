@@ -329,6 +329,67 @@ class Contract extends CI_Controller {
 	}
 	
 	
+	public function savechargerule()
+	{
+		// TODO: implementation
+		$value = $this->input->post("value");
+		$charge_code = $this->input->post("charge_code");
+		$contract = $this->input->post("contract");
+		$application = $this->input->post("charge_application_type");
+		$currency = $this->input->post("currency");
+		$effective = $this->get_sql_date($this->input->post("effective"));
+		$expires = $this->get_sql_date($this->input->post("expires"));
+		
+		$conditions = $this->input->post("conditions");
+		
+		echo var_dump($conditions);
+	}
+	
+	public function testsavechargerule()
+	{
+		$this->output->enable_profiler(TRUE);
+		// data for charge
+		$value = 500.00;
+		$charge_code = 12;
+		$contract = 13;
+		$application = 3;
+		$currency = 5;
+		$effective = "2013-01-01";
+		$expires = "2013-12-31";
+		
+		// data for conditions
+		$condition["condition"] = 13;
+		$condition["values"] = array(
+			"value" => 75253
+		);
+		
+		$conditions = array($condition);
+		 
+		$this->rulemodel->add_charge_rule($value, $charge_code, $contract, $application, $currency, $effective, $expires, $conditions);
+	}
+	
+	
+	public function testgetchargerule($charge_rule_id)
+	{
+		$this->output->enable_profiler(TRUE);
+		$rules = $this->rulemodel->get_charge_rule_by_id($charge_rule_id);
+		echo var_dump($rules);
+	}
+	public function testgetchargerulejson($charge_rule_id=2)
+	{
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($this->rulemodel->get_charge_rule_by_id($charge_rule_id)));
+		
+	}
+	
+	public function testgetchargerulebycontractid($contract_id=13)
+	{
+		$this->output->enable_profiler(TRUE);
+		$rules = $this->rulemodel->get_charge_rule_by_contract_id($contract_id);
+		echo var_dump($rules);
+	}
+	
 	/**
 	* UTILITIES
 	*/
