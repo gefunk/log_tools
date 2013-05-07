@@ -5,10 +5,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
-    <!-- bootstrap -->
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap-overrides.css" type="text/css" rel="stylesheet">
+   <!-- bootstrap -->
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap/bootstrap-overrides.css" type="text/css" rel="stylesheet">
 
     <!-- global styles -->
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/layout.css">
@@ -16,10 +16,15 @@
     <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/icons.css">
 
     <!-- libraries -->
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/lib/font-awesome.css">
-    
+    <!-- font awesome -->
+	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome/font-awesome.min.css">
+	<!--[if IE 7]>
+	<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome/font-awesome-ie7.min.css">
+	<![endif]-->
+
+
     <!-- this page specific styles -->
-    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/compiled/signup.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/compiled/signin.css" type="text/css" media="screen" />
 
     <!-- open sans font -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
