@@ -56,11 +56,11 @@ function site_url($uri = '')
 		if ($CI->config->item('enable_query_strings') == FALSE)
 		{
 			$suffix = ($CI->config->item('url_suffix') == FALSE) ? '' : $CI->config->item('url_suffix');
-			return $CI->config->slash_item(curhostname()).$CI->config->slash_item('index_page').uri_string($uri).$suffix;
+			return curhostname()."/".$CI->config->slash_item('index_page').uri_string($uri).$suffix;
 		}
 		else
 		{
-			return $CI->config->slash_item('base_url').$CI->config->item('index_page').'?'.uri_string($uri);
+			return curhostname().'/'.$CI->config->item('index_page').'?'.uri_string($uri);
 		}
 	}else{
 
@@ -74,7 +74,7 @@ function base_url($uri='')
 {
 	$CI =& get_instance();
 	if (defined('ENVIRONMENT') && ENVIRONMENT == 'production'){
-		return $CI->config->slash_item(curhostname()).ltrim(uri_string($uri), '/');
+		return curhostname()."/".ltrim(uri_string($uri), '/');
 	}else{
 		return $CI->config->slash_item('base_url').ltrim(uri_string($uri), '/');
 	}
