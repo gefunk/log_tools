@@ -56,7 +56,7 @@ function site_url($uri = '')
 		if ($CI->config->item('enable_query_strings') == FALSE)
 		{
 			$suffix = ($CI->config->item('url_suffix') == FALSE) ? '' : $CI->config->item('url_suffix');
-			return curhostname().$CI->config->slash_item('index_page').uri_string($uri).$suffix;
+			return $CI->config->slash_item(curhostname()).$CI->config->slash_item('index_page').uri_string($uri).$suffix;
 		}
 		else
 		{
