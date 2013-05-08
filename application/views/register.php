@@ -55,7 +55,7 @@
 
         <div class="span4 already">
             <p>Already have an account?</p>
-            <a href="../signin/<?php echo $customer_id ?>">Sign in</a>
+            <a href="../signin/<?php echo $customer_id.'/'.$customer_name; ?>">Sign in</a>
         </div>
     </div>
 

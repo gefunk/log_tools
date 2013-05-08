@@ -33,8 +33,9 @@ class Main extends CI_Controller {
 			    ->set_output(json_encode($search_lanes));
 	}
 	
-	public function signin($customer_id){
+	public function signin($customer_id, $customer_name){
 		$data["customer_id"] = $customer_id;
+		$data["customer_name"] = $customer_name;
 		$this->load->view("signin", $data);
 	}
 	
@@ -52,9 +53,10 @@ class Main extends CI_Controller {
 		
 	}
 	
-	public function register($customer_id)
+	public function register($customer_id, $customer_name)
 	{
 		$data['customer_id'] = $customer_id;
+		$data["customer_name"] = $customer_name;
 		$data['customer_group'] = $this->customermodel->get_customer_group($customer_id);
 		$this->load->view("register", $data);
 	}

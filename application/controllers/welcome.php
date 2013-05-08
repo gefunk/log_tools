@@ -15,10 +15,11 @@ class Welcome extends CI_Controller {
 		if($subdomain && $subdomain != '' && $subdomain != 'www'){
 			// only load model when needed
 			$this->load->model("customermodel");
-			$customer_id = $this->customermodel->get_customer_by_domain($subdomain);
-			if($customer_id != null){
+			$customer = $this->customermodel->get_customer_by_domain($subdomain);
+			if($customer != null){
 				// forward to customer login page
-				$data["customer_id"] = $customer_id;
+				$data["customer_id"] = $customer["id"];
+				$data["customer_name"] = $customer["name"];
 				$this->load->view("signin", $data);
 			}else{
 				// regular flow, no customer id found
