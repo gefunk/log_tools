@@ -41,4 +41,17 @@ function site_url($uri = '')
 	
 }
 
+
+function base_url($uri='')
+{
+	$CI =& get_instance();
+	if (defined('ENVIRONMENT') && ENVIRONMENT == 'production'){
+		return $CI->config->slash_item(curhostname()).ltrim($CI->config->_uri_string($uri), '/');
+	}else{
+		return $CI->config->slash_item('base_url').ltrim($CI->config->_uri_string($uri), '/');
+	}
+	
+}
+
+
 ?>
