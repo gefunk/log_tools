@@ -39,7 +39,9 @@
 			</li>
 		</ul>
 		
-		<% if(rules != undefined){%>
+		<% if(typeof rules != 'undefined'){
+			console.log("Rules", (typeof rules));
+			%>
 		<table class="table offset1 span8 lane-rules">
 			<%
 				for(var rule_index in rules){

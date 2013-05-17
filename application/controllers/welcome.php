@@ -18,7 +18,11 @@ class Welcome extends CI_Controller {
 			$customer = $this->customermodel->get_customer_by_domain($subdomain);
 			if($customer != null){
 				// forward to customer login page
-				$data["customer_id"] = $customer["id"];
+				$customer_data = array(
+					"customer_id" => $customer["id"],
+					"customer_name" => $customer["name"]
+				);
+				$this->session->set_userdata($customer_data);
 				$data["customer_name"] = $customer["name"];
 				$this->load->view("signin", $data);
 			}else{

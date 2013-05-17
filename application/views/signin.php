@@ -34,27 +34,29 @@
     <![endif]-->
 </head>
 <body>
-
+	
     <div class="row-fluid login-wrapper">
         <img class="logo" src="<?php echo base_url(); ?>assets/img/logo-white.png">
 
         <div class="span4 box">
-            <div class="content-wrap">
-                <h6>Log in</h6>
-                <input class="span12" type="text" placeholder="E-mail address">
-                <input class="span12" type="password" placeholder="Your password">
-                <a href="#" class="forgot">Forgot password?</a>
-                <div class="remember">
-                    <input id="remember-me" type="checkbox">
-                    <label for="remember-me">Remember me</label>
-                </div>
-                <a class="btn-glow primary login" href="index.html">Log in</a>
-            </div>
+			<form action="<?php echo site_url('main/login_user'); ?>" method="post" accept-charset="utf-8">
+	            <div class="content-wrap">
+	                <h6>Log in - <?php echo $customer_name; ?></h6>
+	                <input class="span12" type="text" placeholder="E-mail address">
+	                <input class="span12" type="password" placeholder="Your password">
+	                <a href="#" class="forgot">Forgot password?</a>
+	                <div class="remember">
+	                    <input id="remember-me" type="checkbox">
+	                    <label for="remember-me">Remember me</label>
+	                </div>
+	                <input type="submit" class="btn-glow primary login" value="Log in">
+	            </div>
+			</form>
         </div>
 
         <div class="span4 no-account">
             <p>Don't have an account?</p>
-            <a href="../register/<?php echo $customer_id.'/'.$customer_name; ?>">Sign up</a>
+            <a href="<?php echo site_url('main/register'); ?>">Sign up</a>
         </div>
     </div>
 
@@ -74,5 +76,8 @@
 
         });
     </script>
+
+
+
 </body>
 </html>

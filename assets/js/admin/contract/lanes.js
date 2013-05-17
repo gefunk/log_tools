@@ -102,6 +102,12 @@ $(document).ready(function(){
 				$parent.addClass("lane-rule-active").append(html);
 				// add date picker to date field
 				$parent.find("#rule-effective-date, #rule-expires-date").datepicker();
+				// add what you see is what you get editor
+				//$parent.find('textarea').wysihtml5();
+				// attach click handler to upload file
+				$parent.find("a.upload-file").click(function(){
+					sendFiles($(this).siblings("input"));
+				});
 			});
 			
 			
@@ -236,6 +242,55 @@ function load_lanes(){
 		$("#lanes").show("slow");
 	});
 		
+}
+
+function sendFiles(file_input){
+	console.log("Input", file_input);
+	var data = new FormData();
+	var count = 1;
+	$.each($(file_input)[0].files, function(i, file){
+		console.log("Should be appending this file", file);
+		data.append('file-'+i, file);
+		console.log("After appending data", data);
+		count++;
+	});
+	data.append("num_files", count);
+	$.ajax({
+		url: site_url+"/attachments/upload_file/"+makeid(),
+		data: data,
+		cache: false,
+		contentType: false,
+		processData: false,
+		type: 'POST',
+		success: function(data){
+			console.log(data);
+		}
+	});
+}
+
+
+/**
+* send data to the form uploader
+**/
+function sendForm(form, output) {
+ 
+  var
+    oOutput = output,
+    oData = new FormData(form);
+ 
+ 
+  var oReq = new XMLHttpRequest();
+  oReq.open("POST", site_url+"/attachments/do_upload/"+makeid(), true);
+  oReq.onload = function(oEvent) {
+    if (oReq.status == 200) {
+      oOutput.innerHTML = "Uploaded!";
+    } else {
+      oOutput.innerHTML = "Error " + oReq.status + " occurred uploading your file.<br \/>";
+    }
+  };
+ 
+  oReq.send(oData);
+ 
 }
 
 

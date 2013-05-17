@@ -19,8 +19,10 @@
 		
 	    <!-- global styles -->
 	    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/compiled/layout.css">
-	    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/elements.css">
+	    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/compiled/elements.css">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/compiled/layout.css">
 	    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/icons.css">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/lib/bootstrap.datepicker.css">
 
 	    <!-- this page specific styles -->
 	    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/compiled/index.css" type="text/css" media="screen" />

@@ -17,6 +17,10 @@
 		<?php 
 			endforeach; 
 		}?>
+		<?php 
+		if (defined('ENVIRONMENT') && ENVIRONMENT == 'production')
+		{
+		?>
 		<script type="text/javascript">
 
 		  var _gaq = _gaq || [];
@@ -31,5 +35,8 @@
 		  })();
 
 		</script>
+		<?php 
+		} // end if environment 
+		?>
 	</body>
 </html>

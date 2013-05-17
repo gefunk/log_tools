@@ -42,20 +42,27 @@
 
         <div class="box">
             <div class="content-wrap">
-				<form action="register/<?php echo $customer_group ?>" method="POST">
-                <h6>Sign Up</h6>
-                <input class="span12" type="text" name="email" placeholder="E-mail address">
-                <input class="span12" type="password" name="password" placeholder="Password">
-                <input class="span12" type="password" placeholder="Confirm Password">
-                <div class="action">
-                    <a class="btn-glow primary signup">Sign up</a>
-                </div>                
+				<div class="error">
+					
+				</div>
+				<form action="<?php echo site_url('main/register_user'); ?>" method="POST" id="register-form">
+	                <h6>Sign Up - Welcome <?php echo $customer_name; ?></h6>
+	                <input class="span12" type="text" class="required email" name="email" minlength="4" placeholder="E-mail address">
+	                <input class="span12" type="password" id="password1" class="required password" name="password" placeholder="Password">
+	                <input class="span12" type="password" class="required" equalTo="#password1" name="password2" placeholder="Confirm Password">
+					<input class="span12" type="text" name="first_name" class="required" minlength="3" maxlength="40" placeholder="First Name">
+					<input class="span12" type="text" name="last_name" class="required" minlength="3" maxlength="40" placeholder="Last Name">
+					<input class="span12" type="text" name="phone_no" class="required phone" maxlength="14" placeholder="Phone Number">
+	                <div class="action">
+	                    <input type="submit" class="btn-glow primary signup submit" value="Sign up" />
+	                </div>        
+        		</form>
             </div>
         </div>
 
         <div class="span4 already">
             <p>Already have an account?</p>
-            <a href="../signin/<?php echo $customer_id.'/'.$customer_name; ?>">Sign in</a>
+            <a href="<?php echo site_url('main/signin'); ?>">Sign in</a>
         </div>
     </div>
 
@@ -63,5 +70,29 @@
     <script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/theme.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jquery.validate.min.js"></script>
+	
+	<script type="text/javascript" charset="utf-8">
+		$(document).ready(function(){
+			
+			$("div.error").hide();
+			
+			
+			/** validate code **/
+			$("#register-form").validate({
+				debug: true
+			});
+
+			$("#register-form").submit(function(e){
+				console.log($("#register-form").valid());
+				if($("#register-form").valid()){
+					this.submit();
+					return true;
+				}
+				return false;
+			})
+		});
+	</script>
+	
 </body>
 </html>

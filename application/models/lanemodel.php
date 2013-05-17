@@ -9,6 +9,8 @@ class LaneModel extends CI_Model
 		$this->load->library('map');
     }
 
+
+
 	/**
 	* get all lanes on a contract
 	*/
@@ -146,6 +148,139 @@ class LaneModel extends CI_Model
 		$this->db->update('contract_lanes', $data);
 	}
 
+	
+	
+	
+	/**
+	* 1	Charge only applies when shipping to destination country	Destination Country	is	2
+	* 3	Charge only applies when shipping form this Origin Country	Origin Country	is	2
+	* 5	Charge only applies when this is the Port of Loading	Port of Loading	is	3
+	* 6	Charge only applies when this is the Port of Discharge	Port of Discharge	is	3
+	* 7	Charge applies across all rates in this contract	Contract	is	NULL
+	* 8	Charge applies to type of Container	Container type	is	4
+	* 9	Charges applies when shipping to these destination countries	Destination Countries	are	2
+	* 10	Charge applies when shipping from these origin countries	Origin Countries	are	2
+	* 13	Charge applies when shpping to these ports	Port of Discharges	are	3
+	* 14	Charge applies when shipping from these ports	Port of Loadings	are	3
+	* 15	Base Container Charge	Base Container Charge	is	NULL
+	* 16	Charge only applies to this Carrier Service	Carrier Service	is	NULL
+	* 17	Tariff 	Tariff	is	5
+	* 18	Service	Service	is	6
+	* 19	Tariffs	Tariffs	are	5
+	* 20	Services	Services	are	6
+	*/
+	
+	function get_lanes_affected_by_charge_rule($conditions)
+	{
+		
+		$sql = "select id from contract_lanes ";
+		
+		$count = 0;
+		foreach($conditions as $condition){
+
+			$value = "";
+			
+			// have to convert values array to comma separated list
+			if(count($condition->values) > 1){
+				foreach($condition->values as $v){
+					$value .= $v.",";
+				}
+				// remove trailing comma
+				$value = rtrim($value, ",");
+			}else{
+				$value = $condition->values[0];
+			}
+			// get the where clause for this condition
+			$clause = $this->translate_conditions_to_where_clauses($condition->id, $value);
+			
+			if($count < 1){
+				$sql .= "WHERE ".$clause;
+			}else{
+				$sql .= "AND ".$clause;
+			}
+			
+			$count++;
+		}
+		
+		
+		// retrieve lane ids
+		$query = $this->db->query($sql);
+		$lane_ids = array();
+		if($query->num_rows() > 0){
+			foreach($query->result() as $row){
+				array_push($lane_ids, $row->id);
+			}
+			return $this->get_lanes_by_lane_id($lane_ids);
+		}
+		
+		return NULL;
+		
+		
+	}
+	
+	function translate_conditions_to_where_clauses($condition, $value)
+	{
+		error_log("Condition is".$condition);
+		switch($condition){
+			case 1: 
+				$country_id = $value;
+				return $this->get_where_for_countries("destination", $country_id);
+				break;
+			case 3: 
+				$country_id = $value;
+				return $this->get_where_for_countries("origin", $country_id);
+				break;
+			case 9:
+				$country_ids = $value;
+				return $this->get_where_for_countries("origin", $country_ids);
+				break;
+			case 10:
+				$country_ids = $value;
+				return $this->get_where_for_countries("origin", $country_ids);
+				break;
+			case 5:
+				$port_ids = $value;
+				return $this->get_where_for_ports("origin", $port_ids);
+				break;
+			case 6:
+				$port_ids = $value;
+				return $this->get_where_for_ports("destination", $port_ids);
+				break;
+			case 13:
+				$port_ids = $value;
+				return $this->get_where_for_ports("destination", $port_ids);
+				break;
+			case 14:
+				$port_ids = $value;
+				return $this->get_where_for_ports("origin", $port_ids);
+				break;
+		}
+	}
+
+
+	function get_where_for_countries($dest_or_origin, $country_ids)
+	{
+		$sql = "id IN (select distinct(contract_lane) from contract_lane_legs cll ".
+			"where cll.leg_type = (select id from ref_leg_types where name = '$dest_or_origin') ".
+			"and location in ( ".
+				"select id from ref_ports p where country_code = ( ".
+					"select code from ref_country_codes rcc where id IN ($country_ids) ".
+				") ".
+			"))";
+			
+		return $sql;
+			
+	}
+	
+	function get_where_for_ports($dest_or_origin, $port_ids)
+	{
+		$sql = "id in ( ".
+			"select distinct(contract_lane) from contract_lane_legs cll ".
+			"where cll.location in ($port_ids) ".
+			"and cll.leg_type = (select id from ref_leg_types where name = '$dest_or_origin') ".
+		")";
+		return $sql;
+	}
 	
 	/*
 	* helper to update port, when used in contract addition

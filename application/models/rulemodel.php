@@ -220,6 +220,7 @@ class RuleModel extends CI_Model
 		return $rules;
 	}
 
+
 	/**
 	* SECTION - LANE RULES
 	*/
