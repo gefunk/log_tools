@@ -52,7 +52,7 @@
 <?php if(isset($customer_id)) { ?>
 <div class="row-fluid">
 	<div class="span12">
-		<?php echo form_open('admin/contract/add/'.$customer_id); ?>
+		<?php echo form_open_multipart('admin/contract/add/'.$customer_id); ?>
 		  <fieldset>
 		    <legend>Add a New Contract</legend>
 		    <label>Carrier</label>
@@ -74,7 +74,10 @@
 			<label>End Date</label>
 			<input type="text" class="datepicker" name="end_date" value="<?php echo set_value('end_date'); ?>" id="end_date" placeholder="End Date" />
 			<span class="help-block">End date on the contract</span>
-		
+			
+			<label>Contract File(s)</label>
+			<input type="file" name="contract-file[]" placeholder="Upload Raw Contract" multiple="multiple" />
+			
 		    <button type="submit" class="btn btn-primary">add</button>
 		  </fieldset>
 		</form>

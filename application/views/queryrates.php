@@ -3,83 +3,47 @@
 	
 	<div class="row-fluid">
 		<div class="span12">
-			<div class="span4">
-				<label for="origin">Origin</label>
-				<input type="hidden" class="query-input" name="origin" id="origin" placeholder="Origin city"  style="width: 226px;"/>
-			</div>
-			<div class="span4">
-				<label for="Destination">Destination</label>
-				<input type="hidden" class="query-input" name="destination" id="destination" placeholder="Destination city" style="width:226px;">			
-			</div>
 			
+			<table id="query-selection">
+				<tr>
+					<td>
+						<table>
+							<tr>
+								<td>
+								<input type="hidden" class="query-input" name="origin" id="origin" placeholder="Origin city"  style="width: 226px;"/>
+								</td>
+								<td class="to">to</td>
+								<td>
+									<input type="hidden" class="query-input" name="destination" id="destination" placeholder="Destination city" style="width:226px;">			
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<div class="input-append" id="from-date-decorate" data-date-format="mm/dd/yyyy">
+								    	<input type="text"  name="from_date" value="" id="from_date" placeholder="Start Date">
+								    	<span class="add-on"><i class="icon-calendar"></i></span>
+								    </div>
+									
+								</td>
+								<td class="to">to</td>
+								<td>
+									<div class="input-append" id="to-date-decorate" data-date-format="mm/dd/yyyy">
+								    	<input type="text" name="to_date" value="" id="to_date" placeholder="End Date" />
+								    	<span class="add-on"><i class="icon-calendar"></i></span>
+								    </div>
+									
+								</td>
+							</tr>
+						</table>
+					</td>
+					<td>
+						<button type="button" id="search" class="btn btn-primary button-input"><i class="icon-search"></i></button>
+					</td>
+				</tr>
+			</table>
 		</div>
 	</div>
-	
 
-
-	<div id="filter-input">
-		<div class="row-fluid">
-			<div class="span12">
-				Filter(s):
-			</div>
-		</div>
-		<div class="row-fluid">
-			<div class="span4">
-				<label for="limit-origin">Origin Port:</label>
-				<input type="hidden" name="limit-origin" id="limit-origin" placeholder="Limit Port of Origin to" style="width:226px" />
-			</div>
-			<div class="span4">
-				<label for="limit-destination">Destination Port</label>
-				<input type="hidden" name="limit-destination" id="limit-destination" placeholder="Limit Port of Destination to" style="width:226px"/>
-			</div>
-		
-			
-		</div>
-		
-		<div class="row-fluid">
-			<div class="span4">
-				<label for="container_size">Container Size</label>
-				<select id="container_size" name="container_size" placeholder="Container Size">
-					<option value="0" style="color: gray;">-- Limit Container Size --</option>
-					<option value="Dry">20</option>
-					<option value="Dry">40</option>
-				</select>
-			</div>
-			<div class="span4">
-				<label for="container_type">Container Type</label>
-				<select id="container_type" name="container_type" placeholder="Container Type">
-					<option value="0" style="color: gray;">-- Limit Container Type --</option>
-					<option value="Dry">Dry</option>
-				</select>
-			</div>
-			<div class="span4">
-				<label for="dangerous_goods">Dangerous Goods</label>
-				<select placeholder="Dangerous Goods">
-					<option value="0" style="color: gray;">-- Dangerous Goods --</option>
-					<option value="cycy">CY/CY</option>
-					<option value="rycy">RY/CY</option>
-				</select>
-			</div>
-		</div>
-		
-		
-
-		
-		<div class="row-fluid">
-			
-			
-
-		</div>
-	</div><!-- end filter -->
-
-	<div id="query-action">
-		<div class="row-fluid">
-			<div class="span4">
-				<button type="button" id="search" class="btn btn-primary button-input"><i class="icon-search"></i><span>Find Rates</span></button>
-				<button id="filter" type="button" class="btn button-input"><i class="icon-filter"></i><span>Filter</span></button>			
-			</div>
-		</div>
-	</div>
 </div><!-- query input selection -->
 
 <div id="filters">
@@ -126,11 +90,9 @@
 			</div>
 		</div><!-- end class rate-body -->
 		<div class="span2 rate-price">
-			<div id="sell-rate"><span class="info">sell:</span>$1700</div>
+			
 			<div id="buy-rate"><span class="info">base:</span>$1600</div>
-			<div id="margin">
-				<span class="info">margin:</span>$100</div>
-			</div>
+			
 		</div>
 
 	

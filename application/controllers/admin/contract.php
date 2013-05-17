@@ -17,6 +17,8 @@ class Contract extends CI_Controller {
 		$this->load->model("referencemodel");
 		$this->load->model("lanemodel");
 		$this->load->model("rulemodel");
+		$this->load->model('assetstorage');
+		$this->load->model("attachments/attachmentmodel");
 		
 	}
 
@@ -73,14 +75,57 @@ class Contract extends CI_Controller {
 			$this->load->view('admin/contract/view', $data);
 			$this->load->view('admin/footer', $footer_data);		
 		}else{
-			// retrieve post variables
+			//retrieve post variables
 			$customer = $customer_id;
 			$carrier = $this->input->post('carrier');
 			$contract_number = $this->input->post('contract_number');
 			$start_date = $this->input->post('start_date');
 			$end_date = $this->input->post('end_date');
+			
+			$attachment_prefix = "customer-".$customer_id."/"."contract-".$contract_number."/";
+			$attachment_id = NULL;
+			if(isset($_FILES) && !empty($_FILES) && !empty($_FILES["contract-file"])){
+				// get an attachment id
+				$attachment_id = $this->attachmentmodel->get_next_attachment_id("contract");
+				// loop through files
+				for($i=0; $i<count($_FILES['contract-file']); $i++){
+					if(isset($_FILES['contract-file']['name'][$i]) &&
+						$_FILES['contract-file']['error'][$i] == UPLOAD_ERR_OK)
+					{
+						// get file info for each file
+						$name = $_FILES['contract-file']['name'][$i];
+						$content_type = $_FILES['contract-file']['type'][$i];
+						$temp_path = $_FILES['contract-file']['tmp_name'][$i];
+						$remote_path = $attachment_prefix.$name;
+						$response = $this->assetstorage->upload_asset($temp_path, $remote_path);
+						// add asset to db, if it was succesfully uploaded
+						if($response["success"]){
+							$this->attachmentmodel->add_attachment_for_id(
+								$attachment_id, 
+								$remote_path, 
+								$content_type, 
+								(($response["local"]) ? 0 : 1)
+							);
+						}
+					}
+					
+				}
+			}
+			
+			
 			// add contract to database
-			$this->contractmodel->add_contract($contract_number, $this->get_sql_date($start_date), $this->get_sql_date($end_date) ,$customer,$carrier);
+			$this->contractmodel->add_contract(
+									$contract_number, 
+									$this->get_sql_date($start_date), 
+									$this->get_sql_date($end_date),
+									$customer,
+									$carrier, 
+									$attachment_id, 
+									$attachment_prefix
+								);
+			
+			
+			
 			// retrieve contract
 			$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
 			// reload the view with success message;
@@ -90,6 +135,8 @@ class Contract extends CI_Controller {
 			$this->load->view('admin/header', $header_data);
 			$this->load->view('admin/contract/view', $data);
 			$this->load->view('admin/footer', $footer_data);
+
+			
 		}
 		
 	}
@@ -134,18 +181,20 @@ class Contract extends CI_Controller {
 			$result = $this->contractmodel->get_contract_from_number($contract_number);
 			if(isset($result)){
 				$header_data['title'] = "Add Rules to Contract";
-				$header_data['page_css'] = array('select2.css', 'admin/contract/lanes.css');
-				$footer_data['scripts'] = array('select2.js','cities.selector.js', 'countries.selector.js', 'containers.selector.js', 'ports.selector.js','admin/contract/lanes.js');
+				$header_data['page_css'] = array('select2.css', 'admin/contract/lanes.css', 'lib/bootstrap-wysihtml5.css');
+				$footer_data['scripts'] = array('select2.js','cities.selector.js', 'countries.selector.js', 'containers.selector.js', 'ports.selector.js','admin/contract/lanes.js', 'wysihtml5-0.3.0.js' ,'bootstrap-wysihtml5-0.0.2.js');
 				// set page data
 				$data['carrier'] = $result->carrier;
 				$data['carrier_id'] = $result->carrier_id;
 				$data['contract_number'] = $result->contract_number;
 				$data['contract_id'] = $result->contract_id;
+				$data['contract_start_date'] = $result->start_date;
+				$data['contract_end_date'] = $result->end_date;
 				$data['customer'] = $result->customer;
 				$data['currencies'] = $this->currencycodes->get_currency_codes();
 				$data['leg_types'] = $this->referencemodel->get_leg_types();
 				$data['transport_types'] = $this->referencemodel->get_transport_types();
-				$data['cargo_types'] = $this->referencemodel->get_cargo_types();
+				$data['cargo_types'] = $this->referencemodel->get_cargo_types($result->customer_id,$result->carrier_id);
 				$data['currencies'] = $this->referencemodel->get_currency_codes();
 				$data['container_types'] = $this->referencemodel->get_container_types($result->carrier_id);
 				$data['tariffs'] = $this->referencemodel->get_tarriffs_for_carrier($result->carrier_id);
@@ -296,7 +345,7 @@ class Contract extends CI_Controller {
 				$result = $this->contractmodel->get_contract_from_number($contract_number);
 				if(isset($result)){
 					$header_data['title'] = "Add Charges to Contract";
-					$header_data['page_css'] = array('select2.css', 'admin/contract/lanes.css');
+					$header_data['page_css'] = array('select2.css', 'admin/contract/rule.css');
 					$footer_data['scripts'] = array('select2.js','cities.selector.js', 'countries.selector.js', 'containers.selector.js', 'ports.selector.js','admin/contract/rules.js');
 					// set page data
 					$data['carrier'] = $result->carrier;
@@ -313,6 +362,7 @@ class Contract extends CI_Controller {
 					$data['tariffs'] = $this->referencemodel->get_tarriffs_for_carrier($result->carrier_id);
 					$data['services'] = $this->referencemodel->get_services_for_carrier($result->carrier_id);
 					$data['conditions'] = $this->referencemodel->get_charge_conditions();
+					$data['application_types'] = $this->referencemodel->get_application_types();
 					$data['customer_default_currency_code'] = $this->customermodel->get_customer_default_currency($result->customer_id);
 					// save contract id for the next page
 					$data['contract_id'] = $result->contract_id;
@@ -343,6 +393,22 @@ class Contract extends CI_Controller {
 		$conditions = $this->input->post("conditions");
 		
 		echo var_dump($conditions);
+	}
+	
+	
+	public function getlanesaffected()
+	{
+		//$this->output->enable_profiler(TRUE);
+		$conditions = json_decode($this->input->post('conditions'));
+		
+		//echo var_dump($conditions);
+		
+	
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($this->lanemodel->get_lanes_affected_by_charge_rule($conditions)));
+		
+		
 	}
 	
 	public function testsavechargerule()

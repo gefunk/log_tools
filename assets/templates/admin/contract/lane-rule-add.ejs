@@ -15,6 +15,7 @@
 				<option value="<%= currencies[i].id %>"><%= currencies[i].code %> - <%= currencies[i].desc %></option>
 			<% } %>
 		</select>
+		
 		<label>amount</label>	
 		<input type="text" name="rule-amount" value="" id="rule-amount" placeholder="Amount" />
 		<label>effective date</label>
@@ -22,7 +23,18 @@
 		<label>expires date</label>
 		<input type="text" name="rule-expires-date" id="rule-expires-date" />
 		<label>Notes</label>	
-	 	<textarea name="notes" rows="8" cols="40" placeholder="Additional Notes" id="rule-notes" name="rule-notes"></textarea>
+	 	<textarea rows="8" cols="40" placeholder="Additional Notes" class="rule-notes" name="rule-notes"></textarea>
+
+		<div class="attachments">
+		<div class="attachment-message"></div>
+		<label>Add Attachment</label>
+		<input type="file" name="userfile" required multiple />
+		<a class="upload-file" class="btn">Upload File</a>
+		<ul class="attachment-list">	
+		</ul>
+		</div>
+		
+	
 		<button id="save-rule" class="btn btn-primary btn-small">Add Rule</button>
 	</div>	
 </div>

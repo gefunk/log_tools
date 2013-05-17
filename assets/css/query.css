@@ -1,4 +1,4 @@
-
+/* all these have to do with the ul that displayes the rate **/
 div.result-row{
 	margin-bottom: 1em;
 	padding: 5px;
@@ -58,8 +58,41 @@ label{
 	text-shadow: 0 1px 0 #FFFFFF;
 }
 
+/** end rate styles **/
+
+
+/** filters **/
 div#filters{
+	border-top: 1px solid #EEEEEE;
 	border-bottom: 1px solid #EEEEEE;
+	
 	padding-bottom: 1em;
+	padding-top: 1em;	
+	
 	margin-bottom: 1em;
+	margin-top: 1em;
+}
+
+
+
+/** query input div **/
+
+table#query-selection {
+	max-width: 100%;
+	background-color: #F6F6F6;
+    background-image: -moz-linear-gradient(center top , #F6F6F6, #F1F1F1);
+    border: 1px solid #DCDCDC;
+    border-radius: 2px 2px 2px 2px;
+}
+
+table#query-selection td{
+	line-height: 18px;
+	vertical-align: middle;
+	padding: 8px;
+}
+
+
+table#query-selection td.to{
+	padding-left: 5px;
+	padding-right: 5px;
 }

@@ -17,7 +17,7 @@ class Main extends CI_Controller {
 	public function index()
 	{
 		$header_data['title'] = "Query Rates";
-		$header_data['page_css'] = array('query.css', 'select2.css');
+		$header_data['page_css'] = array('query.css', 'lib/select2.css');
 		$footer_data['scripts'] = array('select2.js', 'query.js', 'cities.selector.js', 'ports.selector.js');
 		$this->load->view('header', $header_data);
 		$this->load->view('queryrates');
@@ -33,9 +33,20 @@ class Main extends CI_Controller {
 			    ->set_output(json_encode($search_lanes));
 	}
 	
-	public function signin($customer_id, $customer_name){
-		$data["customer_id"] = $customer_id;
-		$data["customer_name"] = $customer_name;
+	public function signin(){
+		$this->load->view("signin");
+	}
+	
+	public function signin_local($subdomain){
+		$this->load->model("customermodel");
+		$customer = $this->customermodel->get_customer_by_domain($subdomain);
+		// forward to customer login page
+		$customer_data = array(
+			"customer_id" => $customer["id"],
+			"customer_name" => $customer["name"]
+		);
+		$this->session->set_userdata($customer_data);
+		$data["customer_name"] = $customer["name"];
 		$this->load->view("signin", $data);
 	}
 	
@@ -53,35 +64,34 @@ class Main extends CI_Controller {
 		
 	}
 	
-	public function register($customer_id, $customer_name)
+	public function register()
 	{
-		$data['customer_id'] = $customer_id;
-		$data["customer_name"] = $customer_name;
-		$data['customer_group'] = $this->customermodel->get_customer_group($customer_id);
+		$customer_id = $this->session->userdata('customer_id');
+		$this->session->set_userdata('customer_group' ,$this->customermodel->get_customer_group($customer_id));
+		$data["customer_name"] = $this->session->userdata("customer_name");
 		$this->load->view("register", $data);
 	}
 	
 	/**
 	* register user
 	*/
-	public function register_user($customer_group){
+	public function register_user(){
 
-		if(isset($customer_group)){
-			$password = $this->input->post("password");
-			$email = $this->input->post("email");
-			$first_name = $this->input->post("first_name");
-			$larst_name = $this->input->post("last_name");
-			$additional_data = array(
-				'first_name' => $first_name,
-				'last_name' => $last_name,
-			);
-			// group 2 signifies members, customer groups the user by customer
-			$group = array('2', $customer_group);
-			$this->ion_auth->register($username, $password, $email, $additional_data, $group);
-		}else{
-			// show error page
+		$customer_group = $this->session->userdata("customer_data");
+		$password = $this->input->post("password");
+		$email = $this->input->post("email");
+		$first_name = $this->input->post("first_name");
+		$last_name = $this->input->post("last_name");
+		$phone_no = $this->input->post("phone_no");
+		$additional_data = array(
+			'first_name' => $first_name,
+			'last_name' => $last_name,
+			'phone' => $phone_no
+		);
+		// group 2 signifies members, customer groups the user by customer
+		$group = array($customer_group);
+		$this->ion_auth->register($email, $password, $email, $additional_data, $group);
 		
-		}
 	}
 	
 	

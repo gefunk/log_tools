@@ -1,15 +1,11 @@
-li.result-city-flag {
-	display: inline;
+
+div.vertical-divider{
+	border-left: 1px solid;
+	padding-left: 1em;
 }
 
-li.result-city {
-	display: inline;
-}
-
-span.result-city-name {
-	margin-right: 3px;
-}
-
-span.result-city-state {
-	margin-right: 3px;
+span.delete-condition{
+	cursor: pointer;
+	color: red;
+	display: none;
 }

@@ -156,9 +156,9 @@ class ReferenceModel extends CI_Model
 	}
 	
 	
-	function get_cargo_types()
+	function get_cargo_types($customer_id, $carrier_id)
 	{
-		$query = $this->db->get("ref_cargo_types");
+		$query = $this->db->get_where("ref_cargo_types", array("carrier" => $carrier_id, "customer" => $customer_id));	
 		return $query->result();
 	}
 	
@@ -195,6 +195,13 @@ class ReferenceModel extends CI_Model
 	function get_charge_conditions()
 	{
 		$query = $this->db->get("ref_charge_condition");
+		return $query->result();
+	}
+	
+	
+	function get_application_types()
+	{
+		$query = $this->db->get("ref_charge_application_type");
 		return $query->result();
 	}
 	

@@ -45,7 +45,10 @@ $(document).ready(function(){
 	});
 	
 	
-	$("#add-charge-rule").click(function(){
+	/**
+	* handle adding a condition
+	*/
+	$("#add-charge-condition").click(function(){
 		var rule_info = $("#rule-input").data("rule-info");
 		
 		// determine prefix to use
@@ -84,19 +87,112 @@ $(document).ready(function(){
 		
 		$("ul#condition-list").append(html);
 		
+		
 	});
+	
+	
+	/** retrieve lanes for conditions **/
+	$("#get-lanes-affected").click(function(){
+		get_lanes_affected_by_rule();
+	});
+	
+	
+	
+	// handlers to show and delete an individual condition
+	/** mouse enters show the delete **/
+	$("section#rule").on("mouseenter", "li", function(){
+		$(this).children("span.delete-condition").show();
+	});
+	// mouse leaves - hide it
+	$("section#rule").on("mouseleave", "li", function(){
+		$(this).children("span.delete-condition").hide();
+	});
+	
+	$("section#rule").on("click", "span.delete-condition", function(){
+		$(this).parent("li").remove();
+	});
+
+	
+	
+	
 });
 
 
+
+function get_lanes_affected_by_rule () {
+	// retrieve all the conditions and values
+	var conditions = new Array();
+	// read all the rule conditions
+	$("ul#condition-list > li").each(function(){
+		
+		var condition = {
+			values : []
+		}
+		
+		condition.id = $(this).attr('data-rule-id');
+		// add rule id to conditions array
+		
+		var values = new Array();
+		// read all the rule values
+		$(this).children("span.selected-text").children("span").each(function(key, value){
+			var value_id = $(value).attr('data-id');
+			// add value to values array
+			condition.values.push(value_id);
+		});
+		// set this condition to have these values
+		conditions.push(condition);
+	});
+	$.post(site_url+"/admin/contract/getlanesaffected", {conditions: JSON.stringify(conditions)})
+	.done(function(data){
+		console.log("data returned");
+		var $div = $("div#affected-lanes");
+		$div.html("").hide();
+		var html = "";
+		for(var index = 0; index < data.length; index++){
+			html += new EJS({url: base_url+'assets/templates/admin/contract/lane.ejs'}).render(data[index]);
+			
+		}
+			
+		
+		$div.append(html);
+		// enable popover
+		$("a.desc").popover();
+		
+		$div.show("slow");
+	});
+}
+
+
+
+/** UTILITIES **/
+
+
+/**
+* returns formatted sentences for conditions which have multiple
+* values
+* @param selections the different selection values e.g. India, USA, etc...
+* @param formatter the formatter to use to return the text of the values, 
+* same formatter used in selec2
+* 
+*/
 function get_text_for_multiple (selections, formatter) {
 	var text = "";
 	for(var se in selections){
 		text += "<span data-id='"+selections[se].id+"'>"+
-		window[formatter](selections[se])+"</span>"+" AND ";
+		window[formatter](selections[se])+"</span>"+" and ";
 	}
-	return text;
+	
+	// strip trailing and
+	return text.substring(0, text.lastIndexOf(" and "));
 }
 
+
+/**
+* returns the formatter based on what the source for the rule was
+* @param source the source from the database attached to the rule,
+* the switch statement cases are directly related to the source
+* in the db
+*/
 function get_formatter_for_source (source) {
 	var formatter = "";
 	switch(source){
