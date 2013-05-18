@@ -16,7 +16,7 @@ class LaneModel extends CI_Model
 	*/
 	function getlanes($contract_id)
 	{
-		$this->db->select("cl.id, date_format(cl.effective_date, '%M %D, %Y') as effective_date, rct.container_type as container, rct.description as container_description, cl.value, rcc.code as currency, rcc.symbol as currency_symbol, rcart.name as cargo, rcart.description as cargo_description", FALSE);
+		$this->db->select("cl.id, date_format(cl.effective_date, '%M %D, %Y') as effective_date,  date_format(cl.expiration, '%M %D, %Y') as expiration_date, rct.container_type as container, rct.description as container_description, cl.value, rcc.code as currency, rcc.symbol as currency_symbol, rcart.name as cargo, rcart.description as cargo_description", FALSE);
 		$this->db->from("contract_lanes cl");
 		$this->db->join("ref_container_types rct", "cl.container = rct.id");
 		$this->db->join("ref_cargo_types rcart","cl.cargo = rcart.id");
