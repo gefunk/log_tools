@@ -1,6 +1,7 @@
 
 $(document).ready(function(){
 	
+	$("select").select2({width: '220px'});
 	
 	// initialize datepicker
 	$('.datepicker').datepicker();
@@ -136,7 +137,7 @@ $(document).ready(function(){
 		
 		var legs = [];
 		
-		$("#route tr:not(:first)").each(function(index, value){
+		$("#route tr").each(function(index, value){
 			
 			var leg = {
 				transport: $(this).data("transport"),
@@ -150,7 +151,8 @@ $(document).ready(function(){
 			contract_id : $("#contract_id").val(),
 			container_type : $("#container_type").val(),
 			cargo_type : $("#cargo_type").val(),
-			effective_date : $("#effective_date").val(),
+			effective_date : contract_start_date,
+			expiration_date : contract_end_date,
 			legs : legs,
 			value : $("#amount").val(),
 			currency : $("#currency_code").val(),
@@ -269,28 +271,5 @@ function sendFiles(file_input){
 }
 
 
-/**
-* send data to the form uploader
-**/
-function sendForm(form, output) {
- 
-  var
-    oOutput = output,
-    oData = new FormData(form);
- 
- 
-  var oReq = new XMLHttpRequest();
-  oReq.open("POST", site_url+"/attachments/do_upload/"+makeid(), true);
-  oReq.onload = function(oEvent) {
-    if (oReq.status == 200) {
-      oOutput.innerHTML = "Uploaded!";
-    } else {
-      oOutput.innerHTML = "Error " + oReq.status + " occurred uploading your file.<br \/>";
-    }
-  };
- 
-  oReq.send(oData);
- 
-}
 
 
