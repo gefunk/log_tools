@@ -63,7 +63,7 @@ $(document).ready(function(){
 	
 	// handle delete route click
 	$("#route").on("click", "button.delete-route", function(){
-		$(this).parents("tr").remove();
+		$(this).closest("tr").remove();
 	});
 	
 	
