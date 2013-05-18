@@ -90,7 +90,7 @@ class LaneModel extends CI_Model
 	$cargo_type = $this->input->post('cargo_type');
 	$effective_date = $this->get_sql_date($this->input->post('effective_date'));
 	*/
-	function addlane($contract_id, $container_type, $value, $cargo_type, $effective_date, $legs, $currency_code, $service, $tariff)
+	function addlane($contract_id, $container_type, $value, $cargo_type, $effective_date, $expiration_date, $legs, $currency_code, $service, $tariffs)
 	{
 		$lane = array(
 			'contract' => $contract_id,
@@ -98,14 +98,21 @@ class LaneModel extends CI_Model
 			'cargo' => $cargo_type,
 			'container' => $container_type,
 			'effective_date' => $effective_date,
+			'expiration' => $expiration_date,
 			'currency' => $currency_code,
-			'tariff' => $tariff,
 			'carrier_service' => $service
 		);
 		
 		// insert lane
 		$this->db->insert('contract_lanes', $lane);
 		$lane_id = $this->db->insert_id(); 
+		
+		// insert tariffs
+		$tariff_data = array();
+		foreach($tariffs as $tariff){
+			array_push($tariff_data, array("contract_lane" => $lane_id, "carrier_tariff" => $tariff));
+		}
+		$this->db->insert_batch('contract_lane_tariffs', $tariff_data);
 		
 		// prepare data for legs for contract
 		$legs_data = array();

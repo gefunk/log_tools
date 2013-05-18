@@ -255,12 +255,13 @@ class Contract extends CI_Controller {
 		$container_type = $this->input->post('container_type');
 		$value = $this->input->post('value');
  		$cargo_type = $this->input->post('cargo_type');
-		$effective_date = $this->get_sql_date($this->input->post('effective_date'));
+		$effective_date = $this->input->post('effective_date');
+		$expiry_date = $this->input->post('expiration_date');
 		$currency_code = $this->input->post("currency");
 		$service = $this->input->post("service");
 		$tariff = $this->input->post("tariff");
 		
-		$this->lanemodel->addlane($contract_id, $container_type, $value, $cargo_type, $effective_date, $legs, $currency_code, $service, $tariff);
+		$this->lanemodel->addlane($contract_id, $container_type, $value, $cargo_type, $effective_date, $expiry_date, $legs, $currency_code, $service, $tariff);
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode("success"));
