@@ -1,13 +1,15 @@
 /* all these have to do with the ul that displayes the rate **/
 div.result-row{
-	margin-bottom: 1em;
 	padding: 5px;
-	border-radius: 5px;
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
+	border-top: 1px solid #EDF2F7;
+}
 
+div.result-row:first-child {
+	border-top: 0px;		
 }
 
 div.result-row:hover{
@@ -40,7 +42,9 @@ span.via-city{
 }
 
 .primary-city{
-	font-size: 115%;
+	font-size: 14px;
+	color: #3389D1;
+	font-weight: 600;
 }
 
 #filter-input{
