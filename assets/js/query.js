@@ -17,7 +17,7 @@ $(document).ready(function(){
 			}
 		},
 		mouseenter: function(){
-				$(this).css("background-color", "#F5F5F5");
+				$(this).css("background-color", "#F5FAFC");
 			},
 		mouseleave: function(){
 				$(this).css("background-color", "");
