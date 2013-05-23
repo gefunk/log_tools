@@ -7,6 +7,7 @@
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/ejs/ejs_fulljslint.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/ejs/ejs.js"></script>
+		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/global.js"></script>
 
 		<?php
 		// way to pass in javascript to append to end of document

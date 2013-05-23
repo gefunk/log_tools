@@ -73,8 +73,9 @@ $(document).ready(function(){
 		$(this).popover('show');
 	});
 	
-	
-	/** date picker for start and end date **/
+
+	create_start_to_date_fields ("from_date", "to_date", true) ;
+	/** date picker for start and end date *
 	var nowTemp = new Date();
 	var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 	
@@ -99,6 +100,7 @@ $(document).ready(function(){
 		}).on('changeDate', function(ev) {
 			end_date.hide();
 		}).data('datepicker');	
+		*/
 	
 });
 

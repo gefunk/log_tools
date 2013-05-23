@@ -1,11 +1,23 @@
 
-div.vertical-divider{
-	border-left: 1px solid;
-	padding-left: 1em;
-}
-
-span.delete-condition{
+span.delete{
 	cursor: pointer;
 	color: red;
 	display: none;
+}
+
+
+section.right-input{
+	border-left: 1px solid gray;
+	padding: 1em;
+	margin-bottom: 1em;
+	border-top: 1px solid gray;	
+}
+
+span.selected-text > span{
+	font-weight: bold;
+}
+
+ul#condition-list{
+	list-style: none;
+	margin: 0 0 9px;
 }

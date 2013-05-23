@@ -18,7 +18,7 @@ class Main extends CI_Controller {
 	{
 		$header_data['title'] = "Query Rates";
 		$header_data['page_css'] = array('query.css', 'lib/select2.css');
-		$footer_data['scripts'] = array('select2.js', 'query.js', 'cities.selector.js', 'ports.selector.js');
+		$footer_data['scripts'] = array('select2.js', 'query.js', 'custom-selectors/cities.selector.js', 'custom-selectors/ports.selector.js');
 		$this->load->view('header', $header_data);
 		$this->load->view('queryrates');
 		$this->load->view('footer', $footer_data);
@@ -57,7 +57,7 @@ class Main extends CI_Controller {
 		$remember = $this->input->post("remember");
 		if($this->ion_auth->login($identity, $password, $remember)){
 			//successful login
-			
+			redirect('main');
 		}else{
 			// unsuccessful login
 		}
@@ -90,7 +90,7 @@ class Main extends CI_Controller {
 		);
 		// group 2 signifies members, customer groups the user by customer
 		$group = array($customer_group);
-		$this->ion_auth->register($email, $password, $email, $additional_data, $group);
+		$this->ion_auth->register($email, $password, $email, $additional_data, $customer_group);
 		
 	}
 	

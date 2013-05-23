@@ -182,7 +182,7 @@ class Contract extends CI_Controller {
 			if(isset($result)){
 				$header_data['title'] = "Add Rules to Contract";
 				$header_data['page_css'] = array('select2.css', 'admin/contract/lanes.css', 'lib/bootstrap-wysihtml5.css');
-				$footer_data['scripts'] = array('select2.js','cities.selector.js', 'countries.selector.js', 'containers.selector.js', 'ports.selector.js','admin/contract/lanes.js', 'wysihtml5-0.3.0.js' ,'bootstrap-wysihtml5-0.0.2.js');
+				$footer_data['scripts'] = array('select2.js','custom-selectors/cities.selector.js', 'custom-selectors/countries.selector.js', 'custom-selectors/containers.selector.js', 'custom-selectors/ports.selector.js', 'custom-selectors/tariff.selector.js', 'admin/contract/lanes.js', 'wysihtml5-0.3.0.js' ,'bootstrap-wysihtml5-0.0.2.js');
 				// set page data
 				$data['carrier'] = $result->carrier;
 				$data['carrier_id'] = $result->carrier_id;
@@ -347,7 +347,7 @@ class Contract extends CI_Controller {
 				if(isset($result)){
 					$header_data['title'] = "Add Charges to Contract";
 					$header_data['page_css'] = array('select2.css', 'admin/contract/rule.css');
-					$footer_data['scripts'] = array('select2.js','cities.selector.js', 'countries.selector.js', 'containers.selector.js', 'ports.selector.js','admin/contract/rules.js');
+					$footer_data['scripts'] = array('select2.js','custom-selectors/cities.selector.js', 'custom-selectors/countries.selector.js', 'custom-selectors/containers.selector.js','custom-selectors/ports.selector.js','custom-selectors/tariff.selector.js','custom-selectors/service.selector.js','admin/contract/rules.js');
 					// set page data
 					$data['carrier'] = $result->carrier;
 					$data['carrier_id'] = $result->carrier_id;
@@ -357,7 +357,8 @@ class Contract extends CI_Controller {
 					$data['currencies'] = $this->currencycodes->get_currency_codes();
 					$data['leg_types'] = $this->referencemodel->get_leg_types();
 					$data['transport_types'] = $this->referencemodel->get_transport_types();
-					$data['cargo_types'] = $this->referencemodel->get_cargo_types();
+					$data['cargo_types'] = $this->referencemodel->get_cargo_types($result->customer_id, $result->carrier_id);
+					$data['charge_codes'] = $this->referencemodel->get_charge_codes_for_carrier($result->carrier_id);
 					$data['currencies'] = $this->referencemodel->get_currency_codes();
 					$data['container_types'] = $this->referencemodel->get_container_types($result->carrier_id);
 					$data['tariffs'] = $this->referencemodel->get_tarriffs_for_carrier($result->carrier_id);

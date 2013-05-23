@@ -1,7 +1,7 @@
 $(document).ready(function(){
 
 	// set up selected when clicked
-	$("#rule-selector > li > a").click(function(){
+	$("#condition-selector > li > a").click(function(){
 		var verb = $(this).data("verb");
 		var source = $(this).data("source");
 		var html = $(this).text()+" "+verb;
@@ -20,24 +20,36 @@ $(document).ready(function(){
 				condition: $.trim($(this).text())
 			}
 		);
-
+		
 		var id = "#rule-entry";
 		switch(source){
 			case 1: 
 				// source is cities
+				$(appendto).html('<input id="rule-entry" class="bigdrop" type="hidden" style="width:440px">');
 				create_cities_list(id, multiple);
 				break;
 			case 2:
 				// source is countries
+				$(appendto).html('<input id="rule-entry" class="bigdrop" type="hidden" style="width:440px">');
 				create_countries_list(id, multiple);
 				break;
 			case 3:
 				// source is ports
+				$(appendto).html('<input id="rule-entry" class="bigdrop" type="hidden" style="width:440px">');
 				create_ports_list(id, multiple);
 				break;
 			case 4:
 				// source is container types
-				create_containers_list(appendto);
+				$(appendto).html('<input id="rule-entry" class="bigdrop" type="hidden" style="width:440px">');
+				create_containers_list(id);
+				break;
+			case 5:
+				$(appendto).html('<input id="rule-entry" class="bigdrop" type="hidden" style="width:440px">');
+				create_tariff_list(id);
+				break;
+			case 6:
+				$(appendto).html('<input id="rule-entry" class="bigdrop" type="hidden" style="width:440px">');
+				create_carrier_service_list(id);
 				break;
 			default:
 				break;
@@ -100,21 +112,104 @@ $(document).ready(function(){
 	
 	// handlers to show and delete an individual condition
 	/** mouse enters show the delete **/
-	$("section#rule").on("mouseenter", "li", function(){
+	$("ul#condition-list").on("mouseenter", "li", function(){
 		$(this).children("span.delete-condition").show();
 	});
 	// mouse leaves - hide it
-	$("section#rule").on("mouseleave", "li", function(){
+	$("ul#condition-list").on("mouseleave", "li", function(){
 		$(this).children("span.delete-condition").hide();
 	});
+	
 	
 	$("section#rule").on("click", "span.delete-condition", function(){
 		$(this).parent("li").remove();
 	});
 
+
+	/** adding a charge code **/
+	$("#charge-code-selector > li > a").click(function(){
+		var data ={
+			id: $(this).data('id'),
+			code:  $(this).data('code'),
+			description: $(this).data('description')
+		} ;
+		
+		var html = new EJS({url: base_url+'assets/templates/admin/contract/rules/charge.ejs'}).render(data);
+		$("div#charge").html(html);
+	});
+	
+	
+	/** adding a application type **/
+	$("#application-selector > li > a").click(function(){
+		var data ={
+			id: $(this).data('id'),
+			description: $(this).data('description')
+		} ;
+		
+		var html = new EJS({url: base_url+'assets/templates/admin/contract/rules/apply.ejs'}).render(data);
+		$("div#apply").html(html);
+	});
 	
 	
 	
+	/** adding value **/
+	$("button#add-value").click(function(){
+		var amount = $("input#value").val();
+		var currency_value = null;
+		var currency_symbol = null;
+		$("select#currency_code option:selected").each(function(){
+			currency_symbol = $(this).data("symbol");
+			currency_value = $(this).val();
+		});
+		
+		var data ={
+			currency_code: currency_value,
+			symbol: currency_symbol,
+			amount : amount
+		} ;
+		
+		var html = new EJS({url: base_url+'assets/templates/admin/contract/rules/value.ejs'}).render(data);
+		$("div#value").html(html);
+	});
+	
+	
+	/** add dates **/
+	$("button#add-dates").click(function(){
+		var data = {
+			from_date: $("#effective_on").val(),
+			to_date: $("#expires_on").val()
+		} 
+		var html = new EJS({url: base_url+'assets/templates/admin/contract/rules/dates.ejs'}).render(data);
+		$("div#dates").html(html);
+	});
+	
+	/* 
+	* handle delete icon click on any of rule holder
+	* divs
+	*/
+	$("div.holder").on("click", "span.delete", function(){
+		$(this).parents("div.holder").html('');
+		//$("div#charge").html('');
+	});
+	/** 
+	* handle on hover for any of the rule holder divs
+	* mouse enters show the delete 
+	*/
+	$("div.holder").on("mouseenter", "p", function(){
+		$(this).children("span.delete").show();
+	});
+	/*
+	* handle mouse leave for any of the rule holder divs
+	* mouse leaves - hide it
+	*/
+	$("div.holder").on("mouseleave", "p", function(){
+		$(this).children("span.delete").hide();
+	});
+	
+	
+	
+	/** date picker for start and end date **/
+	create_start_to_date_fields ("effective_on", "expires_on", false) ;
 });
 
 
@@ -207,6 +302,15 @@ function get_formatter_for_source (source) {
 		// port
 		case 3:
 			formatter = "format_port";
+			break;
+		case 4:
+			formatter = "container_format";
+			break;
+		case 5:
+			formatter = "tariff_format";
+			break;
+		case 6:
+			formatter = "carrier_service_format";
 			break;
 	}
 	return formatter;
