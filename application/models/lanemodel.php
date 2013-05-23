@@ -240,7 +240,7 @@ class LaneModel extends CI_Model
 	
 	function translate_conditions_to_where_clauses($condition, $value)
 	{
-		error_log("Condition is".$condition);
+		log_message("debug","Condition is".$condition);
 		switch($condition){
 			case 1: 
 				$country_id = $value;
@@ -299,6 +299,12 @@ class LaneModel extends CI_Model
 			"where cll.location in ($port_ids) ".
 			"and cll.leg_type = (select id from ref_leg_types where name = '$dest_or_origin') ".
 		")";
+		return $sql;
+	}
+	
+	function get_where_for_containers($container_ids)
+	{
+		$sql = "contract in ( $container_ids )";
 		return $sql;
 	}
 	

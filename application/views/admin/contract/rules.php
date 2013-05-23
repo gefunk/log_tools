@@ -14,11 +14,20 @@
 
 <div class="span5" class="vertical-divider">
 	<section id="rule">
+		<h4>Rule</h4>
 		<ul id="condition-list">
 		</ul>
+		<div id="charge" class="holder">
+		</div>
+		<div id="value"class="holder">
+		</div>
+		<div id="apply"class="holder">
+		</div>
+		<div id="dates" class="holder">
+		</div>
 	</section>
 	<section id="affected-lanes">
-		<h3>Lane(s) Affected</h3>
+		<h5>Lane(s) Affected</h5>
 		<button id="get-lanes-affected" class="btn">Get Lanes</button>
 		<div id="affected-lanes" class="span12">
 			No Lanes Affected
@@ -27,15 +36,15 @@
 </div>
 
 <div class="span3" class="vertical-divider">
-	<section id="add-condition">
+	<section id="add-condition" class="right-input">
 		<h4>Add Condition</h4>
 		
 		<div class="btn-group">
 	    	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-				Select a condition
+				Select condition (s)
 	    		<span class="caret"></span>
 	    	</a>
-		    <ul id="rule-selector" class="dropdown-menu">
+		    <ul id="condition-selector" class="dropdown-menu">
 				<?php foreach($conditions as $condition): ?>
 					<li>
 						<a 
@@ -58,20 +67,42 @@
 			
 			</div>
 			<div id="rule-input">
-				<input id="rule-entry" class="bigdrop" type="hidden" style="width:440px">
+				
 			</div>
 		</div>
 		
-		<button id="add-charge-condition" class="btn btn-primary"><i class="icon-plus"></i>Add</button>
+		<button id="add-charge-condition" class="btn btn-primary"><i class="icon-plus"></i>Add Condition</button>
+	</section>
+	
+	<section id="add-application" class="right-input">
+		<div class="btn-group">
+	    	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+				Select a charge code
+	    		<span class="caret"></span>
+	    	</a>
+		    <ul id="charge-code-selector" class="dropdown-menu">
+				<?php foreach($charge_codes as $code): ?>
+					<li>
+						<a 
+							href="#" 
+							data-id="<?php echo $code->id; ?>"
+							data-description="<?php echo $code->description; ?>"
+							data-code="<?php echo $code->code; ?>"
+							>
+								<?php echo $code->code." - ".$code->description; ?>
+						</a>
+					</li>
+				<?php endforeach; ?>
+		    </ul>
+	    </div>
 	</section>
 	
 	
-	<section id="add-application">
-		<h3>How to Apply?</h3>
+	<section id="add-application" class="right-input">
 		<div>
 			<div class="btn-group">
 		    	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-					Select a condition
+					How do you want to apply this?
 		    		<span class="caret"></span>
 		    	</a>
 			    <ul id="application-selector" class="dropdown-menu">
@@ -94,14 +125,30 @@
 		</div>
 	</section>
 
-	<section id="values">
-		<h3>Value to set</h3>
-		<div id="set-values" class="span12">
-			No Values Set Yet
+	<section id="values" class="right-input">
+		<select id="currency_code" data-placeholder="Currency">
+			<?php foreach($currencies as $currency): ?>
+				<option value="<?php echo $currency->id ?>" data-symbol="<?php echo $currency->symbol; ?>" <?php if($currency->code == "USD") { echo "SELECTED='true'"; } ?>>
+					<?php echo $currency->code." - ".$currency->description ?>
+				</option>
+			<?php endforeach; ?>
+		</select>
+		<div id="set-values">
+			<label for="value">Value</label><input type="text" name="value" value="" id="value">
 		</div>
+		<button id="add-value" class="btn btn-primary"><i class="icon-plus"></i>Set Value</button>
 	</section>
 	
+	<section id="dates" class="right-input">
+			<label for="effective_on">Effective On</label><input type="text" name="effective_on" value="" id="effective_on">
+			<label for="expires_on">Expires On</label><input type="text" name="expires_on" value="" id="expires_on">
+			<button id="add-dates" class="btn btn-primary"><i class="icon-plus"></i>Set Dates</button>
+	</section>
 </div>
 
 	
 </div><!-- end row -->
+
+<script type="text/javascript" charset="utf-8">
+	var carrier_id = <?php echo $carrier_id; ?>
+</script>
