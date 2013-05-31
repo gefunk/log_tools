@@ -45,8 +45,8 @@
 				<div class="error">
 					
 				</div>
-				<form action="<?php echo site_url('main/register_user'); ?>" method="POST" id="register-form">
-	                <h6>Sign Up - Welcome <?php echo $customer_name; ?></h6>
+				<form action="<?php echo site_url('login/register_user'); ?>" method="POST" id="register-form">
+	                <h6>Sign Up - Welcome <?php echo $this->session->userdata['customer_name']; ?></h6>
 	                <input class="span12" type="text" class="required email" name="email" minlength="4" placeholder="E-mail address">
 	                <input class="span12" type="password" id="password1" class="required password" name="password" placeholder="Password">
 	                <input class="span12" type="password" class="required" equalTo="#password1" name="password2" placeholder="Confirm Password">
