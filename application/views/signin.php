@@ -36,17 +36,21 @@
 <body>
 	
     <div class="row-fluid login-wrapper">
+		<div id="messages">
+			<?php echo $this->session->flashdata("messages"); ?>
+		</div>
+	
         <img class="logo" src="<?php echo base_url(); ?>assets/img/logo-white.png">
 
         <div class="span4 box">
-			<form action="<?php echo site_url('main/login_user'); ?>" method="post" accept-charset="utf-8">
+			<form action="<?php echo site_url('login/login_user'); ?>" method="post" accept-charset="utf-8">
 	            <div class="content-wrap">
-	                <h6>Log in - <?php echo $customer_name; ?></h6>
-	                <input class="span12" type="text" placeholder="E-mail address">
-	                <input class="span12" type="password" placeholder="Your password">
+	                <h6>Welcome <?php echo $this->session->userdata['customer_name']; ?></h6>
+	                <input class="span12" type="text" name="identity" placeholder="E-mail address">
+	                <input class="span12" type="password" name="password" placeholder="Your password">
 	                <a href="#" class="forgot">Forgot password?</a>
 	                <div class="remember">
-	                    <input id="remember-me" type="checkbox">
+	                    <input id="remember" name="remember" type="checkbox">
 	                    <label for="remember-me">Remember me</label>
 	                </div>
 	                <input type="submit" class="btn-glow primary login" value="Log in">
@@ -56,7 +60,7 @@
 
         <div class="span4 no-account">
             <p>Don't have an account?</p>
-            <a href="<?php echo site_url('main/register'); ?>">Sign up</a>
+            <a href="<?php echo site_url('login/register'); ?>">Sign up</a>
         </div>
     </div>
 

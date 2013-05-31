@@ -1,45 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Welcome extends CI_Controller {
+class Welcome extends MY_Controller {
 
-	/**
-	*	Default endpoint to landing page
-	*/
-	public function index($showalert="")
+	function __construct()
+    {
+        // Call the Model constructor
+        parent::__construct();
+   	}
+
+	public function index()
 	{
-		
-		/*
-		* check if a customer is access via their subdomain
-		*/
-		$subdomain = array_shift(explode(".",$_SERVER['HTTP_HOST'])); 
-		if($subdomain && $subdomain != '' && $subdomain != 'www'){
-			// only load model when needed
-			$this->load->model("customermodel");
-			$customer = $this->customermodel->get_customer_by_domain($subdomain);
-			if($customer != null){
-				// forward to customer login page
-				$customer_data = array(
-					"customer_id" => $customer["id"],
-					"customer_name" => $customer["name"]
-				);
-				$this->session->set_userdata($customer_data);
-				$data["customer_name"] = $customer["name"];
-				$this->load->view("signin", $data);
-			}else{
-				// regular flow, no customer id found
-				if(isset($showalert))
-					$data['alert'] = $showalert;
-				$this->load->view('landing/landing', $data);
-			}
-		}else{
-			// regular flow no customer id found
-			if(isset($showalert))
-				$data['alert'] = $showalert;
-			$this->load->view('landing/landing', $data);
-		}
-		
+		$this->load->view('landing/landing');
 	}
-	
+
 	public function contact()
 	{
 		$this->load->view('landing/contact');

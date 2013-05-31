@@ -54,19 +54,21 @@ class CustomerModel extends CI_Model
 		return $customer;
 	}
 	
-	function get_customer_group($id)
+	function get_subdomain_from_id($id)
 	{
-		$this->db->select("group")->from("customers")->where("id", $id);
+		$this->db->select("subdomain")->from("customers")->where("id", $id);
 		$query = $this->db->get();
-		$customer_group = NULL;
+		$customer_subdomain = NULL;
 		if ($query->num_rows() > 0)
 		{
 		   foreach ($query->result() as $row)
 		   {
-				$customer_group = $row->group;
+				$customer_subdomain = $row->group;
 			}
 		}
-		return $customer_group;
+		return $customer_subdomain;
 	}
+	
+	
 }
 /** end model **/
