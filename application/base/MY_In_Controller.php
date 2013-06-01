@@ -10,10 +10,13 @@ class MY_In_Controller extends MY_Controller {
 			if (defined('ENVIRONMENT') && ENVIRONMENT == 'development'){
 				redirect('login/signin_local/'.$this->session->userdata("subdomain"), "refresh");
 			}else{
+				// in production redirect them to the login controller
 				redirect("login", "refresh");
-			}	
+			}
+				
+		}	
 			
-		}
+		
 			
 	}
 	
