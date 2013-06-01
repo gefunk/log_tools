@@ -12,13 +12,7 @@ class Welcome extends MY_Controller {
 	{
 		// check if session data is set for customer if it is forward them to 
 		// customer login screen
-		if (defined('ENVIRONMENT') && (ENVIRONMENT == 'production' || ENVIRONMENT == 'testing') && $this->auth->hasCustomerSession()){
-			// redirect customer to login screen
-			redirect("login", "refresh");
-		}else{
-			$this->load->view('landing/landing');
-		}
-		
+		$this->load->view('landing/landing');
 		
 	}
 
