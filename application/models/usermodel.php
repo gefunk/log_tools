@@ -38,6 +38,28 @@ class UserModel extends CI_Model
 	}
 	
 	/**
+	*
+	* @param $hash the hash stored in the cookie
+	* @param $customer_id to check whether this is the hash stored for this customer
+	*/
+	function is_customer_valid_for_login_hash($hash, $customer_id)
+	{
+		$this->db->select("customer")->from("users")->where("password", $hash);
+		$query = $this->db->get();
+		// should only be one result for a hash
+		if($query->num_rows() == 1){
+			$row = $query->row();
+			if($row->customer == $customer_id){
+				error_log("Row CUstomer: ".$row->customer." Customer Id: ".$customer_id);
+				return TRUE;
+			}
+		}
+		return FALSE;
+	}
+	
+	
+	
+	/**
 	* takes a normal string password and encrypts
 	* @return string encrypted password
 	*/
