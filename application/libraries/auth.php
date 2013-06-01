@@ -22,6 +22,23 @@ class Auth
 		$this->load->model('usermodel');
 	}
 	
+	
+	/**
+	* check if user is coming in through customer url
+	*/
+	public function hasCustomerSession()
+	{
+		if($this->session->userdata("subdomain")){
+			return TRUE;
+		}
+		return FALSE;
+	}
+	
+	
+	/**
+	* checks if the user is logged into the site
+	* @return boolean if user logged TRUE else FALSE
+	*/
 	public function isLoggedIn()
 	{
 		$remember_cookie = get_cookie('amfitir_remember');
