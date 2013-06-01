@@ -1,5 +1,5 @@
 alive.html
-application/config/*
+application/logs/
 system
 system/*
 index.php
