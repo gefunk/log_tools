@@ -12,12 +12,8 @@ class MY_In_Controller extends MY_Controller {
 			}else{
 				// in production redirect them to the login controller
 				redirect("login", "refresh");
-			}
-				
+			}	
 		}	
-			
-		
-			
 	}
 	
 }
