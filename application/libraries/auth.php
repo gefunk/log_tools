@@ -41,17 +41,36 @@ class Auth
 	*/
 	public function isLoggedIn()
 	{
+		// load session and cookie
+		$logged_in_session = $this->session->userdata("amfitir_loggedin");
 		$remember_cookie = get_cookie('amfitir_remember');
 		
-		error_log("User Cookie: ".$remember_cookie);
-		if($this->session->userdata("amfitir_loggedin")){
-			return TRUE;
+		$login_hash = NULL;
+		$customer_id = $this->session->userdata("customer_id");
+		
+		// get the login hash from the session or cookie
+		if($logged_in_session){
+			// found hash in user's session 
+			$login_hash = $logged_in_session;
 		}else if($remember_cookie){
+			// found remember cookie
+			$login_hash = $remember_cookie['value'];
 			// add the hash back to the session
 			$this->session->set_userdata('amfitir_loggedin', $remember_cookie['value']);
-			return TRUE;
 		}
-		return FALSE;
+		
+		/*
+		* check if this login hash is valid for this customer
+		*/
+		if(isset($login_hash) && $this->usermodel->is_customer_valid_for_login_hash($login_hash, $customer_id)){
+			log_message("debug", "Customer is valid for this session ".$this->usermodel->is_customer_valid_for_login_hash($login_hash, $customer_id));			
+			return TRUE;
+		}else{
+			// this user doesn't match for the customer, log them out
+			$this->logout();
+			return FALSE;
+		}
+		
 	}
 	
 	/**
