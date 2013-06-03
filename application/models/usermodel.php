@@ -50,7 +50,6 @@ class UserModel extends CI_Model
 		if($query->num_rows() == 1){
 			$row = $query->row();
 			if($row->customer == $customer_id){
-				error_log("Row CUstomer: ".$row->customer." Customer Id: ".$customer_id);
 				return TRUE;
 			}
 		}
