@@ -82,6 +82,7 @@ class Auth
 	*/
 	public function login($identity, $password, $remember, $customer_id)
 	{
+		log_message("debug", "Passed into Auth: ".$identity." Password: ".$password);
 		$login_hash = $this->usermodel->check_login($identity, $password, $customer_id);
 		log_message('debug', 'REMEMBER: '.$remember);
 		$login_result = !empty($login_hash);
@@ -113,9 +114,14 @@ class Auth
 	public function logout()
 	{
 		// remove cookie
-		// record log out
+		if (get_cookie('amfitir_remember'))
+		{
+			delete_cookie('amfitir_remember');
+		}
 		$this->session->unset_userdata('amfitir_loggedin');
-		delete_cookie('amfitir_remember');
+		//Destroy the session
+		//$this->session->sess_destroy();
+		//$this->session->sess_create();
 	}
 	
 	/**
