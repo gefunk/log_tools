@@ -32,6 +32,7 @@ class Login extends MY_Out_Controller {
 				"subdomain" => $subdomain
 			);
 			$this->session->set_userdata($customer_data);
+			log_message("debug", "Set session data: ".$this->session->userdata("subdomain"));
 			$this->load->view("signin");
 		}else{
 			// in production and testing redirect this url to index
@@ -47,6 +48,8 @@ class Login extends MY_Out_Controller {
 		
 		$redir_link = NULL;
 		
+		log_message('debug', 'Login Post: '.$identity." Password: ".$password." Remember: ".$remember);
+		
 		// encrypt the password to test against
 		if($this->auth->login($identity, $password, $remember, $this->session->userdata("customer_id"))){
 			//successful login
@@ -57,9 +60,11 @@ class Login extends MY_Out_Controller {
 			//if the login was un-successful
 			//redirect them back to the login page
 			$this->session->set_flashdata('messages', "incorrect login");
-			if (defined('ENVIRONMENT') && ENVIRONMENT == 'development'){
+			if (defined('ENVIRONMENT') && (ENVIRONMENT == 'development')){
+				log_message("debug", "Customer ID: ",$this->session->userdata("customer_id")." Subdomain: ".$this->session->userdata("subdomain"));
 				$redir_link = 'login/signin_local/'.$this->session->userdata("subdomain");
 			}else{
+				log_message("debug", "this should only happen in qa or production");
 				//use redirects instead of loading views for compatibility with MY_Controller libraries	
 				$redir_link = 'login';
 			}
