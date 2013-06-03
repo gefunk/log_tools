@@ -362,7 +362,14 @@ $config['proxy_ips'] = '';
 Custom Config Items
 ----------------------------------------------------------------------------
 */
+
+// aws authentication
+$config["aws_access_key_id"] = 'AKIAIWO7D4O4UFD3TYBA';
+$config['aws_secret'] = '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';
+
+// s3 custom config
 $config['bucket'] = 'rate_mgt_qa';
+
 $config['site_open'] = TRUE;
 
 
