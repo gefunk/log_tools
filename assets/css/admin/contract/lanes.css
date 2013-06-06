@@ -1,3 +1,26 @@
+/** styles for top port grouping **/
+div#port-groups{
+	margin-bottom: 1em;
+}
+
+div#port-groups > div.row > div{
+	padding: 15px;
+	border: 1px solid #999;
+	border-radius: 15px;
+}
+
+ul#port-grouping{
+	margin-top: 5px;
+}
+
+ul#port-grouping i.delete-from-port-group{
+	display: none;
+	color: red;
+	margin-left: 3px;
+	cursor: pointer;
+}
+
+
 ul.info{
 	margin-left: 0px;
 }

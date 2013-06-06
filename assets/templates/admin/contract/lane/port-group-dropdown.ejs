@@ -1,0 +1,18 @@
+	<div class="btn-group">
+    	<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+			Select a port group
+    		<span class="caret"></span>
+    	</a>
+	    <ul id="port-group-selector" class="dropdown-menu">
+			<li><a href="#" data-id="1">New Port Group</a></li>
+			<% for(var i=0; i < data.length; i++){ %>
+				<li>
+					<a 
+						href="#" 
+						>
+						<%= data[i].name %>
+					</a>
+				</li>
+			<% } %>
+	    </ul>
+    </div>

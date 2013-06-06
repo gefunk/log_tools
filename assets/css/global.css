@@ -1,19 +1,26 @@
-div.container-fluid {
+div.container-fluid{
 	padding-top: 40px;
 }
+
 
 #nav-logo{
 	margin-left: 1em;
 	margin-right: 0.3em;
 }
 
+
+/** sets margin between icon and button standard 
 button > i {
 	margin-right: 3px;
 }
+**/
 
 
 
-
+/** city selector **/
+td.country-dropdown{
+	color: #FFF;
+}
 
 /* used for ports selector */
 span.transport-icon {
@@ -22,10 +29,8 @@ span.transport-icon {
 	display: inline-block;
 }
 
-li.select2-highlighted div.transport-icon{
-	
-}
 
+/** Icons for Ports Selected **/
 span.transport-ocean {
 	background: url('../../assets/img/transport_icons/ship_24.png');
 }
@@ -55,3 +60,8 @@ span.transport-rail {
 li.select2-highlighted span.transport-rail {
 	background: url('../../assets/img/transport_icons/train_24_select.png');
 }
+
+
+
+/** fix puts date picker in front of modal box **/
+.datepicker{z-index:1151;}

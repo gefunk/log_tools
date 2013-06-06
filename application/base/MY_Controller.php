@@ -29,7 +29,8 @@ class MY_Controller extends CI_Controller {
 						// set customer session data
 						$this->session->set_userdata($customer_data);
 						// change the base url to point to the new customer subdomain
-						$this->config->set_item('base_url','http://'.$subdomain.'.amfitir.com/') ;
+						// setting this to https so all our future hits use https
+						$this->config->set_item('base_url','https://'.$subdomain.'.amfitir.com/') ;
 					}
 				}
 				// set the subdomain so we don't check it all the time
