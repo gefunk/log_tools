@@ -54,3 +54,15 @@ function create_start_to_date_fields (from_date_id, to_date_id, disable_before_t
 		$end_date.hide();
 	}).data('datepicker');
 }
+
+/*
+* sql date format is YYYY-MM-DD
+* we return a javascript date object
+* @param sql date in sql date format
+* @return date javascript date object from sql date
+*/
+function convert_sqldate_to_date (sqldate) {
+	sqldatearr = sqldate.split('-');
+	return new Date(sqldatearr[0], sqldatearr[1]-1, sqldatearr[2]);
+}
+
