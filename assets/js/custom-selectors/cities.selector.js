@@ -41,7 +41,7 @@ function format_city_result (city) {
 								+"<tr>"
 									+"<td><img class='flag' src='"+base_url+"assets/img/flags_iso/64/" + city.country_code.toLowerCase() + ".png' /></td>"
 		 							+"<td><table><tr><td><strong>"+city.city_name+"</strong><span style='margin-left:3px'>"+((city.state==null) ? "" : ", "+city.state)+"</span></td></tr>"
-									+"<tr><td class='muted'>"+city.country_name+"</td></tr></table></td></tr></table>";
+									+"<tr><td class='country-dropdown'>"+city.country_name+"</td></tr></table></td></tr></table>";
 		return formatted_html;
 		}					
 }

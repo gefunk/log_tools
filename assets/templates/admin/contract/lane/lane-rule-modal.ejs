@@ -1,0 +1,47 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+  <h3>Add Rule to this lane</h3>
+</div>
+<div class="modal-body">
+	<label>Charge Code</label>
+	<select name="rule-charge_code" id="rule-charge_code" placeholder="Charge Code">
+		<option value='0'>-- Select Charge Code --</option>
+		<% for(var code in charge_codes){ %>
+		<option value="<%=  charge_codes[code].id %>"><%= charge_codes[code].code %> - <%= charge_codes[code].description %></option>	
+		<% } %>	
+	</select>
+	<label>Currency</label>
+	<select name="rule-currency" id="rule-currency" placeholder="Currency">
+		<option value='0'>-- Select Currency --</option>
+		<% for(var i=0; i < currencies.length; i++) { %>
+			<option 
+			value="<%= currencies[i].id %>" 
+			<%= currencies[i].selected %>
+			>
+				<%= currencies[i].code %> - <%= currencies[i].desc %>
+			</option>
+		<% } %>
+	</select>
+	
+	<label>amount</label>	
+	<input type="text" name="rule-amount" value="" id="rule-amount" placeholder="Amount" />
+	<label>effective date</label>
+	<input type="text" name="rule-effective-date" id="rule-effective-date" />
+	<label>expires date</label>
+	<input type="text" name="rule-expires-date" id="rule-expires-date" />
+	<label>Notes</label>	
+ 	<textarea rows="8" cols="40" placeholder="Additional Notes" class="rule-notes" name="rule-notes"></textarea>
+
+	<div class="attachments">
+	<div class="attachment-message"></div>
+	<label>Add Attachment</label>
+	<input type="file" name="userfile" required multiple />
+	<a class="upload-file" class="btn">Upload File</a>
+	<ul class="attachment-list">	
+	</ul>
+	</div>
+</div>
+<div class="modal-footer">
+  <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+  <button id="add-charge-to-input" class="btn btn-primary">Add Rule</button>
+</div>

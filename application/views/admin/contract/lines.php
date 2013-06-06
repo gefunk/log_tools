@@ -1,5 +1,3 @@
-
-		
 <div id="input-contract-line" class="well">
 	<div class="row">
 		<div class="span12">

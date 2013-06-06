@@ -29,7 +29,7 @@
 		</script>
 	</head>
 	<body>
-		<div class="navbar navbar-fixed-top">
+		<div class="navbar">
 		  <div class="navbar-inner">
 		    <a class="brand" href="#"><img id="nav-logo" src="<?php echo base_url(); ?>assets/img/nav-logo.png" />Amfitir Administration</a>
 		    <ul class="nav">
@@ -44,9 +44,9 @@
 		    </ul>
 		  </div>
 		</div>
-		<div class="container-fluid">
+		<div class="container">
 
-			<div id="messages" class="row-fluid">
+			<div id="messages" class="row">
 				<div class="span12">
 					<?php echo validation_errors('<div class="alert alert-error">', '</div>'); ?>
 					<?php if ( isset($messages) ) {?>
@@ -60,5 +60,3 @@
 					<?php } // end if isset messages ?>
 				</div>
 			</div>
-
-			<div class="row-fluid">
