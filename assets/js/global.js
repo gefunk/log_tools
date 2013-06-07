@@ -13,6 +13,33 @@ function makeid()
     return text;
 }
 
+/**
+* @param file_input reference to file upload element
+* @param file_upload_path the path to set when upload to amazon s3
+*/
+function sendFiles(file_input, file_upload_path){
+	console.log("Input", file_input);
+	var data = new FormData();
+	var count = 1;
+	$.each($(file_input)[0].files, function(i, file){
+		console.log("Should be appending this file", file);
+		data.append('file-'+i, file);
+		console.log("After appending data", data);
+		count++;
+	});
+	data.append("num_files", count);
+	$.ajax({
+		url: site_url+"/attachments/upload_file/"+file_upload_path,
+		data: data,
+		cache: false,
+		contentType: false,
+		processData: false,
+		type: 'POST',
+		success: function(data){
+			console.log(data);
+		}
+	});
+}
 
 /**
 * initializes from and to date inputs
