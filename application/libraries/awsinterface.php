@@ -7,8 +7,9 @@ use Aws\Common\Aws;
 use Aws\Common\Enum\Region;
 use Aws\S3\Enum\CannedAcl;
 use Aws\S3\Exception\S3Exception;
+use Aws\S3\Enum\StorageClass;
 
-class AwsStorage {   
+class AwsInterface{   
     private $aws;
     private $s3Client;
     public $debug=false;
@@ -162,13 +163,20 @@ class AwsStorage {
         }   
     }
      
-    function putObject($bucket_name, $key, $body){
+	/**
+	* Upload the file to Amazon
+	* @param $bucket_name the name of the bucket to upload to
+	* @param $key key for this file
+	* @param $source local file path
+	*/
+    function putObject($bucket_name, $key, $source){
         try {
             $this->s3Client->putObject(array(
                 'Bucket'=> $bucket_name,
                 'Key'   => $key,
-                'Body'  => $body,
-                'ACL'   => CannedAcl::PUBLIC_READ
+                'SourceFile'  => $source,
+                'ACL'   => CannedAcl::BUCKET_OWNER_FULL_CONTROL,
+				'StorageClass' => StorageClass::REDUCED_REDUNDANCY
             ));
             return true;
         } catch(S3Exception $e){
@@ -216,6 +224,27 @@ class AwsStorage {
         }   
     }
      
+
+	/**
+	* Gets a temporary url for a s3 object
+	* @param $keypath, the full path to the remote object
+	* @return returns a string representing the url
+	*/
+	function getUrlForRemoteFile($keypath)
+	{
+		// get() returns a Guzzle\Http\Message\Request object
+		$request = $this->s3Client->get($keypath);
+		
+		error_log("Request object: ".$request);
+
+		// Create a signed URL from a completely custom HTTP request that
+		// will last for 10 minutes from the current time
+		$signedUrl = $this->s3Client->createPresignedUrl($request, '+10 minutes');
+		
+		error_log("Signed Url: ".$signedUrl);
+		
+		return $signedUrl;
+	}
      
      
 }
