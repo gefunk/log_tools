@@ -16,7 +16,7 @@ class Assetstorage extends CI_Model{
 	* retrieve an asset either from s3 or locally
 	* @param local specifies whether asset is local or remote
 	*/
-	public function get_asset($keyname, $local)
+	public function get_asset($keyname, $local=FALSE)
 	{
 		if($local){
 			// return local asset

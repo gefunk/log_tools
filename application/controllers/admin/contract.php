@@ -20,6 +20,7 @@ class Contract extends CI_Controller {
 		$this->load->model("portgroupmodel");		
 		$this->load->model('assetstorage');
 		$this->load->model("attachments/attachmentmodel");
+		$this->load->model("attachments/datastore");
 		
 	}
 
@@ -331,6 +332,24 @@ class Contract extends CI_Controller {
 		$this->output->enable_profiler(TRUE);
 		$rules = $this->rulemodel->get_charge_rule_by_contract_id($contract_id);
 		echo var_dump($rules);
+	}
+	
+	
+	public function testgets3()
+	{
+		$asset = "balship_test/oocl-balship.pdf";
+		echo $this->datastore->get($asset);
+	}
+	
+	public function testimagicks3(){
+		$asset = "balship_test/oocl-balship.pdf";
+		$url = $this->datastore->get($asset);
+		
+		$im = new Imagick($url);
+		$im->setImageFormat( "jpg" );
+		$this->output
+		    ->set_content_type('jpg')
+			->set_output($im);
 	}
 	
 	/**
