@@ -36,5 +36,50 @@ class AttachmentModel extends CI_Model
 		$this->db->insert("attachment_storage", $data);
 	}
 	
+	
+	/**
+	* once a contract is uploaded 
+	* we want to save it in the db to pull it again
+	*/
+	function insert_uploaded_contract($contract_id, $filename)
+	{
+		$data = array(
+			"contract" => $contract_id,
+			"filename" => $filename
+		);
+		
+		$this->db->insert("contract_uploads", $data);
+		return $this->db->insert_id();
+	}
+	
+	/**
+	* save the image of each page of the contract
+	* @param $contract_id the id of contract this page belongs to, relates to the contracts table
+	* @param $page_number the page number that corresponds to the page number on the contract
+	* @param $upload_id corresponds to the version of the contract uploaded
+	*/
+	function insert_uploaded_contract_page($contract_id, $page_number, $upload_id)
+	{
+		$data = array(
+			"contract" => $contract_id,
+			"page" => $page_number,
+			"contract_upload_id" => $upload_id
+		);
+		
+		$this->db->insert("contract_upload_pages", $data);
+		
+
+	}
+	
+	function update_contract_process_progress($progress, $id)
+	{
+		$data = array(
+		               'status' => $progress
+		            );
+
+		$this->db->where('id', $id);
+		$this->db->update('contract_uploads', $data);
+	}
+	
 }
 /** end model **/
