@@ -6,7 +6,8 @@ class Attachments extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->helper(array('form', 'url'));
-		$this->load->model('assetstorage');
+		$this->load->model('attachments/attachmentmodel');
+		$this->load->model('attachments/datastore');
 	}
 
 	function index()
@@ -21,82 +22,84 @@ class Attachments extends CI_Controller {
 		echo $response['body'];
 	}
 
+
+	/** Asynchronous upload of Contracts **/
+
 	/**
-	* Upload files to server
+	* Asynchronously Upload files to server
 	* @param the key to use when creating a folder in the s3 bucket or locally
 	*/
-	function upload_file($keypath){
-		// directory to store upload in
-		$uploaddir = './assets/uploads/';
+	function async_upload_contract_remote(){
 		
-		$response_data = array();
-
+		// set execution time to be forever
+		ini_set('MAX_EXECUTION_TIME', -1);
 		
-		/**
-		* loop through files uploaded
-		*/
-		for($i=0; $i < count($_FILES); $i++){
-			$file = ($_FILES["file-".$i]);
-			if($file["error"] > 0){
-				// file could not be uploaded
-				array_push($response_data, array("file" => $file['name'], "success" => false, "message" => $file["error"]));
-			}else{
-				$temp_path = $file['tmp_name'];
-				$orig_name = $file['name'];
-				$remote_path = $keypath."/".$orig_name;
-				$response_data = $this->assetstorage->upload_asset($temp_path, $remote_path);
-				
-			}
-		}
+		// local_files is the local file path
+		$contract_id = $this->input->post("contract_id");
+		$file_name = $this->input->post("contract_filename");
+		$local_file = $this->config->item("upload_directory")."/".$file_name;
+		// remote_paths is where to put the file in the remote location
+		$remote_path = $this->input->post("remote_path");
 		
-		$this->output
-		    ->set_content_type('application/json')
-		    ->set_output(json_encode($response_data));
+		// upload the files to s3
+		if($this->datastore->put($local_file, $remote_path.'/'.$file_name)){
+			// successful upload
 			
-	}
-
-	function do_upload($keypath)
-	{
-		$config['upload_path'] = './assets/uploads/';
-		$config['allowed_types'] = 'gif|jpg|png|jpeg|pdf|doc|docx';
-		//$config['max_size']	= '100';
-		//$config['max_width']  = '1024';
-		//$config['max_height']  = '768';
-
-		$this->load->library('upload', $config);
-		
-		$response_data = array();
-
-		if ( ! $this->upload->do_upload())
-		{
-			$response_data["success"] = false;
-			$response_data["message"] = $this->upload->display_errors();	
-		}
-		else
-		{
-			$data = array('upload_data' => $this->upload->data());
-			// derive remote path
-			$remote_path = $keypath.'/'.$data['upload_data']['orig_name'];
-			// upload to image storage
-			$response = $this->assetstorage->upload_asset($data['upload_data']['full_path'], $remote_path);
-			// delete the file
-			if($response){
-				unlink($data['upload_data']['full_path']);
-				$response_data["filename"] = $remote_path;
-			}else{
-				$response_data["remote_fail"] = "Could not upload to S3 ".$response->body;
-				$response_data["filename"] = $data['upload_data']['full_path'];
+			// save the contract into the db
+			$upload_id = $this->attachmentmodel->insert_uploaded_contract($contract_id, $file_name);
+			// get the number of pages from the pdf
+			$number_of_pages = 20;
+			
+			if (defined('ENVIRONMENT') && (ENVIRONMENT != 'development')){
+				$command = "pdfinfo $local_file";
+				$output = shell_exec($command);
+				// find page count
+				preg_match('/Pages:\s+([0-9]+)/', $output, $pagecountmatches);
+				$number_of_pages = $pagecountmatches[1];
 			}
 			
-			$response_data["success"] = true;
-
-			
+			// generate unique directory to store pages
+			$dir = $this->config->item("upload_directory")."/".uniqid();
+			// make the random directory
+			if (mkdir($dir, 0777, true)) {
 				
+				// make all the pages
+				for($page_number = 0; $page_number < $number_of_pages; $page_number++){
+					$page = $local_file."[".$page_number."]";
+					log_message("info", "Working on Contract ".$local_file." page: ".$page);
+					$img = new Imagick();
+					// keep it clear - set to high resolution
+					$img->setResolution( 300, 300 ); 
+					$img->readImage($page);
+					/* Convert to png */
+					$img->setImageFormat( "png" );
+					$page_name = '/page-'.($page_number+1).'.png';
+					$local_page = $dir.$page_name;
+					$img->writeImage($local_page);       // Write to disk
+					ob_clean(); // clear buffer
+					$img->destroy();
+					
+					// upload the image to amazon
+					if($this->datastore->put($local_page, $remote_path.'/'.$page_name)){
+						// successful upload, save the page number into the db
+						$this->attachmentmodel->insert_uploaded_contract_page($contract_id, $page_number+1, $upload_id);
+						$progress = (($page_number+1) / $number_of_pages)*100;
+						$this->attachmentmodel->update_contract_process_progress($progress, $upload_id);
+					}
+					
+					
+				}
+			}
+			log_message("info", "Completed uploading files to s3");
+			// clean up the contract local file
+			unlink($local_file);
+			// clean up the image directory
+			system('rm -rf ' . escapeshellarg($dir));
+			
 		}
+			
 		
-		$this->output
-		    ->set_content_type('application/json')
-		    ->set_output(json_encode($response_data));
+			
 	}
 
 }

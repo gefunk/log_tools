@@ -363,6 +363,8 @@ Custom Config Items
 ----------------------------------------------------------------------------
 */
 
+$config["upload_directory"] = "./assets/uploads";
+
 // aws authentication
 $config["aws_access_key_id"] = 'AKIAIWO7D4O4UFD3TYBA';
 $config['aws_secret'] = '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';
