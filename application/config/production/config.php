@@ -362,6 +362,13 @@ $config['proxy_ips'] = '';
 Custom Config Items
 ----------------------------------------------------------------------------
 */
+// uploads directory
+$config["upload_directory"] = "/var/www/amfitir/assets/uploads";
+
+// aws authentication
+$config["aws_access_key_id"] = 'AKIAIWO7D4O4UFD3TYBA';
+$config['aws_secret'] = '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';
+// aws bucket
 $config['bucket'] = 'rate_mgt_prod';
 
 

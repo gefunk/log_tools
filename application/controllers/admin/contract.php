@@ -22,6 +22,9 @@ class Contract extends CI_Controller {
 		$this->load->model("attachments/attachmentmodel");
 		$this->load->model("attachments/datastore");
 		
+		$this->load->library("contracts");
+		$this->load->library("async");
+		
 	}
 
 	public function index($customer_id=NULL)
@@ -84,7 +87,7 @@ class Contract extends CI_Controller {
 			$start_date = $this->input->post('start_date');
 			$end_date = $this->input->post('end_date');
 			
-			$attachment_prefix = "customer-".$customer_id."/"."contract-".$contract_number."/";
+			$attachment_prefix = $this->contracts->get_remote_url_for_asset($customer_id, $contract_id);
 			$attachment_id = NULL;
 			if(isset($_FILES) && !empty($_FILES) && !empty($_FILES["contract-file"])){
 				// get an attachment id
@@ -337,19 +340,80 @@ class Contract extends CI_Controller {
 	
 	public function testgets3()
 	{
-		$asset = "balship_test/oocl-balship.pdf";
+		$asset = "customer-10/contract-SC836739/oocl-balship.pdf";
 		echo $this->datastore->get($asset);
 	}
 	
 	public function testimagicks3(){
-		$asset = "balship_test/oocl-balship.pdf";
+		$asset = "customer-10/contract-SC836739/oocl-balship.pdf";
 		$url = $this->datastore->get($asset);
+		$uploaddir = './assets/uploads/';
+		file_put_contents($uploaddir."balship.pdf", fopen($url, 'r'));
 		
-		$im = new Imagick($url);
-		$im->setImageFormat( "jpg" );
+		$im = new Imagick($uploaddir."balship.pdf[0]");
+		/* Convert to png */
+		$im->setImageFormat( "png" );
+
+		/* Send out */
+		header( "Content-Type: image/png" );
+		echo $im;
+	}
+	
+	public function testpage2(){	
+		$uploaddir = './assets/uploads/';	
+		$im = new Imagick($uploaddir."balship.pdf[1]");
+		/* Convert to png */
+		$im->setImageFormat( "png" );
+
+		/* Send out */
+		header( "Content-Type: image/png" );
+		echo $im;
+	}
+	
+	public function testimagickidentify()
+	{
+		$uploaddir = './assets/uploads/';
+		$im = new Imagick($uploaddir."balship.pdf");
+		//var_dump( $im->identifyImage());
+		echo "Number of Pages: ".$im->getNumberImages();
+	}
+	
+	public function testgenerateimagesfrompdf()
+	{
+		$asset = './assets/uploads/balship.pdf';
+		
+		for($i = 0; $i < 27; $i++){
+			$page = $asset."[".$i."]";
+			error_log("Working on page: ".$page);
+			$img = new Imagick();
+			// keep it clear - set to high resolution
+			$img->setResolution( 300, 300 ); 
+			$img->readImage($page);
+			/* Convert to png */
+			$img->setImageFormat( "png" );
+			$img->writeImage('./assets/uploads/page-'.$i.'.png');       // Write to disk
+			ob_clean(); // clear buffer
+			$img->destroy();
+		}
+		
+		
+	}
+	
+	public function test_async()
+	{
+		$params = array(
+					"contract_id" => '5',
+		            "contract_filename" => "anl.pdf",
+		            "remote_path" => "test_async/seacorp_test"
+		);
+		$this->async->post(site_url()."/attachments/async_upload_contract_remote", $params);
+	}
+	
+	public function showimage($image_name)
+	{
 		$this->output
-		    ->set_content_type('jpg')
-			->set_output($im);
+		    ->set_content_type('png') 
+		    ->set_output(file_get_contents('./assets/uploads/'.$image_name.'.png'));
 	}
 	
 	/**
