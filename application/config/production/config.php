@@ -363,7 +363,7 @@ Custom Config Items
 ----------------------------------------------------------------------------
 */
 // uploads directory
-$config["upload_directory"] = "/var/www/amfitir/assets/uploads";
+$config["upload_directory"] = "/var/www/amfitir/uploads";
 
 // aws authentication
 $config["aws_access_key_id"] = 'AKIAIWO7D4O4UFD3TYBA';
