@@ -9,4 +9,12 @@ upload/*
 *.DS_Store
 assets/.DS_Store
 
+*.prj
+.settings/*
+*.project
+*.buildpath
+logtools.*
+
+application/libraries/fake
+
 .DS_Store
