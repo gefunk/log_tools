@@ -432,7 +432,7 @@ class Contract extends CI_Controller {
     {
         $this->output->enable_profiler(TRUE);
 
-        $this->load->library('email', $config);
+        $this->load->library('email');
         $this->email->set_newline("\r\n");
         $this->email->from($this->config->item("email_from"),'Do Not Reply'); // change it to yours
         $this->email->to('rahul@logiwareinc.com'); // change it to yours
