@@ -39,9 +39,7 @@ $(document).ready(function(){
 	$("#route").on("click", "button.delete-route", function(){
 		$(this).closest("tr").remove();
 	});
-	
-	
-	
+		
 	// currency code change handler
 	$("#currency_code").change(function(){
 		$("#amount").siblings("span.add-on").html($(this).find(":selected").data("symbol"));

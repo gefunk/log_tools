@@ -374,6 +374,14 @@ $config['bucket'] = 'rate_mgt_qa';
 
 $config['site_open'] = TRUE;
 
+// pdf image dpi
+$config['pdf_image_dpi'] = 96;
+// rescale image to be readable - 816 X 1056 = 8.5 x 11
+$config['pdf_image_width'] = 816;
+$config['pdf_image_height'] = 1056;
+
+// Amazon Email Service config
+
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */

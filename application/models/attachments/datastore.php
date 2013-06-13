@@ -11,6 +11,8 @@ class Datastore extends CI_Model{
 	
 	/*
 	* retrieve asset from S3
+	* @param $asset the key to the asset
+	* @return url to the asset
 	*/
 	public function get($asset)
 	{
