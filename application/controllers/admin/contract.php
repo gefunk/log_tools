@@ -17,14 +17,14 @@ class Contract extends CI_Controller {
 		$this->load->model("referencemodel");
 		$this->load->model("lanemodel");
 		$this->load->model("rulemodel");
-		$this->load->model("portgroupmodel");		
+		$this->load->model("portgroupmodel");
 		$this->load->model('assetstorage');
 		$this->load->model("attachments/attachmentmodel");
 		$this->load->model("attachments/datastore");
-		
+
 		$this->load->library("contracts");
 		$this->load->library("async");
-		
+
 	}
 
 	public function index($customer_id=NULL)
@@ -37,7 +37,7 @@ class Contract extends CI_Controller {
 			$data["carriers"] = $this->referencemodel->get_carriers();
 		}
 		$footer_data["scripts"] = array("admin/contract/view.js");
-			
+
 		$this->load->view('admin/header', $header_data);
 		$this->load->view('admin/contract/view', $data);
 		$this->load->view('admin/footer', $footer_data);
@@ -48,15 +48,15 @@ class Contract extends CI_Controller {
 	* CODE - CONTRACT RELEVANT SECTION
 	*
 	*/
-	
-	
+
+
 	/**
 	* add a new contract into the system
 	* accessible via /admin/contract/add
 	*/
 	public function add($customer_id)
 	{
-		//$this->output->enable_profiler(TRUE);	
+		//$this->output->enable_profiler(TRUE);
 		// page level data
 		$header_data['title'] = "View Contracts";
 		// pass javascript to footer
@@ -65,8 +65,8 @@ class Contract extends CI_Controller {
 		$data["customer_id"] = $customer_id;
 		$data["carriers"] = $this->referencemodel->get_carriers();
 		$data['customers'] = $this->customermodel->get_customers();
-		
-		
+
+
 		// code igniter framework - validation rules
 		$this->form_validation->set_rules('contract_number', 'Contract Number', 'required');
 		$this->form_validation->set_rules('start_date', 'Start Date', 'required');
@@ -78,7 +78,7 @@ class Contract extends CI_Controller {
 			// load view
 			$this->load->view('admin/header', $header_data);
 			$this->load->view('admin/contract/view', $data);
-			$this->load->view('admin/footer', $footer_data);		
+			$this->load->view('admin/footer', $footer_data);
 		}else{
 			//retrieve post variables
 			$customer = $customer_id;
@@ -86,7 +86,7 @@ class Contract extends CI_Controller {
 			$contract_number = $this->input->post('contract_number');
 			$start_date = $this->input->post('start_date');
 			$end_date = $this->input->post('end_date');
-			
+
 			$attachment_prefix = $this->contracts->get_remote_url_for_asset($customer_id, $contract_id);
 			$attachment_id = NULL;
 			if(isset($_FILES) && !empty($_FILES) && !empty($_FILES["contract-file"])){
@@ -106,31 +106,31 @@ class Contract extends CI_Controller {
 						// add asset to db, if it was succesfully uploaded
 						if($response["success"]){
 							$this->attachmentmodel->add_attachment_for_id(
-								$attachment_id, 
-								$remote_path, 
-								$content_type, 
+								$attachment_id,
+								$remote_path,
+								$content_type,
 								(($response["local"]) ? 0 : 1)
 							);
 						}
 					}
-					
+
 				}
 			}
-			
-			
+
+
 			// add contract to database
 			$this->contractmodel->add_contract(
-									$contract_number, 
-									$this->get_sql_date($start_date), 
+									$contract_number,
+									$this->get_sql_date($start_date),
 									$this->get_sql_date($end_date),
 									$customer,
-									$carrier, 
-									$attachment_id, 
+									$carrier,
+									$attachment_id,
 									$attachment_prefix
 								);
-			
-			
-			
+
+
+
 			// retrieve contract
 			$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
 			// reload the view with success message;
@@ -141,21 +141,21 @@ class Contract extends CI_Controller {
 			$this->load->view('admin/contract/view', $data);
 			$this->load->view('admin/footer', $footer_data);
 
-			
+
 		}
-		
+
 	}
-	
+
 	/**
 	* delete a contract from the system
 	*/
 	public function delete($customer_id, $contract_id)
 	{
-		
+
 		// delete contract
 		$this->contractmodel->delete($contract_id);
-		
-		
+
+
 		$header_data['title'] = "View Contracts";
 		// pass javascript to footer
 		$footer_data["scripts"] = array("admin/contract/view.js");
@@ -172,13 +172,13 @@ class Contract extends CI_Controller {
 		$this->load->view('admin/contract/view', $data);
 		$this->load->view('admin/footer', $footer_data);
 	}
-	
 
-	
-	/** 
+
+
+	/**
 	* SECTION - PORT GROUPS
 	*/
-	
+
 	public function get_port_groups($contract)
 	{
 		//$this->output->enable_profiler(TRUE);
@@ -186,7 +186,7 @@ class Contract extends CI_Controller {
 			    ->set_content_type('application/json')
 			    ->set_output(json_encode($this->portgroupmodel->get_port_groups($contract)));
 	}
-	
+
 	/*
 	* save port groups in table
 	*/
@@ -195,27 +195,27 @@ class Contract extends CI_Controller {
 		$port_ids = $this->input->post("port_ids");
 		$name = $this->input->post("name");
 		$contract = $this->input->post("contract");
-		
+
 		foreach($port_ids as $port_id){
 			$this->portgroupmodel->add_port_group($name, $port_id, $contract);
 		}
-		
+
 		$response_data = array(
 			"name" => $name
 		);
-		
+
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($response_data));
 	}
-	
-	
-	
-	
+
+
+
+
 	/**
 	* SECTION - CHARGE RULES
 	*/
-	
+
 	/**
 	* rules
 	**/
@@ -258,8 +258,8 @@ class Contract extends CI_Controller {
 				}
 			}// end if contract_number
 	}
-	
-	
+
+
 	public function savechargerule()
 	{
 		// TODO: implementation
@@ -270,28 +270,28 @@ class Contract extends CI_Controller {
 		$currency = $this->input->post("currency");
 		$effective = $this->get_sql_date($this->input->post("effective"));
 		$expires = $this->get_sql_date($this->input->post("expires"));
-		
+
 		$conditions = $this->input->post("conditions");
-		
+
 		echo var_dump($conditions);
 	}
-	
-	
+
+
 	public function getlanesaffected()
 	{
 		//$this->output->enable_profiler(TRUE);
 		$conditions = json_decode($this->input->post('conditions'));
-		
+
 		//echo var_dump($conditions);
-		
-	
+
+
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($this->lanemodel->get_lanes_affected_by_charge_rule($conditions)));
-		
-		
+
+
 	}
-	
+
 	public function testsavechargerule()
 	{
 		$this->output->enable_profiler(TRUE);
@@ -303,19 +303,19 @@ class Contract extends CI_Controller {
 		$currency = 5;
 		$effective = "2013-01-01";
 		$expires = "2013-12-31";
-		
+
 		// data for conditions
 		$condition["condition"] = 13;
 		$condition["values"] = array(
 			"value" => 75253
 		);
-		
+
 		$conditions = array($condition);
-		 
+
 		$this->rulemodel->add_charge_rule($value, $charge_code, $contract, $application, $currency, $effective, $expires, $conditions);
 	}
-	
-	
+
+
 	public function testgetchargerule($charge_rule_id)
 	{
 		$this->output->enable_profiler(TRUE);
@@ -327,29 +327,29 @@ class Contract extends CI_Controller {
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($this->rulemodel->get_charge_rule_by_id($charge_rule_id)));
-		
+
 	}
-	
+
 	public function testgetchargerulebycontractid($contract_id=13)
 	{
 		$this->output->enable_profiler(TRUE);
 		$rules = $this->rulemodel->get_charge_rule_by_contract_id($contract_id);
 		echo var_dump($rules);
 	}
-	
-	
+
+
 	public function testgets3()
 	{
 		$asset = "customer-10/contract-SC836739/oocl-balship.pdf";
 		echo $this->datastore->get($asset);
 	}
-	
+
 	public function testimagicks3(){
 		$asset = "customer-10/contract-SC836739/oocl-balship.pdf";
 		$url = $this->datastore->get($asset);
 		$uploaddir = './assets/uploads/';
 		file_put_contents($uploaddir."balship.pdf", fopen($url, 'r'));
-		
+
 		$im = new Imagick($uploaddir."balship.pdf[0]");
 		/* Convert to png */
 		$im->setImageFormat( "png" );
@@ -358,9 +358,9 @@ class Contract extends CI_Controller {
 		header( "Content-Type: image/png" );
 		echo $im;
 	}
-	
-	public function testpage2(){	
-		$uploaddir = './assets/uploads/';	
+
+	public function testpage2(){
+		$uploaddir = './assets/uploads/';
 		$im = new Imagick($uploaddir."balship.pdf[1]");
 		/* Convert to png */
 		$im->setImageFormat( "png" );
@@ -369,7 +369,7 @@ class Contract extends CI_Controller {
 		header( "Content-Type: image/png" );
 		echo $im;
 	}
-	
+
 	public function testimagickidentify()
 	{
 		$uploaddir = './assets/uploads/';
@@ -377,17 +377,17 @@ class Contract extends CI_Controller {
 		//var_dump( $im->identifyImage());
 		echo "Number of Pages: ".$im->getNumberImages();
 	}
-	
+
 	public function testgenerateimagesfrompdf()
 	{
 		$asset = './assets/uploads/balship.pdf';
-		
+
 		for($i = 0; $i < 27; $i++){
 			$page = $asset."[".$i."]";
 			error_log("Working on page: ".$page);
 			$img = new Imagick();
 			// keep it clear - set to high resolution
-			$img->setResolution( 300, 300 ); 
+			$img->setResolution( 300, 300 );
 			$img->readImage($page);
 			/* Convert to png */
 			$img->setImageFormat( "png" );
@@ -395,10 +395,10 @@ class Contract extends CI_Controller {
 			ob_clean(); // clear buffer
 			$img->destroy();
 		}
-		
-		
+
+
 	}
-	
+
 	public function test_async()
 	{
 		$params = array(
@@ -408,14 +408,58 @@ class Contract extends CI_Controller {
 		);
 		$this->async->post(site_url()."/attachments/async_upload_contract_remote", $params);
 	}
-	
+
 	public function showimage($image_name)
 	{
 		$this->output
-		    ->set_content_type('png') 
+		    ->set_content_type('png')
 		    ->set_output(file_get_contents('./assets/uploads/'.$image_name.'.png'));
 	}
-	
+
+	public function testhighlight()
+	{
+		$data['contract_page'] = $this->datastore->get('test_async/seacorp_test/page-7.png');
+		error_log("Data: ".$data['contract_page']);
+		$header_data['title'] = "Contract";
+		$this->load->view('admin/header', $header_data);
+		$this->load->view("admin/contract/highlight", $data);
+		$this->load->view('admin/footer');
+
+	}
+
+
+    public function testemail()
+    {
+        $this->output->enable_profiler(TRUE);
+		
+		$config = Array(
+                  'protocol' => 'smtp',
+                  'smtp_host' => 'ssl://smtp.googlemail.com',
+                  'validation'=>TRUE,
+                  'smtp_timeout'=>30,
+                  'smtp_port' => 465,
+                  'smtp_user' => 'rahul.gokulnath@gmail.com', // change it to yours
+                  'smtp_pass' => '_soniyo123', // change it to yours
+                  'mailtype' => 'html',
+                  'charset' => 'iso-8859-1',
+                  'wordwrap' => TRUE
+			);
+          $this->load->library('email', $config);
+          $this->email->set_newline("\r\n");
+          $this->email->from('rahul.gokulnath@gmail.com','Rahul Gokulnath'); // change it to yours
+          $this->email->to('rahul@logiwareinc.com'); // change it to yours
+          $this->email->subject('testing out emails');
+          $this->email->message('testing emails');
+          $this->email->send(); 
+		
+        $this->email->print_debugger();
+
+
+    }
+
+
+
+
 	/**
 	* UTILITIES
 	*/
@@ -424,7 +468,7 @@ class Contract extends CI_Controller {
 		$format = "m/j/Y";
 		$sql_date = date_parse_from_format ( $format , $date );
 		return $sql_date['year']."-".$sql_date['month']."-".$sql_date['day'];
-		
+
 	}
 
 }

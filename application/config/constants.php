@@ -36,6 +36,16 @@ define('FOPEN_READ_WRITE_CREATE',				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT',				'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+/* PATH to Entities */
+define('ENTITIES_DIR', APPPATH . "entities/");
+// Log Events
+define("LOG_EVENT_ADD", 1);
+define("LOG_EVENT_UPDATE", 2);
+define("LOG_EVENT_DELETE", 3);
+
+// Log Object types
+define("LOG_OBJECT_LINE_ITEM", 1);
+define("LOG_OBJECT_LANE", 2);
 
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
