@@ -438,7 +438,7 @@ class Contract extends CI_Controller {
         $this->email->to('rahul@logiwareinc.com'); // change it to yours
         $this->email->subject('testing out emails');
 		$data['subject'] = "testing out email";
-		$msg = $this->load->view('emails/basic', $data, true);
+		$msg = $this->load->view('email/basic', $data, true);
         $this->email->message($msg);
         $this->email->send(); 
 		
