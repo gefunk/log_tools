@@ -431,26 +431,14 @@ class Contract extends CI_Controller {
     public function testemail()
     {
         $this->output->enable_profiler(TRUE);
-		
-		$config = Array(
-                  'protocol' => 'smtp',
-                  'smtp_host' => 'ssl://smtp.googlemail.com',
-                  'validation'=>TRUE,
-                  'smtp_timeout'=>30,
-                  'smtp_port' => 465,
-                  'smtp_user' => 'rahul.gokulnath@gmail.com', // change it to yours
-                  'smtp_pass' => '_soniyo123', // change it to yours
-                  'mailtype' => 'html',
-                  'charset' => 'iso-8859-1',
-                  'wordwrap' => TRUE
-			);
-          $this->load->library('email', $config);
-          $this->email->set_newline("\r\n");
-          $this->email->from('rahul.gokulnath@gmail.com','Rahul Gokulnath'); // change it to yours
-          $this->email->to('rahul@logiwareinc.com'); // change it to yours
-          $this->email->subject('testing out emails');
-          $this->email->message('testing emails');
-          $this->email->send(); 
+
+        $this->load->library('email', $config);
+        $this->email->set_newline("\r\n");
+        $this->email->from($this->config->item("email_from"),'Do Not Reply'); // change it to yours
+        $this->email->to('rahul@logiwareinc.com'); // change it to yours
+        $this->email->subject('testing out emails');
+        $this->email->message('testing emails');
+        $this->email->send(); 
 		
         $this->email->print_debugger();
 
