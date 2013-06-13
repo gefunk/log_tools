@@ -448,6 +448,12 @@ class Contract extends CI_Controller {
     }
 
 
+	public function emailraw()
+	{
+		$data['subject'] = "testing out email";
+		$this->load->view('email/basic', $data);
+	}
+
 
 
 	/**
