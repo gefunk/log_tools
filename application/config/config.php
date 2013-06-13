@@ -381,7 +381,7 @@ $config['pdf_image_width'] = 816;
 $config['pdf_image_height'] = 1056;
 
 // Amazon Email Service config
-
+$config["email_from"] = "no-reply@amfitir.com";
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
