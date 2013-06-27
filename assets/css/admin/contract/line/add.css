@@ -1,0 +1,8 @@
+
+.control-group  .input-prepend .add-on, .input-append .add-on, .input-prepend .btn, .input-append .btn{
+	margin-left: -4px;
+}
+
+select.port-group-selector{
+	display: none;
+}
