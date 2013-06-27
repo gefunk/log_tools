@@ -1,0 +1,12 @@
+<p>
+	<% var flagurl = base_url +"assets/img/flags_iso/16/"+ country_code.toLowerCase() +".png"; %>
+	<img src="<%= flagurl %>" />
+	<% 
+		var help_string = country_code+port_code+" - "+name+", ";
+		if(state != null && state !== undefined && state.length > 0){
+			help_string += state + ", ";
+		}
+		help_string += country_code;
+	 %>
+	 <%= help_string %>
+</p> 

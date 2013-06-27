@@ -1,0 +1,33 @@
+1:
+    id: 1
+    line_item_id: 1
+    application: 1
+    charge_code: 1
+    effective: 2010-01-11
+    expires: 2011-10-01
+    value: 100
+    currency: 1
+    deleted: 0
+
+2:
+    id: 2
+    line_item_id: 1 
+    application: 1
+    charge_code: 1
+    effective: 2011-10-09
+    expires: 2012-03-03
+    value: 200
+    currency: 5
+    deleted: 0
+
+3:
+    id: 3
+    line_item_id: 1 
+    application: 1
+    charge_code: 1
+    effective: 2012-02-01
+    expires: 2013-01-01
+    value: 300
+    currency: 5
+    deleted: 0
+

@@ -30,5 +30,19 @@ class Logmodel extends CI_Model
         $this->db->insert('log_contract', $data);
     }
     
+	/**
+	 * get the latest log entry 
+	 * only return the last max id from the table
+	 * @return the last log entry
+	 */
+	public function get_last_entry_for_object($object_id)
+	{
+		$this->db->where("new", $object_id);
+		$this->db->order_by("id", "desc");
+		$this->db->limit(1);
+		$query = $this->db->get("log_contract");
+		$row = $query->result();
+		return $row[0];
+	}
 
 }
