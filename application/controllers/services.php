@@ -77,6 +77,33 @@ class Services extends CI_Controller {
 		
 	}
 	
+	public function ports_type_ahead()
+	{
+		//$this->output->enable_profiler(TRUE);
+		$query = $this->input->get('query');
+		$page_size = $this->input->get('page_size');
+		
+		
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($this->referencemodel->typeahead_ports($query, $page_size)));
+		
+	}
+	
+	public function port_groups($contract_id)
+	{
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($this->referencemodel->get_port_groups($contract_id)));
+	}
+	
+	public function get_ports_for_group($group_name, $contract)
+	{
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($this->referencemodel->get_ports_for_group($group_name, $contract)));
+	}
+	
 	public function list_of_charge_codes($carrier_id)
 	{
 			$this->output
