@@ -1,21 +1,21 @@
 1:
-    id: 
-    line_item_id: 
-    container_type: 
-    value: 
-    deleted: 
+    id: 1
+    line_item_id: 1
+    container_type: 1
+    value: 100
+    deleted: 0
 
 2:
-    id: 
-    line_item_id: 
-    container_type: 
-    value: 
-    deleted: 
+    id: 2
+    line_item_id: 1
+    container_type: 2
+    value: 200
+    deleted: 0
 
 3:
-    id: 
-    line_item_id: 
-    container_type: 
-    value: 
-    deleted: 
+    id: 3
+    line_item_id: 1
+    container_type: 3
+    value: 300
+    deleted: 0
 

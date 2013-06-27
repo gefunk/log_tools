@@ -48,15 +48,5 @@
 
 			<div id="messages" class="row">
 				<div class="span12">
-					<?php echo validation_errors('<div class="alert alert-error">', '</div>'); ?>
-					<?php if ( isset($messages) ) {?>
-						<?php foreach($messages as $message):
-						 	if($message['type'] == "success") { ?>
-								<div class="alert alert-success">
-									<?php echo $message['body']; ?>
-								</div>
-							<?php } ?>
-						<?php endforeach; ?>
-					<?php } // end if isset messages ?>
 				</div>
 			</div>

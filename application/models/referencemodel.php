@@ -133,6 +133,43 @@ class ReferenceModel extends CI_Model
 		
 	}
 	
+	function typeahead_ports($item, $size){
+		$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
+		$this->db->from('ref_ports rp');
+		$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
+		$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
+		$this->db->where("search_term LIKE '%$item%'");
+		$this->db->order_by("found", "desc");
+		$this->db->limit($size);
+		
+		$query = $this->db->get();
+		$data['results'] = $query->result_array();
+		return $data;
+	}
+	
+	function get_port_groups($contract_id)
+	{
+		$this->db->select("distinct(name)");
+		$this->db->from("contract_entry_port_groups");
+		$this->db->where("contract", $contract_id);
+		$query = $this->db->get();
+		
+		return $query->result();
+	}
+	
+	function get_ports_for_group($group_name, $contract_id)
+	{
+		$this->db->select("port_id");
+		$this->db->from("contract_entry_port_groups");
+		$this->db->where("name", $group_name);
+		$this->db->where("contract", $contract_id);
+		$query = $this->db->get();
+		
+		return $query->result();
+	}
+	
+	
+	
 	
 	
 	/*

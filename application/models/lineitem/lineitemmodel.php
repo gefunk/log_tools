@@ -55,7 +55,7 @@ class Lineitemmodel extends CI_Model
 		$this->db->update('line_items', $data);
         
         if($log)
-            $this->amfitirlog->log_delete_contract_line_item($line_item_id);
+            $this->amfitirlog->log_delete_contract_line_item($lineitem_id);
         
         return $lineitem_id;
 	}
@@ -70,7 +70,7 @@ class Lineitemmodel extends CI_Model
         $old_lineitem = $this->delete_line_item($lineitem_id, FALSE);
         $new_line_item = $this->add_line_item($lineitem, FALSE);
         $this->amfitirlog->log_update_contract_line_item($new_line_item, $old_lineitem);
-		return $new_line_item;                  
+		return $this->get_line_item($new_line_item);                  
     }
     
     /**
