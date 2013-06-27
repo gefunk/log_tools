@@ -2,7 +2,6 @@ alive.html
 application/logs/
 system
 system/*
-index.php
 test.php
 upload
 upload/*
