@@ -13,6 +13,7 @@
 			background:url('<?php echo $contract_page ?>') 0 0;
 			background-position: -88px -342px;
 			background-size: 959px 1290px;
+			background-repeat: no-repeat;
 		}
 		
 		div.contract-image > div.highlighter {
