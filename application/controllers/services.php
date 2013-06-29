@@ -34,16 +34,26 @@ class Services extends CI_Controller {
 	
 	public function list_of_container_types($carrier_id)
 	{
+		$key = 'container-types-'.$carrier_id;
+		if(! $container_types = $this->cache->get($key)){
+			$container_types = $this->referencemodel->get_container_types($carrier_id, TRUE);
+			$this->cache->save($key, $container_types, DAY_IN_SECONDS);
+		}
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->referencemodel->get_container_types($carrier_id, TRUE)));
+		    ->set_output(json_encode($container_types));
 	}
 	
 	public function list_of_currency_codes()
 	{
+		$key = 'currency_codes';
+		if(! $currency_codes = $this->cache->get($key)){
+			$currency_codes = $this->referencemodel->get_currency_codes(TRUE);
+			$this->cache->save($key, $currency_codes, WEEK_IN_SECONDS);
+		}
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->referencemodel->get_currency_codes(TRUE)));
+		    ->set_output(json_encode($currency_codes));
 	}
 	
 	/**
