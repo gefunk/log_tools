@@ -6,6 +6,13 @@ class Services extends CI_Controller {
 	{
 		parent::__construct();	
 		$this->load->model('referencemodel');
+		$this->load->driver('cache', array('adapter' => 'memcached', 'backup' => 'dummy')); 
+	}
+	
+	
+	public function cache_info()
+	{
+		var_dump($this->cache->cache_info());
 	}
 	
 	/**
@@ -14,7 +21,12 @@ class Services extends CI_Controller {
 	*/
 	public function list_of_countries()
 	{
-		$countries = $this->referencemodel->get_country_codes(TRUE);
+		
+		if(! $countries = $this->cache->get('list-countries')){
+			$countries = $this->referencemodel->get_country_codes(TRUE);
+			$this->cache->save('list-countries', $countries, WEEK_IN_SECONDS);	
+		}
+		
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($countries));
