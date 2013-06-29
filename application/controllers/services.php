@@ -105,10 +105,15 @@ class Services extends CI_Controller {
 		$query = $this->input->get('query');
 		$page_size = $this->input->get('page_size');
 		
+		$key = 'ports-type-ahead-'.$query."-".$page_size;
+		if(! $result = $this->cache->get($key)){
+			$result = $this->referencemodel->typeahead_ports($query, $page_size);
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
 		
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->referencemodel->typeahead_ports($query, $page_size)));
+		    ->set_output(json_encode($result));
 		
 	}
 	
