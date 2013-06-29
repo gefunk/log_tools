@@ -49,6 +49,7 @@ define("LOG_OBJECT_LANE", 2);
 
 // Time in seconds
 define("WEEK_IN_SECONDS", 604800);
+define("DAY_IN_SECONDS", 86400);
 
 
 /* End of file constants.php */
