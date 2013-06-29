@@ -47,5 +47,9 @@ define("LOG_EVENT_DELETE", 3);
 define("LOG_OBJECT_LINE_ITEM", 1);
 define("LOG_OBJECT_LANE", 2);
 
+// Time in seconds
+define("WEEK_IN_SECONDS", 604800);
+
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
