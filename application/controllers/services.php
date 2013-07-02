@@ -6,7 +6,7 @@ class Services extends CI_Controller {
 	{
 		parent::__construct();	
 		$this->load->model('referencemodel');
-		$this->load->driver('cache', array('adapter' => 'memcached', 'backup' => 'dummy'));
+		
 	}
 	
 	
@@ -22,11 +22,8 @@ class Services extends CI_Controller {
 	public function list_of_countries()
 	{
 		
-		if(! $countries = $this->cache->get('list-countries')){
-			$countries = $this->referencemodel->get_country_codes(TRUE);
-			$this->cache->save('list-countries', $countries, WEEK_IN_SECONDS);	
-		}
 		
+		$countries = $this->referencemodel->get_country_codes(TRUE);
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($countries));
@@ -34,11 +31,8 @@ class Services extends CI_Controller {
 	
 	public function list_of_container_types($carrier_id)
 	{
-		$key = 'container-types-'.$carrier_id;
-		if(! $container_types = $this->cache->get($key)){
-			$container_types = $this->referencemodel->get_container_types($carrier_id, TRUE);
-			$this->cache->save($key, $container_types, DAY_IN_SECONDS);
-		}
+
+		$container_types = $this->referencemodel->get_container_types($carrier_id, TRUE);
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($container_types));
@@ -46,11 +40,7 @@ class Services extends CI_Controller {
 	
 	public function list_of_currency_codes()
 	{
-		$key = 'currency_codes';
-		if(! $currency_codes = $this->cache->get($key)){
-			$currency_codes = $this->referencemodel->get_currency_codes(TRUE);
-			$this->cache->save($key, $currency_codes, WEEK_IN_SECONDS);
-		}
+		$currency_codes = $this->referencemodel->get_currency_codes(TRUE);
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($currency_codes));
@@ -70,10 +60,8 @@ class Services extends CI_Controller {
 		
 		$key = 'list_of_cities-'.$query.'-'.$page.'-'.$page_size;
 		
-		if(! $cities = $this->cache->get($key)){
-			$cities = $this->referencemodel->search_cities($query, $page, $page_size, TRUE);
-			$this->cache->save($key, $cities, WEEK_IN_SECONDS);
-		}
+
+		$cities = $this->referencemodel->search_cities($query, $page, $page_size, TRUE);
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($cities));	
@@ -92,13 +80,7 @@ class Services extends CI_Controller {
 		$page = $this->input->get('page');
 		$page_size = $this->input->get('page_size');
 		
-		$key = 'list-of-ports-'.$query.'-'.$page.'-'.$page_size;
-		
-		if(! $ports = $this->cache->get($key)){
-			$ports = $this->referencemodel->search_ports($query, $page, $page_size, TRUE);
-			$this->cache->save($key, $ports, WEEK_IN_SECONDS);
-		}
-		
+		$ports = $this->referencemodel->search_ports($query, $page, $page_size, TRUE);
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($ports));	
@@ -112,11 +94,7 @@ class Services extends CI_Controller {
 		$query = $this->input->get('query');
 		$page_size = $this->input->get('page_size');
 		
-		$key = 'ports-type-ahead-'.$query."-".$page_size;
-		if(! $result = $this->cache->get($key)){
-			$result = $this->referencemodel->typeahead_ports($query, $page_size);
-			$this->cache->save($key, $result, WEEK_IN_SECONDS);
-		}
+		$result = $this->referencemodel->typeahead_ports($query, $page_size);
 		
 		$this->output
 		    ->set_content_type('application/json')
@@ -126,11 +104,7 @@ class Services extends CI_Controller {
 	
 	public function port_groups($contract_id)
 	{
-		$key = 'port-groups-'.$contract_id;
-		if(! $result = $this->cache->get($key)){
-			$result = $this->referencemodel->get_port_groups($contract_id);
-			$this->cache->save($key, $result, WEEK_IN_SECONDS);
-		}
+		$result = $this->referencemodel->get_port_groups($contract_id);
 		
 		$this->output
 		    ->set_content_type('application/json')
@@ -139,11 +113,7 @@ class Services extends CI_Controller {
 	
 	public function get_ports_for_group($group_name, $contract)
 	{
-		$key = 'get-ports-for-group'.$group_name."-".$contract;
-		if(! $result = $this->cache->get($key)){
-			$result = $this->referencemodel->get_ports_for_group($group_name, $contract);
-			$this->cache->save($key, $result, WEEK_IN_SECONDS);
-		}
+		$result = $this->referencemodel->get_ports_for_group($group_name, $contract);
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($result));
@@ -151,11 +121,7 @@ class Services extends CI_Controller {
 	
 	public function list_of_charge_codes($carrier_id)
 	{
-		$key = 'list_of_charge_codes'.$carrier_id;
-		if(! $result = $this->cache->get($key)){
-			$result = $this->referencemodel->get_charge_codes_for_carrier($carrier_id);
-			$this->cache->save($key, $result, WEEK_IN_SECONDS);
-		}
+		$result = $this->referencemodel->get_charge_codes_for_carrier($carrier_id);
 		
 		$this->output
 		    ->set_content_type('application/json')
@@ -164,11 +130,7 @@ class Services extends CI_Controller {
 	
 	public function list_of_tariffs($carrier_id)
 	{
-		$key = 'list_of_tariffs'.$carrier_id;
-		if(! $result = $this->cache->get($key)){
-			$result = $this->referencemodel->get_tarriffs_for_carrier($carrier_id);
-			$this->cache->save($key, $result, WEEK_IN_SECONDS);
-		}
+		$result = $this->referencemodel->get_tarriffs_for_carrier($carrier_id);
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output( json_encode($result));
@@ -176,11 +138,9 @@ class Services extends CI_Controller {
 	
 	public function list_of_carrier_services($carrier_id)
 	{
-		$key = 'list_of_carrier_services'.$carrier_id;
-		if(! $result = $this->cache->get($key)){
-			$result = $this->referencemodel->get_services_for_carrier($carrier_id);
-			$this->cache->save($key, $result, WEEK_IN_SECONDS);
-		}
+		
+		$result = $this->referencemodel->get_services_for_carrier($carrier_id);
+		
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output( json_encode($result));
