@@ -6,7 +6,7 @@ class Services extends CI_Controller {
 	{
 		parent::__construct();	
 		$this->load->model('referencemodel');
-		 
+		$this->load->driver('cache', array('adapter' => 'memcached', 'backup' => 'dummy'));
 	}
 	
 	
