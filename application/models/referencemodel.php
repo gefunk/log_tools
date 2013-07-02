@@ -6,84 +6,110 @@ class ReferenceModel extends CI_Model
     {
         // Call the Model constructor
         parent::__construct();
+		$this->load->driver('cache', array('adapter' => 'memcached', 'backup' => 'dummy'));
     }
 
 	function get_country_codes($array = FALSE)
 	{
-		$this->db->select('id, name, code')->from('ref_country_codes'); 
-		$query = $this->db->get();
-		if($array)
-			return $query->result_array();
-		else
-	    	return $query->result();
+		$key = 'get_country_codes-'.$array;
+		if(! $result = $this->cache->get($key)){
+			$this->db->select('id, name, code')->from('ref_country_codes'); 
+			$query = $this->db->get();
+			if($array)
+				$result = $query->result_array();
+			else
+	    		$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		return $result;
 	}
 	
 	function get_carriers()
 	{
-		$this->db->select('id, name')->from('ref_carriers'); 
-		$query = $this->db->get();
-	    return $query->result();
+		$key = 'get_carriers';
+		if(! $result = $this->cache->get($key)){
+			$this->db->select('id, name')->from('ref_carriers'); 
+			$query = $this->db->get();
+	    	$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		return $result;
 	}
 	
 	
 	function get_currency_codes($array = FALSE)
 	{
-		$this->db->select('id, description, code, symbol')->from('ref_currency_codes'); 
-		$query = $this->db->get();
-		if($array)
-			return $query->result_array();
-		else
-	    	return $query->result();
+		$key = 'get_currency_codes-'.$array;
+		if(! $result = $this->cache->get($key)){
+			$this->db->select('id, description, code, symbol')->from('ref_currency_codes'); 
+			$query = $this->db->get();
+			if($array)
+				$result = $query->result_array();
+			else
+	    		$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		return $result;
 	}
 	
 	function get_container_types($carrier_id, $array = FALSE)
 	{
-		$this->db->select('id, container_type, carrier, description')->from('ref_container_types')->where('carrier', $carrier_id); 
-		$query = $this->db->get();
-		if($array)
-			return $query->result_array();
-		else
-	    	return $query->result();
+		$key = 'get_container_types-'.$carrier_id.'-'.$array;
+		if(! $result = $this->cache->get($key)){
+			$this->db->select('id, container_type, carrier, description')->from('ref_container_types')->where('carrier', $carrier_id); 
+			$query = $this->db->get();
+			if($array)
+				$result = $query->result_array();
+			else
+	    		$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		return $result;
 	}
 	
 	function search_cities($search_term, $page=NULL, $page_size=NULL, $array=FALSE)
 	{
 		
-		$search_terms = $this->clean_search_term($search_term);
-
-		$match_string = "";
-		
-		foreach($search_terms as $term){
-			// only include wildcard if search term has more than 4 characters
-			$match_string .= "+".$term.(strlen($term) > 4 ? "*" : "" )." ";
-		}
-		// remove trailing space
-		$match_string = rtrim($match_string);
-		
-		$this->db->select("id, city_name, state, country_name, country_code");
-		$this->db->from('ref_cities_search');
-		$this->db->where("MATCH(search_term) AGAINST ('$match_string' IN BOOLEAN MODE)");
-		$this->db->order_by('population', 'desc');
-		
-		if(isset($page) && isset($page_size)){
-			if($page == 1){
-				// get the initial page
-				$this->db->limit($page_size);
-			}else{
-				// get the next page
-				$this->db->limit($page_size*$page, $page_size*($page-1));
+		$key = "search_cities-".$search_term.'-'.$page.'-'.$array;
+		if(! $data = $this->cache->get($key)){
+			$search_terms = $this->clean_search_term($search_term);
+	
+			$match_string = "";
+			
+			foreach($search_terms as $term){
+				// only include wildcard if search term has more than 4 characters
+				$match_string .= "+".$term.(strlen($term) > 4 ? "*" : "" )." ";
 			}
+			// remove trailing space
+			$match_string = rtrim($match_string);
+			
+			$this->db->select("id, city_name, state, country_name, country_code");
+			$this->db->from('ref_cities_search');
+			$this->db->where("MATCH(search_term) AGAINST ('$match_string' IN BOOLEAN MODE)");
+			$this->db->order_by('population', 'desc');
+			
+			if(isset($page) && isset($page_size)){
+				if($page == 1){
+					// get the initial page
+					$this->db->limit($page_size);
+				}else{
+					// get the next page
+					$this->db->limit($page_size*$page, $page_size*($page-1));
+				}
+			}
+			
+			$query = $this->db->get();
+			$data['results'] = $query->result_array();
+			
+			$this->db->select("count(*) as total");
+			$this->db->from('ref_cities_search');
+			$this->db->where("MATCH(search_term) AGAINST ('$match_string'  IN BOOLEAN MODE)");
+			$query = $this->db->get();
+			$data['total'] = $query->row()->total;
+			
+			// save result to cache
+			$this->cache->save($key, $data, WEEK_IN_SECONDS);
 		}
-		
-		$query = $this->db->get();
-		$data['results'] = $query->result_array();
-		
-		$this->db->select("count(*) as total");
-		$this->db->from('ref_cities_search');
-		$this->db->where("MATCH(search_term) AGAINST ('$match_string'  IN BOOLEAN MODE)");
-		$query = $this->db->get();
-		$data['total'] = $query->row()->total;
-		
 		return $data;
 		
 		
@@ -92,95 +118,114 @@ class ReferenceModel extends CI_Model
 	function search_ports($search_term, $page=NULL, $page_size=NULL, $array=FALSE)
 	{
 		
-		$search_terms = $this->clean_search_term($search_term);
-
-		$match_string = "";
-		
-		foreach($search_terms as $term){
-			$match_string .= $term." ";
-		}
-		
-		$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
-		$this->db->from('ref_ports rp');
-		$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
-		$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
-		$this->db->where("MATCH(search_term) AGAINST ('$match_string')");
-		$this->db->order_by("found", "desc");
-		
-		if(isset($page) && isset($page_size)){
-			if($page == 1){
-				// get the initial page
-				$this->db->limit($page_size);
-			}else{
-				// get the next page
-				$this->db->limit($page_size*$page, $page_size*($page-1));
+		$key = "search_ports-".$search_term.'-'.$page.'-'.$array;
+		if(! $data = $this->cache->get($key)){
+			$search_terms = $this->clean_search_term($search_term);
+	
+			$match_string = "";
+			
+			foreach($search_terms as $term){
+				$match_string .= $term." ";
 			}
+			
+			$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
+			$this->db->from('ref_ports rp');
+			$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
+			$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
+			$this->db->where("MATCH(search_term) AGAINST ('$match_string')");
+			$this->db->order_by("found", "desc");
+			
+			if(isset($page) && isset($page_size)){
+				if($page == 1){
+					// get the initial page
+					$this->db->limit($page_size);
+				}else{
+					// get the next page
+					$this->db->limit($page_size*$page, $page_size*($page-1));
+				}
+			}
+			
+			$query = $this->db->get();
+			$data['results'] = $query->result_array();
+			
+	
+			
+			$this->db->select("count(*) as total");
+			$this->db->from('ref_ports');
+			$this->db->where("MATCH(search_term) AGAINST ('$match_string')");
+			$query = $this->db->get();
+			$data['total'] = $query->row()->total;
+			$this->cache->save($key, $data, WEEK_IN_SECONDS);
 		}
-		
-		$query = $this->db->get();
-		$data['results'] = $query->result_array();
-		
-
-		
-		$this->db->select("count(*) as total");
-		$this->db->from('ref_ports');
-		$this->db->where("MATCH(search_term) AGAINST ('$match_string')");
-		$query = $this->db->get();
-		$data['total'] = $query->row()->total;
-		
 		return $data;
 		
 		
 	}
 	
 	function typeahead_ports($item, $size){
-		$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
-		$this->db->from('ref_ports rp');
-		$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
-		$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
-		$this->db->where("search_term LIKE '%$item%'");
-		$this->db->order_by("found", "desc");
-		$this->db->limit($size);
-		
-		$query = $this->db->get();
-		$data['results'] = $query->result_array();
+		$key = "typeahead_ports-".$item.'-'.$size;
+		if(! $data = $this->cache->get($key)){
+
+			$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
+			$this->db->from('ref_ports rp');
+			$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
+			$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
+			$this->db->where("search_term LIKE '%$item%'");
+			$this->db->order_by("found", "desc");
+			$this->db->limit($size);
+			
+			$query = $this->db->get();
+			$data['results'] = $query->result_array();
+			$this->cache->save($key, $data, WEEK_IN_SECONDS);
+		}
 		return $data;
 	}
 	
 	function get_port_groups($contract_id)
 	{
-		$this->db->select("distinct(name)");
-		$this->db->from("contract_entry_port_groups");
-		$this->db->where("contract", $contract_id);
-		$query = $this->db->get();
-		
-		return $query->result();
+		$key = "get_port_groups-".$contract_id;
+		if(! $result = $this->cache->get($key)){
+			$this->db->select("distinct(name)");
+			$this->db->from("contract_entry_port_groups");
+			$this->db->where("contract", $contract_id);
+			$query = $this->db->get();
+			
+			$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		return $result;
 	}
 	
 	function get_ports_for_group($group_name, $contract_id)
 	{
-		$this->db->select("port_id");
-		$this->db->from("contract_entry_port_groups");
-		$this->db->where("name", $group_name);
-		$this->db->where("contract", $contract_id);
-		$query = $this->db->get();
+		$key = 'get_ports_for_group-'.$group_name."-".$contract_id;
+		if(! $data = $this->cache->get($key)){
 		
-		$port_in_clause = ""; 
-		foreach ($query->result() as $row) {
-			$port_in_clause .= $row->port_id.",";
+			$this->db->select("port_id");
+			$this->db->from("contract_entry_port_groups");
+			$this->db->where("name", $group_name);
+			$this->db->where("contract", $contract_id);
+			$query = $this->db->get();
+			
+			$port_in_clause = ""; 
+			foreach ($query->result() as $row) {
+				$port_in_clause .= $row->port_id.",";
+			}
+			
+			$port_in_clause = rtrim($port_in_clause, ",");
+			
+			$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
+			$this->db->from('ref_ports rp');
+			$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
+			$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
+			$this->db->where("rp.id IN ($port_in_clause)");
+			
+			
+			$query = $this->db->get();
+			
+			$data['results'] = $query->result_array();
+			$this->cache->save($key, $data, WEEK_IN_SECONDS);
 		}
-		
-		$port_in_clause = rtrim($port_in_clause, ",");
-		
-		$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
-		$this->db->from('ref_ports rp');
-		$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
-		$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
-		$this->db->where("rp.id IN ($port_in_clause)");
-		
-		
-		$query = $this->db->get();
-		$data['results'] = $query->result_array();
 		return $data;
 	}
 	
