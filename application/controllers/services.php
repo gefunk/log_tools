@@ -6,7 +6,7 @@ class Services extends CI_Controller {
 	{
 		parent::__construct();	
 		$this->load->model('referencemodel');
-		$this->load->driver('cache', array('adapter' => 'memcached', 'backup' => 'dummy')); 
+		 
 	}
 	
 	
@@ -63,22 +63,21 @@ class Services extends CI_Controller {
 	public function list_of_cities()
 	{
 		//$this->output->enable_profiler(TRUE);
+		
 		$query = $this->input->get('query');
 		$page = $this->input->get('page');
 		$page_size = $this->input->get('page_size');
+		
+		$key = 'list_of_cities-'.$query.'-'.$page.'-'.$page_size;
+		
+		if(! $cities = $this->cache->get($key)){
+			$cities = $this->referencemodel->search_cities($query, $page, $page_size, TRUE);
+			$this->cache->save($key, $cities, WEEK_IN_SECONDS);
+		}
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->referencemodel->search_cities($query, $page, $page_size, TRUE)));	
+		    ->set_output(json_encode($cities));	
 		
-		
-	}
-	
-	public function test_list_of_cities(){
-		$this->output->enable_profiler(TRUE);
-		$query = 'Atlanta GA';
-		$page = 1;
-		$page_size = 10;
-		echo json_encode($this->referencemodel->search_cities($query, $page, $page_size, TRUE));
 		
 	}
 	
@@ -92,9 +91,17 @@ class Services extends CI_Controller {
 		$query = $this->input->get('query');
 		$page = $this->input->get('page');
 		$page_size = $this->input->get('page_size');
+		
+		$key = 'list-of-ports-'.$query.'-'.$page.'-'.$page_size;
+		
+		if(! $ports = $this->cache->get($key)){
+			$ports = $this->referencemodel->search_ports($query, $page, $page_size, TRUE);
+			$this->cache->save($key, $ports, WEEK_IN_SECONDS);
+		}
+		
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->referencemodel->search_ports($query, $page, $page_size, TRUE)));	
+		    ->set_output(json_encode($ports));	
 		
 		
 	}
@@ -119,36 +126,63 @@ class Services extends CI_Controller {
 	
 	public function port_groups($contract_id)
 	{
+		$key = 'port-groups-'.$contract_id;
+		if(! $result = $this->cache->get($key)){
+			$result = $this->referencemodel->get_port_groups($contract_id);
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->referencemodel->get_port_groups($contract_id)));
+		    ->set_output(json_encode($result));
 	}
 	
 	public function get_ports_for_group($group_name, $contract)
 	{
+		$key = 'get-ports-for-group'.$group_name."-".$contract;
+		if(! $result = $this->cache->get($key)){
+			$result = $this->referencemodel->get_ports_for_group($group_name, $contract);
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->referencemodel->get_ports_for_group($group_name, $contract)));
+		    ->set_output(json_encode($result));
 	}
 	
 	public function list_of_charge_codes($carrier_id)
 	{
-			$this->output
-			    ->set_content_type('application/json')
-			    ->set_output( json_encode($this->referencemodel->get_charge_codes_for_carrier($carrier_id)));
+		$key = 'list_of_charge_codes'.$carrier_id;
+		if(! $result = $this->cache->get($key)){
+			$result = $this->referencemodel->get_charge_codes_for_carrier($carrier_id);
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output( json_encode($result));
 	}
 	
 	public function list_of_tariffs($carrier_id)
 	{
+		$key = 'list_of_tariffs'.$carrier_id;
+		if(! $result = $this->cache->get($key)){
+			$result = $this->referencemodel->get_tarriffs_for_carrier($carrier_id);
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output( json_encode($this->referencemodel->get_tarriffs_for_carrier($carrier_id)));
+		    ->set_output( json_encode($result));
 	}
 	
 	public function list_of_carrier_services($carrier_id)
 	{
+		$key = 'list_of_carrier_services'.$carrier_id;
+		if(! $result = $this->cache->get($key)){
+			$result = $this->referencemodel->get_services_for_carrier($carrier_id);
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output( json_encode($this->referencemodel->get_services_for_carrier($carrier_id)));
+		    ->set_output( json_encode($result));
 	}
 }
