@@ -2,7 +2,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-require_once (ENTITIES_DIR . "LineItemCharge.php");
+require_once (ENTITIES_DIR . "lineitemcharge.php");
 
 
 /**

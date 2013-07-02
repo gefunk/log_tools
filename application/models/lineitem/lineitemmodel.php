@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-require_once(ENTITIES_DIR  . "LineItemEntity.php");
+require_once(ENTITIES_DIR  . "lineitementity.php");
 
 class Lineitemmodel extends CI_Model 
 {
