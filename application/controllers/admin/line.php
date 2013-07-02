@@ -1,9 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
-require_once(ENTITIES_DIR  . "LineItemEntity.php");
-require_once(ENTITIES_DIR  . "LineContainer.php");
-require_once(ENTITIES_DIR . "LineItemCharge.php");
+require_once(ENTITIES_DIR  . "lineitementity.php");
+require_once(ENTITIES_DIR  . "linecontainer.php");
+require_once(ENTITIES_DIR . "lineitemcharge.php");
 
 class Line extends CI_Controller {
 

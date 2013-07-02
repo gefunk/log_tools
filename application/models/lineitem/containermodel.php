@@ -2,7 +2,7 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-require_once (ENTITIES_DIR . "LineContainer.php");
+require_once (ENTITIES_DIR . "linecontainer.php");
 
 class ContainerModel extends CI_Model {
     function __construct() {
