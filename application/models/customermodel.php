@@ -6,6 +6,7 @@ class CustomerModel extends CI_Model
     {
         // Call the Model constructor
         parent::__construct();
+		$this->load->driver('cache', array('adapter' => 'memcached', 'backup' => 'dummy'));
     }
 
 	function get_customers()
@@ -32,41 +33,56 @@ class CustomerModel extends CI_Model
 	
 	function get_customer_default_currency($customer_id)
 	{
-		$this->db->select('default_currency')->from('customers')->where("id", $customer_id);
-		$query = $this->db->get();
-		$row = $query->row();
-		return $row->default_currency;
+		$key = 'get_customer_default_currency-'.$customer_id;
+		if(! $result =  $this->cache->get($key)){
+			$this->db->select('default_currency')->from('customers')->where("id", $customer_id);
+			$query = $this->db->get();
+			$row = $query->row();
+			$result = $row->default_currency;
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		return $result;
 	}
 	
 	function get_customer_by_domain($domain)
 	{
-		$this->db->select("id, name")->from("customers")->where("subdomain", $domain);
-		$query = $this->db->get();
-		$customer = array();
-		if ($query->num_rows() > 0)
-		{
-		   foreach ($query->result() as $row)
-		   {
-				$customer["id"] = $row->id;
-				$customer["name"] = $row->name;
+		$key = 'get_customer_by_domain-'.$domain;
+		if(! $customer = $this->cache->get($key)){
+		
+			$this->db->select("id, name")->from("customers")->where("subdomain", $domain);
+			$query = $this->db->get();
+			$customer = array();
+			if ($query->num_rows() > 0)
+			{
+			   foreach ($query->result() as $row)
+			   {
+					$customer["id"] = $row->id;
+					$customer["name"] = $row->name;
+				}
 			}
+			$this->cache->save($key, $customer, WEEK_IN_SECONDS);
 		}
 		return $customer;
 	}
 	
 	function get_subdomain_from_id($id)
 	{
-		$this->db->select("subdomain")->from("customers")->where("id", $id);
-		$query = $this->db->get();
-		$customer_subdomain = NULL;
-		if ($query->num_rows() > 0)
-		{
-		   foreach ($query->result() as $row)
-		   {
-				$customer_subdomain = $row->group;
+		$key = 'get_customer_by_domain-'.$domain;
+		if(! $result = $this->cache->get($key)){
+			$this->db->select("subdomain")->from("customers")->where("id", $id);
+			$query = $this->db->get();
+			$result = NULL;
+			if ($query->num_rows() > 0)
+			{
+			   foreach ($query->result() as $row)
+			   {
+					$result = $row->group;
+				}
 			}
+			if(isset($result))
+				$this->cache->save($key, $result, WEEK_IN_SECONDS);
 		}
-		return $customer_subdomain;
+		return $result;
 	}
 	
 	
