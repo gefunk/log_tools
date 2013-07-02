@@ -37,6 +37,10 @@ class Line extends CI_Controller {
 		$data['customer_default_currency_code'] = $this->customermodel->get_customer_default_currency($result->customer_id);
 		$data['port_groups'] = $this->referencemodel->get_port_groups($result->contract_id);
 		
+		$data['carrier'] = $result->carrier;
+		$data['carrier_id'] = $result->carrier_id;
+		$data['contract_number'] = $result->contract_number;
+		$data['contract_id'] = $result->contract_id;
 			
 		$this->load->view('admin/header', $header_data);
 		$this->load->view('admin/contract/line/add', $data);
@@ -46,6 +50,7 @@ class Line extends CI_Controller {
 	
 	public function save()
 	{
+		$contract_id = $this->input->post("contract_id");
 		
 	}
 
