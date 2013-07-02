@@ -165,7 +165,23 @@ class ReferenceModel extends CI_Model
 		$this->db->where("contract", $contract_id);
 		$query = $this->db->get();
 		
-		return $query->result();
+		$port_in_clause = ""; 
+		foreach ($query->result() as $row) {
+			$port_in_clause .= $row->port_id.",";
+		}
+		
+		$port_in_clause = rtrim($port_in_clause, ",");
+		
+		$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
+		$this->db->from('ref_ports rp');
+		$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
+		$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
+		$this->db->where("rp.id IN ($port_in_clause)");
+		
+		
+		$query = $this->db->get();
+		$data['results'] = $query->result_array();
+		return $data;
 	}
 	
 	
