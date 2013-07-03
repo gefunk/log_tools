@@ -1,5 +1,6 @@
 $(document).ready(function(){
 	
+	// attach to origin
 	attach_autocomplete_handler ({
 		source:  site_url+"/services/ports_type_ahead",
 		page_size: 10,
@@ -17,6 +18,7 @@ $(document).ready(function(){
 		
 	});
 	
+	// attach to destination
 	attach_autocomplete_handler ({
 		source:  site_url+"/services/ports_type_ahead",
 		page_size: 10,
@@ -104,6 +106,10 @@ $(document).ready(function(){
 		}
 	});
 	
+	
+	// initalize date fields
+	$("#from_date").datepicker('update');
+	$("#to_date").datepicker('update');
 	
 });
 

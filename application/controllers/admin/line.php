@@ -37,15 +37,15 @@ class Line extends CI_Controller {
 		$data['customer_default_currency_code'] = $this->customermodel->get_customer_default_currency($result->customer_id);
 		$data['port_groups'] = $this->referencemodel->get_port_groups($result->contract_id);
 		$data['tariffs'] = $this->referencemodel->get_tarriffs_for_carrier($result->carrier_id);
-		$data['services'] = $this->referencemodel->get_services_for_carrier($result->carrier_id);
+		$data['services'] = $this->referencemodel->get_services_for_carrier($result->carrier_id); 
 		
 		$data['carrier'] = $result->carrier;
 		$data['carrier_id'] = $result->carrier_id;
 		$data['contract_number'] = $result->contract_number;
 		$data['contract_id'] = $result->contract_id;
 		
-		$data['effective_date'] = $result->start_date;
-		$data['expires_date'] = $result->end_date;
+		$data['effective_date'] = date( 'm/d/Y', strtotime($result->start_date)); 
+		$data['expires_date'] = date( 'm/d/Y', strtotime($result->end_date));
 			
 		$this->load->view('admin/header', $header_data);
 		$this->load->view('admin/contract/line/add', $data);
