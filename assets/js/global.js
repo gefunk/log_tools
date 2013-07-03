@@ -93,3 +93,12 @@ function convert_sqldate_to_date (sqldate) {
 	return new Date(sqldatearr[0], sqldatearr[1]-1, sqldatearr[2]);
 }
 
+
+/**
+ * Increment the number of times a port was used in a search
+ * @param {Object} port_id, the id of the port to increment
+ */
+function update_port_hit_count (port_id) {
+  $.post(site_url+"/services/increment_port_hit_count", {port_id: port_id});
+}
+
