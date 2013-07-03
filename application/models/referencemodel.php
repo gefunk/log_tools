@@ -240,8 +240,14 @@ class ReferenceModel extends CI_Model
 	*/
 	function get_transport_types()
 	{
-		$query = $this->db->get('ref_transport_types');
-		return $query->result();
+		$key = 'get_transport_types';
+		if(! $result = $this->cache->get($key)){
+			$query = $this->db->get('ref_transport_types');
+			$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		
+		return $result;
 	}
 	
 	/*
@@ -257,16 +263,28 @@ class ReferenceModel extends CI_Model
 	
 	function get_cargo_types($customer_id, $carrier_id)
 	{
-		$query = $this->db->get_where("ref_cargo_types", array("carrier" => $carrier_id, "customer" => $customer_id));	
-		return $query->result();
+		$key = 'get_cargo_types-'.$customer_id.'-'.$carrier_id;
+		if(! $result = $this->cache->get($key)){
+			$query = $this->db->get_where("ref_cargo_types", array("carrier" => $carrier_id, "customer" => $customer_id));	
+			$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		
+		return $result;
 	}
 	
 	
 	function get_charge_codes_for_carrier($carrier_id)
 	{
-		$this->db->select("code, description, id")->from("ref_charge_codes")->where('carrier', $carrier_id);
-		$query = $this->db->get();
-		return $query->result();
+		$key = 'get_charge_codes_for_carrier-'.$carrier_id;
+		if(! $result = $this->cache->get($key)){
+			$this->db->select("code, description, id")->from("ref_charge_codes")->where('carrier', $carrier_id);
+			$query = $this->db->get();
+			$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		
+		return $result;
 	}
 	
 	/**
@@ -275,9 +293,15 @@ class ReferenceModel extends CI_Model
 	*/
 	function get_tarriffs_for_carrier($carrier_id)
 	{
-		$this->db->select("code, name, id")->from("ref_carrier_tariffs")->where('carrier', $carrier_id);
-		$query = $this->db->get();
-		return $query->result();
+		$key = 'get_tarriffs_for_carrier-'.$carrier_id;
+		if(! $result = $this->cache->get($key)){
+			$this->db->select("code, name, id")->from("ref_carrier_tariffs")->where('carrier', $carrier_id);
+			$query = $this->db->get();
+			$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		
+		return $result;
 	}
 	
 	/**
@@ -286,9 +310,15 @@ class ReferenceModel extends CI_Model
 	*/
 	function get_services_for_carrier($carrier_id)
 	{
-		$this->db->select("code, name, id")->from("ref_carrier_services")->where('carrier', $carrier_id);
-		$query = $this->db->get();
-		return $query->result();
+		$key = 'get_services_for_carrier-'.$carrier_id;
+		if(! $result = $this->cache->get($key)){
+			$this->db->select("code, name, id")->from("ref_carrier_services")->where('carrier', $carrier_id);
+			$query = $this->db->get();
+			$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		
+		return $result;
 	}
 	
 	function get_charge_conditions()
