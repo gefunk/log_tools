@@ -18,7 +18,7 @@ function attach_autocomplete_handler (options) {
 	    		function(data){
 	    			$.each(data['results'], function(i, result){
 	    				//console.log("Result", result.name);
-	    				item = result.name+", "+result.country_name.toLowerCase();
+	    				item = options.formatter(result);
 	    				lookup[item] = result;
 	    				labels.push(item);
 	    			});
@@ -41,3 +41,4 @@ function attach_autocomplete_handler (options) {
 		}
   });  
 }
+

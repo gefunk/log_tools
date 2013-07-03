@@ -7,7 +7,14 @@ $(document).ready(function(){
 		callback: function(obj){
 			var html = new EJS({url: base_url+'assets/templates/admin/contract/line/help_block.ejs'}).render(obj);
 			$("#origin-select").siblings("span.help-block").children("ul").html(html);
+			$("#origin").val(obj.id);
+			update_port_hit_count (obj.id);
+		},
+		formatter: function(port) {
+			
+ 			return port.name+", "+port.country_name.toLowerCase();
 		}
+		
 	});
 	
 	attach_autocomplete_handler ({
@@ -18,20 +25,58 @@ $(document).ready(function(){
 			obj.base_url = base_url;
 			var html = new EJS({url: base_url+'assets/templates/admin/contract/line/help_block.ejs'}).render(obj);
 			$("#destination-select").siblings("span.help-block").children("ul").html(html);
+			$("#destination").val(obj.id);
+			update_port_hit_count (obj.id);
+		},
+		formatter: function(port) {
+ 			return port.name+", "+port.country_name.toLowerCase();
 		}
 	});
 	
 	// button to toggle inputs
 	$("button.toggle-group").click(function(){
 		if($(this).data('toggle') == 'off'){
+			// show the Port Grouping Drop down
+			
+			// hide the port input
 			$(this).siblings("input").hide();
-			$(this).siblings("select").show();
-			$(this).text("Use Port").data('toggle','on');	
+			// show the drop down and reset it to the first value
+			var $select = $(this).siblings("select");
+			$select.val(0).show();
+			// change the text and set the toggle to port grouping on
+			$(this).text("Use Port").data('toggle','on');
+			// set the hidden input origin or destination type to port grouping, depending on whats selected
+			if($select.hasClass('origin')){
+				$("#origin_type").val(1);
+			}else{
+				$("#destination_type").val(1);
+			}
+			
+			
 		}else{
-			$(this).siblings("select").hide();
-			$(this).siblings("input").show();
+			// show individual port selector
+			
+			// hide port group drop down
+			var $select = $(this).siblings("select");
+			$select.hide();
+			// clear the individual port input
+			var $input = $(this).siblings("input");
+			$input.val("").show();
+			// toggle to off to indicate port selector is showing
 			$(this).text("Use Group").data('toggle','off');
+			// set type of origin or destination to port, depending on which was selected
+			if($select.hasClass('origin')){
+				$("#origin_type").val(0);
+			}else{
+				$("#destination_type").val(0);
+			}
 		}
+		
+		
+		
+		// clear the help box of any values
+		var $help_block = $(this).siblings("span.help-block");
+		$help_block.html("<ul><li>"+$help_block.data('reset')+"</li></ul>");
 		
 	});
 	
@@ -50,9 +95,18 @@ $(document).ready(function(){
 				}
 				$select.siblings("span.help-block").children("ul").html(html)
 			} 
-		);	
+		);
+		// set the port group value to the origin or destination input
+		if($select.hasClass('origin')){
+			$("#origin").val($select.val());
+		}else{
+			$("#destination").val($select.val());
+		}
 	});
 	
 	
 });
+
+
+
 
