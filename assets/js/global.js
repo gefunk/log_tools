@@ -47,13 +47,13 @@ function sendFiles(file_input, file_upload_path){
 * @param to_date_id the id of the to date field
 * @param disable_before_today boolean to signify if dates before today should be disabled
 */
-function create_start_to_date_fields (from_date_id, to_date_id, disable_before_today) {
+function create_start_to_date_fields (from_date_id, to_date_id, options) {
 	var start_date_options = {};
 	/** date picker for start and end date **/
 	
 	var $start_date, $end_date = null;
 	
-	if(disable_before_today){
+	if(options.disable_before_today){
 		var nowTemp = new Date();
 		var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
 		start_date_options = {
@@ -75,8 +75,8 @@ function create_start_to_date_fields (from_date_id, to_date_id, disable_before_t
 	
 	$end_date = $("#"+to_date_id).datepicker({
 			onRender: function(date) {
-			return date.valueOf() <= $start_date.date.valueOf() ? 'disabled' : '';
-		}
+				return date.valueOf() <= $start_date.date.valueOf() ? 'disabled' : '';
+			}
 	}).on('changeDate', function(ev) {
 		$end_date.hide();
 	}).data('datepicker');

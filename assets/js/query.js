@@ -74,7 +74,7 @@ $(document).ready(function(){
 	});
 	
 
-	create_start_to_date_fields ("from_date", "to_date", true) ;
+	create_start_to_date_fields ("from_date", "to_date", {disable_before_today: true}) ;
 	/** date picker for start and end date *
 	var nowTemp = new Date();
 	var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
