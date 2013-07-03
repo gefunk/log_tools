@@ -36,6 +36,8 @@
 	    <!--[if lt IE 9]>
 	      <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	    <![endif]-->
+
+		<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url(); ?>assets/img/favicon.ico" />
 	
 		<!-- page specific css -->
 		<?php

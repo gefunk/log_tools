@@ -65,35 +65,54 @@
   	</div>
   	<?php } // end if tarfifs ?>
   	
-  	<!-- container section below -->
   	
-  	<?php
-	foreach($container_types as $container):
-	?>
-	<div class="control-group">
-	    <label class="control-label" for="<?php echo $container -> container_type; ?>"><?php echo $container -> container_type . " "; ?> Container Cost</label>
-	    <div class="controls">
-	    <select class="container_currency_code" 
-	    		data-placeholder="Currency" 
-	    		name="container[<?php echo $container -> id; ?>][currency]">
-			<?php foreach($currencies as $currency): ?>
-				<option value="<?php echo $currency->id ?>" data-symbol="<?php echo $currency -> symbol; ?>" <?php
-					if ($currency -> code == "USD") { echo "SELECTED='true'";
-				}?>>
-					<?php echo $currency->code." - ".$currency->description ?>
-				</option>
-			<?php endforeach; ?>
-		</select>
-	    <input type="text" 
-	    id="<?php echo $container -> container_type; ?>"
-	    name="container[<?php echo $container -> id; ?>][value]" 
-	    data-container-id="<?php echo $container->id; ?>" 
-	    placeholder="<?php echo $container -> container_type; ?>"  />
-	    </div>
-  	</div>
-	<?php
-		endforeach;
-	?>
+  	
+	<div class="input-append" id="from-date-decorate" data-date="<?php echo $effective_date; ?>" data-date-format="mm/dd/yyyy">
+		<input type="text"  name="from_date" value="<?php echo $effective_date; ?>" id="from_date" name="effective_date" placeholder="Start Date">
+		<span class="add-on"><i class="icon-calendar"></i></span>
+	</div>
+									
+	<div class="input-append" id="to-date-decorate" data-date-format="mm/dd/yyyy">
+		<input type="text" name="to_date" value="<?php echo $expires_date; ?>" name="expires_date" id="to_date" placeholder="End Date" />
+		<span class="add-on"><i class="icon-calendar"></i></span>
+	</div>
+	
+  	<!-- container section below -->
+  	<table>
+		  <tr>
+		  	<?php
+				foreach($container_types as $container):
+			?>
+		  	<td> 
+		  		<div  class="input-append">
+		  			<input type="text" 
+			    		id="<?php echo $container -> container_type; ?>"
+			    		name="container[<?php echo $container -> id; ?>][value]" 
+			    		data-container-id="<?php echo $container->id; ?>" 
+			    		placeholder="<?php echo $container -> container_type; ?>"  />
+		  			<span class="add-on">
+						<select class="container_currency_code" 
+		    					data-placeholder="Currency" 
+		    					name="container[<?php echo $container -> id; ?>][currency]">
+							<?php foreach($currencies as $currency): ?>
+							<option value="<?php echo $currency->id ?>" data-symbol="<?php echo $currency -> symbol; ?>" <?php
+							if ($currency -> code == "USD") { echo "SELECTED='true'";}?>>
+								<?php echo $currency->code." - ".$currency->description ?>
+							</option>
+							<?php endforeach; ?>
+						</select>	
+					</span>
+				</div>
+		  		
+			    
+	    	</td>
+	    	<?php
+				endforeach;
+			?>
+		  </tr>
+	</table>
+  	
+	
 </div>
 
 <div class="row">
@@ -111,4 +130,7 @@
 <script type="text/javascript" charset="utf-8">
 	var carrier_id = "<?php echo $carrier_id ?>";
 	var contract_id = "<?php echo $contract_id ?>";
+	
+	
+	
 </script>
