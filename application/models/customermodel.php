@@ -67,7 +67,7 @@ class CustomerModel extends CI_Model
 	
 	function get_subdomain_from_id($id)
 	{
-		$key = 'get_customer_by_domain-'.$domain;
+		$key = 'get_subdomain_from_id-'.$domain;
 		if(! $result = $this->cache->get($key)){
 			$this->db->select("subdomain")->from("customers")->where("id", $id);
 			$query = $this->db->get();

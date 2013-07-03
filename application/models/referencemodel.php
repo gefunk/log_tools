@@ -172,6 +172,7 @@ class ReferenceModel extends CI_Model
 			$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
 			$this->db->where("search_term LIKE '%$item%'");
 			$this->db->order_by("found", "desc");
+			$this->db->order_by("hit_count", "desc");
 			$this->db->limit($size);
 			
 			$query = $this->db->get();

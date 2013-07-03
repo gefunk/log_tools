@@ -6,7 +6,7 @@ class Services extends CI_Controller {
 	{
 		parent::__construct();	
 		$this->load->model('referencemodel');
-		
+		$this->load->model('portmodel');
 	}
 	
 	
@@ -145,4 +145,11 @@ class Services extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output( json_encode($result));
 	}
+	
+	public function increment_port_hit_count()
+	{
+		$id = $this->input->post('port_id');
+		$this->portmodel->up_hit_count($id);
+	}
+	
 }
