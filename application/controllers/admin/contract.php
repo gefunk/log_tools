@@ -174,34 +174,27 @@ class Contract extends CI_Controller {
 	}
 
 
+	
 
 	/**
 	* SECTION - PORT GROUPS
 	*/
 
-	public function get_port_groups($contract)
-	{
-		//$this->output->enable_profiler(TRUE);
-		$this->output
-			    ->set_content_type('application/json')
-			    ->set_output(json_encode($this->portgroupmodel->get_port_groups($contract)));
-	}
-
 	/*
 	* save port groups in table
 	*/
-	public function save_port_groups()
+	public function save_new_port_group()
 	{
-		$port_ids = $this->input->post("port_ids");
 		$name = $this->input->post("name");
 		$contract = $this->input->post("contract");
 
-		foreach($port_ids as $port_id){
-			$this->portgroupmodel->add_port_group($name, $port_id, $contract);
-		}
+		
+		$group_id =	$this->portgroupmodel->add_port_group($name, $contract);
+		
 
 		$response_data = array(
-			"name" => $name
+			"name" => $name,
+			'id' => $group_id
 		);
 
 		$this->output
@@ -209,7 +202,34 @@ class Contract extends CI_Controller {
 		    ->set_output(json_encode($response_data));
 	}
 
+	
+	public function save_new_port_to_group()
+	{
+		$port_id = $this->input->post("port_id");
+		$group_id = $this->input->post('group_id');
+		
+		$this->portgroupmodel->add_port_to_group($port_id, $group_id);
+	}
 
+	public function delete_port_from_group()
+	{
+		$port_id = $this->input->post("port_id");
+		$group_id = $this->input->post('group_id');
+		$this->portgroupmodel->remove_port_from_group($port_id, $group_id);
+	}
+
+	public function ports($contract_number)
+	{
+		$result = $this->contractmodel->get_contract_from_number($contract_number);
+		$data['port_groups'] = $this->portgroupmodel->get_port_groups_for_contract($result->contract_id);
+		$data['contract_id'] = $result->contract_id;
+		$header_data['title'] = "Manage Ports";
+		// pass javascript to footer
+		$footer_data["scripts"] = array("custom-selectors/custom.source.js", "admin/contract/ports.js");
+		$this->load->view('admin/header', $header_data);
+		$this->load->view('admin/contract/ports', $data);
+		$this->load->view('admin/footer', $footer_data);
+	}
 
 
 	/**
