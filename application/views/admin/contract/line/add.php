@@ -8,7 +8,7 @@
 	      <select id="origin-port-group" class="port-group-selector origin">
 	      	<option value="0">-- Select  a Group --</option>
 	      	<?php foreach ($port_groups as $group): ?>
-			<option value="<?php echo $group->name ?>"><?php echo $group->name; ?></option>
+			<option value="<?php echo $group->id ?>"><?php echo $group->name; ?></option>
 			<?php endforeach; ?>
 	      </select>
 	      <button class="btn toggle-group" type="button" data-toggle="off">Use Group</button>
@@ -22,7 +22,7 @@
 	      <select id="destination-port-group" class="port-group-selector">
 	      	<option value="0">-- Select  a Group --</option>
 	      	<?php foreach ($port_groups as $group): ?>
-			<option value="<?php echo $group->name ?>"><?php echo $group->name; ?></option>
+			<option value="<?php echo $group->id ?>"><?php echo $group->name; ?></option>
 			<?php endforeach; ?>
 	      </select>
 	      <button class="btn toggle-group" type="button" data-toggle="off">Use Group</button>

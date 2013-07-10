@@ -182,54 +182,7 @@ class ReferenceModel extends CI_Model
 		return $data;
 	}
 	
-	function get_port_groups($contract_id)
-	{
-		$key = "get_port_groups-".$contract_id;
-		if(! $result = $this->cache->get($key)){
-			$this->db->select("distinct(name)");
-			$this->db->from("contract_entry_port_groups");
-			$this->db->where("contract", $contract_id);
-			$query = $this->db->get();
-			
-			$result = $query->result();
-			$this->cache->save($key, $result, WEEK_IN_SECONDS);
-		}
-		return $result;
-	}
-	
-	function get_ports_for_group($group_name, $contract_id)
-	{
-		$key = 'get_ports_for_group-'.$group_name."-".$contract_id;
-		if(! $data = $this->cache->get($key)){
-		
-			$this->db->select("port_id");
-			$this->db->from("contract_entry_port_groups");
-			$this->db->where("name", $group_name);
-			$this->db->where("contract", $contract_id);
-			$query = $this->db->get();
-			
-			$port_in_clause = ""; 
-			foreach ($query->result() as $row) {
-				$port_in_clause .= $row->port_id.",";
-			}
-			
-			$port_in_clause = rtrim($port_in_clause, ",");
-			
-			$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
-			$this->db->from('ref_ports rp');
-			$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
-			$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
-			$this->db->where("rp.id IN ($port_in_clause)");
-			
-			
-			$query = $this->db->get();
-			
-			$data['results'] = $query->result_array();
-			$this->cache->save($key, $data, WEEK_IN_SECONDS);
-		}
-		return $data;
-	}
-	
+
 	
 	
 	
