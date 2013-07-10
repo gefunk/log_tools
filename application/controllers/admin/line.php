@@ -16,6 +16,7 @@ class Line extends CI_Controller {
 		$this->load->model("contractmodel");
 		$this->load->model("referencemodel");
 		$this->load->model('customermodel');
+		$this->load->model('portgroupmodel');
 	}
 
 
@@ -35,7 +36,7 @@ class Line extends CI_Controller {
 		$data['container_types'] = $this->referencemodel->get_container_types($result->carrier_id);
 		$data['currencies'] = $this->referencemodel->get_currency_codes();
 		$data['customer_default_currency_code'] = $this->customermodel->get_customer_default_currency($result->customer_id);
-		$data['port_groups'] = $this->referencemodel->get_port_groups($result->contract_id);
+		$data['port_groups'] = $this->portgroupmodel->get_port_groups_for_contract($result->contract_id);
 		$data['tariffs'] = $this->referencemodel->get_tarriffs_for_carrier($result->carrier_id);
 		$data['services'] = $this->referencemodel->get_services_for_carrier($result->carrier_id); 
 		
@@ -46,7 +47,7 @@ class Line extends CI_Controller {
 		
 		$data['effective_date'] = date( 'm/d/Y', strtotime($result->start_date)); 
 		$data['expires_date'] = date( 'm/d/Y', strtotime($result->end_date));
-			
+		// views	
 		$this->load->view('admin/header', $header_data);
 		$this->load->view('admin/contract/line/add', $data);
 		$this->load->view('admin/footer', $footer_data);		

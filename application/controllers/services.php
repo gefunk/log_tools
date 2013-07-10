@@ -7,6 +7,7 @@ class Services extends CI_Controller {
 		parent::__construct();	
 		$this->load->model('referencemodel');
 		$this->load->model('portmodel');
+		$this->load->model('portgroupmodel');
 	}
 	
 	
@@ -102,18 +103,18 @@ class Services extends CI_Controller {
 		
 	}
 	
-	public function port_groups($contract_id)
+	public function get_port_groups($contract_id)
 	{
-		$result = $this->referencemodel->get_port_groups($contract_id);
+		$result = $this->portgroupmodel->get_port_groups_for_contract($contract_id);
 		
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($result));
 	}
 	
-	public function get_ports_for_group($group_name, $contract)
+	public function get_ports_for_group($group_id)
 	{
-		$result = $this->referencemodel->get_ports_for_group($group_name, $contract);
+		$result = $this->portgroupmodel->get_ports_for_group($group_id);
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($result));
