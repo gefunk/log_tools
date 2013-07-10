@@ -87,7 +87,7 @@ $(document).ready(function(){
 		var $select = $(this);
 		var port_group = $select.val();
 		$.get(
-			site_url+"/services/get_ports_for_group/"+port_group+"/"+contract_id,
+			site_url+"/services/get_ports_for_group/"+port_group,
 			function(data){
 				var html = "";
 				for(var i in data.results){
