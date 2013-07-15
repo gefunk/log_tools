@@ -60,6 +60,7 @@ $(document).ready(function(){
 			var html = new EJS({url: base_url+'assets/templates/admin/contract/port-admin-li.ejs'}).render(obj);
 			$("ul#ports-list").append(html);
 			update_port_hit_count (obj.id);
+			$("#port-input").focus().select();
 		},
 		formatter: function(port) {
 			var port_name = port.name;

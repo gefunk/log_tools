@@ -363,7 +363,7 @@ Custom Config Items
 ----------------------------------------------------------------------------
 */
 
-$config["upload_directory"] = "./assets/uploads";
+$config["upload_directory"] = "/Users/rahulgokulnath/Sites/log_tools/assets/uploads/";
 
 // aws authentication
 $config["aws_access_key_id"] = 'AKIAIWO7D4O4UFD3TYBA';
@@ -375,10 +375,10 @@ $config['bucket'] = 'rate_mgt_qa';
 $config['site_open'] = TRUE;
 
 // pdf image dpi
-$config['pdf_image_dpi'] = 96;
+$config['pdf_image_dpi'] = 300;
 // rescale image to be readable - 816 X 1056 = 8.5 x 11
-$config['pdf_image_width'] = 816;
-$config['pdf_image_height'] = 1056;
+$config['pdf_image_width'] = 1632;
+$config['pdf_image_height'] = 2112;
 
 // Amazon Email Service config
 $config["email_from"] = "no-reply@amfitir.com";

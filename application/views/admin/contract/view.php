@@ -36,6 +36,12 @@
 				<td>
 					<a href="<?php echo site_url().'/admin/contract/rules/'.$row->number; ?>" class="btn btn-small contract-charges">Charges</a>
 					<a href="<?php echo site_url().'/admin/contract/lanes/'.$row->number; ?>" class="btn btn-small btn-info contract-view">Lanes</a>
+					<a class="btn btn-small upload-button" 
+						data-contract-id="<?php echo $row->id ?>" 
+						data-contract-number="<?php echo $row->number; ?>" 
+						data-customer-id="<?php echo $customer_id; ?>">
+							Upload
+					</a>
 					<button data-id="<?php echo $row->id; ?>" class="btn btn-small btn-danger contract-delete">Delete</button>
 				</td>
 			</tr>
@@ -75,12 +81,51 @@
 			<input type="text" class="datepicker" name="end_date" value="<?php echo set_value('end_date'); ?>" id="end_date" placeholder="End Date" />
 			<span class="help-block">End date on the contract</span>
 			
-			<label>Contract File(s)</label>
-			<input type="file" name="contract-file[]" placeholder="Upload Raw Contract" multiple="multiple" />
-			
 		    <button type="submit" class="btn btn-primary">add</button>
 		  </fieldset>
 		</form>
 	</div>
 </div>
 <?php } // end is set customer id ?>
+
+<div id="upload">
+	
+</div>
+
+
+<div id="upload-modal" class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" aria-hidden="true">&times;</button>
+    <h3>Upload Contract Document</h3>
+  </div>
+  <div class="modal-body">
+    <?php echo form_open_multipart('admin/contract/upload'); ?>
+		<div id="upload-message">
+		  
+		</div>
+	  	<input name="contract-file" type="file" />
+	  	<input type="hidden" name="customer_id" />
+	  	<input type="hidden" name="contract_id" />
+	  	<input type="hidden" name="contract_number" />
+		
+		<div id="upload-progress">
+			<p>File Upload Progress</p>
+		  	<div class="progress progress-striped active">
+  				<div class="bar" style="width: 0%;"></div>
+			</div>  
+		</div>
+		<div id="page-progress">
+			<p>Page Processing Progress</p>
+			<div class="progress progress-striped active">
+  				<div class="bar" style="width: 0%;"></div>
+			</div>  
+		</div>
+		
+	</form>
+  </div>
+  <div class="modal-footer">
+    <a id="upload-file" href="#" class="btn btn-primary">Upload</a>
+    <a id="overwrite-file" href="#" class="btn">Over Write</a>
+  </div>
+</div>
+
