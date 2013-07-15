@@ -6,3 +6,39 @@
 select.port-group-selector{
 	display: none;
 }
+
+
+
+div#contract-pages{
+	border: 2px solid;
+	position: relative;
+}
+
+div#contract-page-controls{
+	padding-top: 1em;
+	padding-right: 1em;	
+}
+
+div#contract-page-controls > a.btn{
+	margin: 0;
+}
+
+input#contract-page-number{
+	width: 20px;
+}
+
+
+
+div#contract-pages > div.highlighter {
+	width: 100%;
+	position: absolute;
+	background: rgb(255, 255, 0); /* fallback color */
+	background: rgba(255, 255, 0, 0.6);
+	
+	/*
+	* set by user when selecting highlight
+	top: 102px;
+	height: 20px;
+	min-height: 20px;
+	*/
+}

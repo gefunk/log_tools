@@ -111,8 +111,67 @@ $(document).ready(function(){
 	$("#from_date").datepicker('update');
 	$("#to_date").datepicker('update');
 	
+	
+	
+	// initialize contract page(s)
+	$("img#contract-page").hide();
+	// initialize the document
+	contractDocument.initialize(contract_id, customer_id, 20);
+	// initialize the highlighter
+	contractHighlighter.initialize($("img#contract-page"), contract_id);
+	// add subscribers for broadcast
+	contractDocument.addSubscriber(update_contract_page);
+	contractDocument.addPageSubscriber(contractHighlighter.getHighlightsForPage);
+	
+	contractDocument.getNextPage();
+	// initialize contract highlighter
+	
+	
+	$("a#contract-page-go-right").click(function(){
+		$("img#contract-page").hide('fast', function(){
+  			$("div#contract-page-loading").show();	
+  			$("input#contract-page-number").prop('disabled', true);
+  		});
+		contractDocument.getNextPage();
+	});
+	
+	$("a#contract-page-go-left").click(function(){
+  		$("img#contract-page").hide('fast', function(){
+  			$("div#contract-page-loading").show();	
+  			$("input#contract-page-number").prop('disabled', true);
+  		});
+		contractDocument.getPreviousPage();
+	});
+	
+	$("input#contract-page-number").change(function(){
+		console.log("this should change", $(this).val());
+		$("img#contract-page").hide('fast', function(){
+  			$("div#contract-page-loading").show();	
+  			$("input#contract-page-number").prop('disabled', true);
+  		});
+		contractDocument.goToPage($(this).val());
+	});
+	
+	
+	
+	
+	
 });
 
 
 
-
+function update_contract_page (url, page) {
+	
+  $("img#contract-page")
+  	.attr('src', url)
+  	.load(function(){
+  		$(this).show('fast', function(){
+  			$("div#contract-page-loading").hide();
+  			$("input#contract-page-number").val(page).prop('disabled', false);
+  			console.log("update contract -page called");
+  			//contractHighlighter.getHighlightsForPage(page);
+  		});
+  });
+  
+  
+}

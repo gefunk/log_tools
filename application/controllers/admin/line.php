@@ -30,7 +30,13 @@ class Line extends CI_Controller {
 		$header_data['title'] = "Add new Line Item";
 		$header_data['page_css'] = array('admin/contract/line/add.css');
 		// pass javascript to footer
-		$footer_data["scripts"] = array("custom-selectors/custom.source.js","admin/contract/line/add.js");	
+		$footer_data["scripts"] = 
+						array(
+							"admin/contract/line/contract.document.js", 
+							"admin/contract/line/highlight.contract.document.js", 
+							"custom-selectors/custom.source.js",
+							"admin/contract/line/add.js"
+						);	
 		// page data
 		$data['cargo_types'] = $this->referencemodel->get_cargo_types($result->customer_id,$result->carrier_id);
 		$data['container_types'] = $this->referencemodel->get_container_types($result->carrier_id);
@@ -44,6 +50,7 @@ class Line extends CI_Controller {
 		$data['carrier_id'] = $result->carrier_id;
 		$data['contract_number'] = $result->contract_number;
 		$data['contract_id'] = $result->contract_id;
+		$data['customer_id'] = $result->customer_id;
 		
 		$data['effective_date'] = date( 'm/d/Y', strtotime($result->start_date)); 
 		$data['expires_date'] = date( 'm/d/Y', strtotime($result->end_date));

@@ -126,11 +126,40 @@
 
 </form>
 
+<div class="row">
+	<table id="contract-page-controls">
+		<tr>
+			<td>
+				<a id="contract-highlight-enable" class="btn btn-info" data-toggle="off">Highlight Off</a>
+			</td>
+			<td>
+				<a id="contract-page-go-left" class='btn'><i class='icon-chevron-left icon-large'></i></a>		
+			</td>
+	  		<td>
+	  			<input id="contract-page-number" type="text" />		
+	  		</td>
+	  		<td>
+	  			<a id="contract-page-go-right" class='btn'><i class='icon-chevron-right icon-large'></i></a>		
+	  		</td>
+	  	</tr>
+	</table>
+  <div id="contract-pages">
+    <div id='contract-page-loading'>
+      <i class="icon-spinner icon-spin icon-4x"></i>
+    </div>
+    <img id="contract-page" src="blank.gif" />
+    <div class="highlighter">
+			&nbsp;
+	</div>
+  </div>
+</div>
+
+
 <!-- values to pass to javascript -->
 <script type="text/javascript" charset="utf-8">
 	var carrier_id = "<?php echo $carrier_id ?>";
 	var contract_id = "<?php echo $contract_id ?>";
-	
+	var customer_id = '<?php echo $customer_id ?>';
 	
 	
 </script>
