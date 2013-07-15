@@ -30,7 +30,7 @@ class Attachments extends CI_Controller {
 		// local_files is the local file path
 		$contract_id = $this->input->post("contract_id");
 		$file_name = $this->input->post("contract_filename");
-		$local_file = $this->config->item("upload_directory")."/".$file_name;
+		$local_file = $this->config->item('upload_directory').$file_name;
 		// remote_paths is where to put the file in the remote location
 		$remote_path = $this->input->post("remote_path");
 
@@ -82,16 +82,23 @@ class Attachments extends CI_Controller {
 					$img->destroy();
 
 					// upload the image to amazon
-					if($this->datastore->put($local_page, $remote_path.'/'.$page_name)){
-						// successful upload, save the page number into the db
-						$this->attachmentmodel->insert_uploaded_contract_page($contract_id, $page_number+1, $upload_id);
+					if($this->datastore->put($local_page, $remote_path.'/pages/'.$page_name)){
+						// update progress
 						$progress = (($page_number+1) / $number_of_pages)*100;
 						$this->attachmentmodel->update_contract_process_progress($progress, $upload_id);
+						// delete local image file
+						unlink($local_page);
 					}
 
 
 				}
+
+				log_message("info", "Number of pages: ".$number_of_pages." in contract upload id ".$upload_id);
+				// record total pages in document
+				$this->attachmentmodel->insert_uploaded_contract_page($number_of_pages, $upload_id);
 			}
+
+
 			log_message("info", "Completed uploading files to s3");
 			// clean up the contract local file
 			unlink($local_file);
