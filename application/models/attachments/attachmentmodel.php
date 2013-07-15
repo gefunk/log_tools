@@ -54,21 +54,14 @@ class AttachmentModel extends CI_Model
 	
 	/**
 	* save the image of each page of the contract
-	* @param $contract_id the id of contract this page belongs to, relates to the contracts table
 	* @param $page_number the page number that corresponds to the page number on the contract
 	* @param $upload_id corresponds to the version of the contract uploaded
 	*/
-	function insert_uploaded_contract_page($contract_id, $page_number, $upload_id)
+	function insert_uploaded_contract_page($page_number, $upload_id)
 	{
-		$data = array(
-			"contract" => $contract_id,
-			"page" => $page_number,
-			"contract_upload_id" => $upload_id
-		);
-		
-		$this->db->insert("contract_upload_pages", $data);
-		
-
+		$data = array("number_of_pages" => $page_number);
+		$this->db->where("id", $upload_id);
+		$this->db->update("contract_uploads", $data);
 	}
 	
 	function update_contract_process_progress($progress, $id)
@@ -79,6 +72,17 @@ class AttachmentModel extends CI_Model
 
 		$this->db->where('id', $id);
 		$this->db->update('contract_uploads', $data);
+	}
+	
+	
+	
+	public function get_latest_upload_for_contract($contract_id)
+	{
+		$sql = "SELECT status, filename, number_of_pages FROM contract_uploads".
+		" where contract = $contract_id".
+		" order by upload_time desc LIMIT 1";
+		$query = $this->db->query($sql);
+		return $query->result();
 	}
 	
 }
