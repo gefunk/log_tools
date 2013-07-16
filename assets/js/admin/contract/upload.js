@@ -45,7 +45,6 @@ $(document).ready(function(){
 	// button click upload
 	$('a#upload-file').click(function(e){
 		
-		console.log("Upload button clicked");
 		e.preventDefault();
 	    var formData = new FormData($("div.modal-body > form")[0]);
 	   	// upload the form
@@ -93,7 +92,7 @@ var contractUploader = {
 	        },
 	        //Ajax events
 	        success: function(){
-	        	console.log("contractUploader complete");
+	        	//console.log("contractUploader complete");
 	        	contractUploader.addCallbackSubscriber(show_upload_modal_status);
 				show_upload_modal_status (0)
 	        },
@@ -168,7 +167,7 @@ function show_upload_modal_status (status) {
   		window.setTimeout(contractUploader.checkStatus, 5000);
 	}else{
 		// show the uploaded pages
-		console.log("should show uploaded pages");
+		//console.log("should show uploaded pages");
 		
 		$("input[name=contract-file]").hide();
 		$("div#upload-progress").hide();

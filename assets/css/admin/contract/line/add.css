@@ -8,6 +8,13 @@ select.port-group-selector{
 }
 
 
+/**
+ * 	contracts section below this
+ * 
+ */
+div#contracts-physical{
+	display: none;
+}
 
 div#contract-pages{
 	border: 2px solid;
@@ -41,7 +48,7 @@ div#contract-page-loading{
 
 
 
-div#contract-pages > div.highlighter {
+div.highlighter {
 	width: 100%;
 	position: absolute;
 	background: rgb(255, 255, 0); /* fallback color */
@@ -54,3 +61,13 @@ div#contract-pages > div.highlighter {
 	min-height: 20px;
 	*/
 }
+
+div.highlighter > i{
+	float:right;
+	margin-right:1em;
+	margin-top:-7px; 
+	font-size:150%;
+	display: none;	
+	cursor: pointer;
+} 
+

@@ -35,7 +35,7 @@
 				<td><?php echo $row->carrier_name; ?></td>				
 				<td>
 					<a href="<?php echo site_url().'/admin/contract/rules/'.$row->number; ?>" class="btn btn-small contract-charges">Charges</a>
-					<a href="<?php echo site_url().'/admin/contract/lanes/'.$row->number; ?>" class="btn btn-small btn-info contract-view">Lanes</a>
+					<a href="<?php echo site_url().'/admin/line/add/'.$row->number; ?>" class="btn btn-small btn-info contract-view">Lanes</a>
 					<a class="btn btn-small upload-button" 
 						data-contract-id="<?php echo $row->id ?>" 
 						data-contract-number="<?php echo $row->number; ?>" 
