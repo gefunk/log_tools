@@ -55,6 +55,7 @@ var contractHighlighter = {
 		contractHighlighter.page_element.parent().append(html);
 	},
 	getHighlightsForPage: function(page){
+		contractHighlighter.removeHighlights();
 		contractHighlighter.page = page;
 		$.get(
 			site_url+"/contract/get_highlights/"+contractHighlighter.contract_id+'/'+page,
@@ -71,6 +72,9 @@ var contractHighlighter = {
 				}
 			}
 		);
+	},
+	removeHighlights: function(){
+		contractHighlighter.page_element.parent().remove("div.highlighter");
 	}
 	
 }// end contract Highlighter
