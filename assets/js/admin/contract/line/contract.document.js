@@ -8,6 +8,7 @@ var contractDocument = {
 		contractDocument.pageOnlyCallbacks = new Array();
 	},
 	addSubscriber: function(callback_func){
+		
 		contractDocument.callbacks.push(callback_func);
 	},
 	addPageSubscriber: function(callback_func){
@@ -23,6 +24,8 @@ var contractDocument = {
 				if(data.success){
 					for(var i = 0; i < contractDocument.callbacks.length; i++){
 						contractDocument.callbacks[i](data.page, contractDocument.page_count);
+					}
+					for(var i = 0; i < contractDocument.pageOnlyCallbacks.length; i++){
 						contractDocument.pageOnlyCallbacks[i](contractDocument.page_count);
 					}
 				}

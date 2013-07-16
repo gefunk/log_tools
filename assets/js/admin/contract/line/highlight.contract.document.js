@@ -9,6 +9,9 @@ var contractHighlighter = {
 		contractHighlighter.attachHandler();
 		contractHighlighter.contract_id = contract_id;
 		contractHighlighter.position = 0;
+		
+		
+		
 	},
 	attachHandler: function(page_element){
 		contractHighlighter.page_element.click(function(e) {
@@ -29,6 +32,8 @@ var contractHighlighter = {
 					height = contractHighlighter.position- height_percent;
 					position = contractHighlighter.position;
 				}
+				// convert to absolute value if negative
+				height = Math.abs(height);
 				
 				// reset the position
 				contractHighlighter.position = 0;
@@ -42,7 +47,7 @@ var contractHighlighter = {
 						position: (position)
 					}
 				).done(function(data){
-					contractHighlighter.addHighlight(data[0].id, position, height);
+					contractHighlighter.addHighlight(data[0], position, height);
 				});
 			}
     		
@@ -50,7 +55,7 @@ var contractHighlighter = {
 	},
 	addHighlight: function(highlight_id, position, height){
 		var style = "top:"+(position*100)+"%;height:"+(height*100)+"%";
-		var html = '<div id="'+highlight_id+'" class="highlighter" style="'+style+'">&nbsp;</div>';
+		var html = '<div id="'+highlight_id+'" class="highlighter" style="'+style+'"><i class="icon-remove-sign hide" ></i>&nbsp;</div>';
 		console.log("should be adding highlights: ", html);
 		contractHighlighter.page_element.parent().append(html);
 	},
@@ -74,7 +79,11 @@ var contractHighlighter = {
 		);
 	},
 	removeHighlights: function(){
-		contractHighlighter.page_element.parent().remove("div.highlighter");
+		contractHighlighter.page_element.parent().children("div.highlighter").remove();
+	},
+	deleteHighlight: function(id){
+		contractHighlighter.page_element.parent().children("div#"+id).remove();
+		$.post(site_url+"/contract/delete_highlight", {id: id});
 	}
 	
 }// end contract Highlighter
