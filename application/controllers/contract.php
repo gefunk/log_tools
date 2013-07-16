@@ -9,8 +9,7 @@ class Contract extends CI_Controller {
 		$this->load->model("contracthighlights");
 		$this->load->library("contracts");
 	}
-	
-	
+
 	
 	public function page($contract_id, $customer_id, $page)
 	{
@@ -47,6 +46,13 @@ class Contract extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output( json_encode(array($this->contracthighlights->add($contract_id, $position, $height, $page))));
 		
+	}
+	
+	
+	public function delete_highlight()
+	{
+		$id = $this->input->post('id');
+		$this->contracthighlights->delete($id);
 	}
 } // end controller
 		
