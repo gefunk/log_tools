@@ -23,8 +23,25 @@ div#contract-page-controls > a.btn{
 	margin: 0;
 }
 
+img#contract-page{
+	height: 1244px;
+	width: 956px;
+	
+}
+
 input#contract-page-number{
 	width: 20px;
+}
+
+div#contract-page-loading{
+	position: absolute; top: 48%; left:48%;	
+}
+
+.fade {
+   opacity: 0.25;
+   transition: opacity .25s ease-in-out;
+   -moz-transition: opacity .25s ease-in-out;
+   -webkit-transition: opacity .25s ease-in-out;
 }
 
 

@@ -111,7 +111,6 @@ var contractUploader = {
 	updateProgress: function(e){
 		if(e.lengthComputable){
 	    	var percent = ((e.loaded/e.total)*100)+"%";
-	    	console.log("percent uploaded ", percent);
 	        $('div#upload-progress div.progress > div.bar').css('width', percent);
     	}
 	},
