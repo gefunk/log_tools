@@ -36,5 +36,17 @@ class Contract extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output( json_encode(array($this->contracthighlights->get_for_contract_page($contract_id, $page))));
 	}
+	
+	public function add_highlight()
+	{
+		$contract_id=$this->input->post('contract_id');
+		$position=$this->input->post('position');
+		$height=$this->input->post('height');
+		$page=$this->input->post('page');
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output( json_encode(array($this->contracthighlights->add($contract_id, $position, $height, $page))));
+		
+	}
 } // end controller
 		

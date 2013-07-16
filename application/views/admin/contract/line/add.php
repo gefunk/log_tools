@@ -148,9 +148,6 @@
       <i class="icon-spinner icon-spin icon-4x"></i>
     </div>
     <img id="contract-page" src="blank.gif" />
-    <div class="highlighter">
-			&nbsp;
-	</div>
   </div>
 </div>
 
