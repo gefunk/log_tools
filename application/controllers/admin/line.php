@@ -22,7 +22,7 @@ class Line extends CI_Controller {
 
 	public function add($contract_number)
 	{
-		$this->output->enable_profiler(TRUE);
+		//$this->output->enable_profiler(TRUE);
 		$result = $this->contractmodel->get_contract_from_number($contract_number);
 		
 		

@@ -126,7 +126,7 @@
 
 </form>
 
-<div class="row">
+<div id="contracts-physical" class="row">
 	<table id="contract-page-controls">
 		<tr>
 			<td>
