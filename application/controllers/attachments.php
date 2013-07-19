@@ -41,7 +41,7 @@ class Attachments extends CI_Controller {
 			// save the contract into the db
 			$upload_id = $this->attachmentmodel->insert_uploaded_contract($contract_id, $file_name);
 			// get the number of pages from the pdf
-			$number_of_pages = 20;
+			$number_of_pages = 10;
 
 			if (defined('ENVIRONMENT') && (ENVIRONMENT != 'development')){
 				$command = "pdfinfo $local_file";
@@ -66,6 +66,14 @@ class Attachments extends CI_Controller {
 					$img->setResolution( $resolution, $resolution );
 					$img->readImage($page);
 
+
+					// increase the contrast by 2
+					$img->contrastImage(1);
+					$img->contrastImage(2);
+					$img->contrastImage(3);
+					
+					
+					
 					// rescale image to be readable - 816 X 1056 = 8.5 x 11
 					$img->scaleImage($this->config->item('pdf_image_width'),0);
 					$d = $img->getImageGeometry();
@@ -73,8 +81,13 @@ class Attachments extends CI_Controller {
 					if($h > $this->config->item('pdf_image_height')) {
 					    $img->scaleImage(0,$this->config->item('pdf_image_height'));
 					}
-					/* Convert to png */
+					
+					 //* Convert to png */
 					$img->setImageFormat( "png" );
+					// set the new dpi
+					// resize image to printer resolution
+					$img->setResolution(72,72);
+					
 					$page_name = '/page-'.($page_number+1).'.png';
 					$local_page = $dir.$page_name;
 					$img->writeImage($local_page);       // Write to disk
