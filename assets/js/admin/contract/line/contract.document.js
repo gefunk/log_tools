@@ -34,7 +34,7 @@ var contractDocument = {
 	},
 	getNextPage: function(){
 		if(contractDocument.page_count < contractDocument.total_pages){
-			contractDocument.page_count += 1;
+			contractDocument.page_count = parseInt(contractDocument.page_count) + 1;
 			contractDocument.getPage();	
 		}else{
 			return false;
@@ -42,7 +42,7 @@ var contractDocument = {
 	},
 	getPreviousPage: function(){
 		if(contractDocument.page_count > 1){
-			contractDocument.page_count -= 1;
+			contractDocument.page_count = parseInt(contractDocument.page_count) - 1;
 			contractDocument.getPage();
 		}else{
 			return false;
