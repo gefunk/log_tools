@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
 	<head>
 		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 		<title><?php echo $title ?> - Amfitir</title>
-		 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 	    <!-- bootstrap -->
 	    <link href="<?php echo base_url(); ?>assets/css/bootstrap/bootstrap.css" rel="stylesheet" />
 	    <link href="<?php echo base_url(); ?>assets/css/bootstrap/bootstrap-responsive.css" rel="stylesheet" />
@@ -23,6 +23,7 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/compiled/layout.css">
 	    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/icons.css">
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/lib/bootstrap.datepicker.css">
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/typeaheadjs-bootstrap.css">
 
 	    <!-- this page specific styles -->
 	    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/compiled/index.css" type="text/css" media="screen" />
@@ -168,4 +169,4 @@
 	    <div class="content">
 
 	        <div class="container-fluid">
-				<div class="row-fluid">
+				
