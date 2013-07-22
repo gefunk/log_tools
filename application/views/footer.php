@@ -7,6 +7,10 @@
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/ejs/ejs_fulljslint.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/ejs/ejs.js"></script>
+		
+			<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/typeahead.min.js"></script>
+		
+		<script src="http://twitter.github.com/hogan.js/builds/2.0.0/hogan-2.0.0.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/global.js"></script>
 
 		<?php
