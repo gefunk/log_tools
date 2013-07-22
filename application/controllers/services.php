@@ -108,6 +108,20 @@ class Services extends CI_Controller {
 		
 	}
 	
+	public function search_ports($query)
+	{
+		//$this->output->enable_profiler(TRUE);
+		
+		$page_size = 10;
+		
+		$result = $this->referencemodel->typeahead_ports($query, $page_size);
+		
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($result));
+		
+	}
+	
 	public function ports_type_ahead()
 	{
 		//$this->output->enable_profiler(TRUE);

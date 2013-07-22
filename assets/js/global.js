@@ -102,3 +102,11 @@ function update_port_hit_count (port_id) {
   $.post(site_url+"/services/increment_port_hit_count", {port_id: port_id});
 }
 
+
+/**
+ * convert first letter of each word to upper case
+ */
+function toTitleCase(str)
+{
+    return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+}
