@@ -114,6 +114,58 @@ class ReferenceModel extends CI_Model
 		
 		
 	}
+
+	function typeahead_cities($search_term)
+	{
+		$data = array();
+		if(strlen($search_term) > 3){
+			$key = "typeahead_cities-".$search_term;
+			if(! $data = $this->cache->get($key)){
+					
+				$search_terms = $this->clean_search_term($search_term);
+	
+				$match_string = "+";
+					
+				foreach($search_terms as $term){
+						// only include wildcard if search term has more than 4 characters
+					//$match_string .= "+".$term.(strlen($term) > 2 ? "*" : "" )." ";
+					$match_string .= $term." ";
+				}
+				
+					// remove trailing space
+				$match_string = rtrim($match_string)."*";
+					
+				$this->db->select("id, city_name, state, country_name, country_code");
+				$this->db->from('ref_cities_search');
+				$this->db->where("MATCH(search_term) AGAINST ('$match_string' IN BOOLEAN MODE)");
+				$this->db->order_by('population', 'desc');
+				$this->db->limit(10);
+				
+			
+				
+				
+				/**
+				$match_string = '%'.trim(join("%", $this->clean_search_term($search_term))).'%';
+				
+				// remove trailing space
+				//$match_string = rtrim($match_string);
+				
+				$this->db->select("id, city_name, state, country_name, country_code");
+				$this->db->from('ref_cities_search');
+				$this->db->where("search_term LIKE '$match_string'");
+				$this->db->order_by('population', 'desc');
+				$this->db->limit(10);
+				 **/
+				
+				$query = $this->db->get();
+				$data = $query->result_array();
+				$this->cache->save($key, $data, WEEK_IN_SECONDS);
+			}
+		}
+		return $data;
+			
+			
+	}
 	
 	function search_ports($search_term, $page=NULL, $page_size=NULL, $array=FALSE)
 	{
