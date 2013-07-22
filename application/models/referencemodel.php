@@ -214,22 +214,40 @@ class ReferenceModel extends CI_Model
 		
 	}
 	
-	function typeahead_ports($item, $size){
-		$key = "typeahead_ports-".$item.'-'.$size;
-		if(! $data = $this->cache->get($key)){
-
-			$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
-			$this->db->from('ref_ports rp');
-			$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
-			$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
-			$this->db->where("search_term LIKE '%$item%'");
-			$this->db->order_by("found", "desc");
-			$this->db->order_by("hit_count", "desc");
-			$this->db->limit($size);
-			
-			$query = $this->db->get();
-			$data['results'] = $query->result_array();
-			$this->cache->save($key, $data, WEEK_IN_SECONDS);
+	function typeahead_ports($search_term, $size){
+		$data = array();
+		if(strlen($search_term) > 3){
+			$key = "typeahead_ports-".$search_term.'-'.$size;
+			if(! $data = $this->cache->get($key)){
+				
+				$search_terms = $this->clean_search_term($search_term);
+		
+				$match_string = "+";
+						
+				foreach($search_terms as $term){
+							// only include wildcard if search term has more than 4 characters
+						//$match_string .= "+".$term.(strlen($term) > 2 ? "*" : "" )." ";
+						$match_string .= $term." ";
+				}
+					
+						// remove trailing space
+				$match_string = rtrim($match_string)."*";
+	
+	
+	
+				$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
+				$this->db->from('ref_ports rp');
+				$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
+				$this->db->join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
+				$this->db->where("MATCH(search_term) AGAINST ('$match_string' IN BOOLEAN MODE)");
+				$this->db->order_by("found", "desc");
+				$this->db->order_by("hit_count", "desc");
+				$this->db->limit($size);
+				
+				$query = $this->db->get();
+				$data = $query->result_array();
+				$this->cache->save($key, $data, WEEK_IN_SECONDS);
+			}
 		}
 		return $data;
 	}
