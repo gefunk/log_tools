@@ -70,6 +70,25 @@ class Services extends CI_Controller {
 		
 	}
 	
+	public function search_cities($query, $test=FALSE)
+	{
+		$content_type = 'application/json';
+		if($test){
+			$this->output->enable_profiler(TRUE);
+			$content_type = 'text/html';
+		}
+		$cities = $this->referencemodel->typeahead_cities(urldecode($query));
+		$this->output
+		    ->set_content_type($content_type)
+		    ->set_output(json_encode($cities));	
+	}
+	
+	public function test_clean_search($search_term)
+	{
+		//echo urldecode($search_term);
+		echo var_dump(preg_split("/[\s,]+/", urldecode($search_term)));
+	}
+	
 	/**
 	* pages through list of
 	*

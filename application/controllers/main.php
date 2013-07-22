@@ -22,6 +22,18 @@ class Main extends MY_In_Controller {
 		$this->load->view('footer', $footer_data);
 	}
 	
+	public function design()
+	{
+		$header_data['title'] = "Query Rates";
+		$header_data['page_css'] = array('main/main.css');
+		$footer_data['scripts'] = array('main/main.js');
+		$this->load->view('header', $header_data);
+		$this->load->view('main');
+		$this->load->view('footer', $footer_data);
+	}
+
+	
+	
 	public function searchlanes($origin_city_id, $destination_city_id, $customer_id)
 	{
 		$search_lanes = ($this->querymodel->search_lanes($origin_city_id, $destination_city_id, $customer_id));
