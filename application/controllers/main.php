@@ -12,7 +12,7 @@ class Main extends MY_In_Controller {
 		$this->load->model('lanemodel');
     }
 
-	public function index()
+	public function oldindex()
 	{
 		$header_data['title'] = "Query Rates";
 		$header_data['page_css'] = array('query.css', 'lib/select2.css');
@@ -22,7 +22,7 @@ class Main extends MY_In_Controller {
 		$this->load->view('footer', $footer_data);
 	}
 	
-	public function design()
+	public function index()
 	{
 		$header_data['title'] = "Query Rates";
 		$header_data['page_css'] = array('main/main.css');
