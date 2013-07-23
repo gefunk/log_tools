@@ -1,14 +1,16 @@
 <div>
 	<p>
 		<span class="port-code-suggest">
-			<%= port_code %>
+			(<%= port_code %>)
 		</span> 
 		<%= value %>
 	</p>
 </div>
 <div>
 	<img src="<%= flag %>" />
-		<% for(var i = 0; i < transport_icons.length; i++){ %>
-			<img src="<%= transport_icons[i] %>" />
+		<% for(var i = 0; i < transport_icons.length; i++){ 
+			console.log("Transport Icon: ", transport_icons[i]);
+		%>
+			<span class="transport-icon <%= transport_icons[i] %>"></span>
 	<% } %>
 </div>	

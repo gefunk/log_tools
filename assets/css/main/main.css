@@ -1,3 +1,10 @@
-div#autocomplete{
-	border: 1px solid;
+/** twitter typehead responsive fix **/
+	
+span.twitter-typeahead{
+	width: 100%;
 }
+
+span.twitter-typeahead input{
+	width: 100%;
+}
+

@@ -110,3 +110,15 @@ function toTitleCase(str)
 {
     return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
+
+
+/**
+ * Sets up ejs engine for bootstrap typeahead
+ */
+var ejs = {};
+
+ejs.compile = function(template){
+	var compiled = new EJS({url: template});
+	return compiled;
+}
+
