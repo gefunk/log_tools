@@ -71,3 +71,42 @@ div#results-header small{
 }
 
 
+div.result-row{
+	border-bottom: 1px solid #EDF2F7;
+    color: #526273;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    vertical-align: middle;
+    font-size: 12px;
+    padding-left: 1em;
+}
+
+div.result-row:hover{
+	background-color: #F5FAFC;
+}
+
+img.carrier-img{
+	max-width: 60px;
+	height: auto;
+}
+
+table#prices td{
+	font-size: 13px;
+	text-align: right;
+}
+
+ul#legs{
+	margin-top: 1em;
+	margin-left: 1em;
+	list-style-type: none;
+}
+
+ul#legs > li{
+	margin-top: 1em; 
+}
+
+div#carrier ul.dropdown-menu label.checkbox{
+	cursor: pointer;
+	color:inherit;
+}
+
