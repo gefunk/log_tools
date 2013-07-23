@@ -24,7 +24,7 @@
 	    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/icons.css">
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/lib/bootstrap.datepicker.css">
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/typeaheadjs-bootstrap.css">
-
+		
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/global.css">
 
 	    <!-- this page specific styles -->
@@ -64,7 +64,9 @@
 		<!-- navbar -->
 	    <div class="navbar navbar-inverse">
 	        <div class="navbar-inner">
-	            <a class="brand" href="index.html"><img src="<?php echo base_url(); ?>assets/img/nav-logo.png">Amfitir Rate Manager</a>
+	            <a class="brand" href="index.html"><img src="<?php echo base_url(); ?>assets/img/nav-logo.png">
+	            		<span class="hidden-phone">Amfitir Rate Manager</span>
+	            	</a>
 
 	            <!-- shows same menu as sidebar but for mobile devices -->
 	            <button type="button" class="btn btn-navbar visible-phone" data-toggle="collapse" data-target=".nav-collapse">

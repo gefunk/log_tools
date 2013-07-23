@@ -6,5 +6,68 @@ span.twitter-typeahead{
 
 span.twitter-typeahead input{
 	width: 100%;
+	border: 1px solid #D6E2EB;
 }
+
+/*
+div#search{
+	background-color: #FDFDFD;
+    border: 1px solid #EFEEF3;
+    margin-left: -20px;
+    margin-right: -20px;
+}
+
+*/
+div#search h4{
+	color: #696D73;
+    font-style: italic;
+}
+
+    
+
+div#search > div.row-fluid{
+	/*box-shadow: -1px 0 5px 2px #F9F9F9 inset;*/
+	border-bottom: 1px solid #EFEEF3;
+}
+
+
+
+div#route-search input {
+	min-width: 200px;
+	
+}
+
+div#route-dates {
+	margin-top: 1em;
+}
+
+div#route-dates .add-on {
+	margin-right: -5px;
+}
+
+
+
+div#results-header {
+	margin-top: 1em;
+}
+
+div#results-header > span.location{
+	color: #696D73;
+	font-size: 14px; 
+    font-style: italic;
+}
+div#results-header > i{
+	margin: 5px;
+}
+
+div#results-header > span.date{
+	margin-left: 20px;
+}
+
+div#results-header small{
+	font-size: 12px; 
+    font-style: italic;
+    color: #999999;
+}
+
 
