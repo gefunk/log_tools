@@ -22,16 +22,16 @@ function transform_port_to_datum(port){
     var transport_icon_path = base_url+"assets/img/transport_icons/";
     var icon_size = 24;
     if(port.rail == 1){
-    	transport_icons.push("transport-rail");
+    	transport_icons.push("icon-train");
     }
     if(port.road == 1){
-    	transport_icons.push("transport-road");
+    	transport_icons.push("icon-road");
     }
     if(port.airport == 1){
-    	transport_icons.push("transport-air");
+    	transport_icons.push("icon-plane");
     }
     if(port.ocean == 1){
-    	transport_icons.push("transport-ocean");
+    	transport_icons.push("icon-boat");
     }
     
     return {
