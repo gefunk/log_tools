@@ -25,6 +25,8 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/lib/bootstrap.datepicker.css">
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/typeaheadjs-bootstrap.css">
 
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/global.css">
+
 	    <!-- this page specific styles -->
 	    <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/compiled/index.css" type="text/css" media="screen" />
 
@@ -72,15 +74,11 @@
 	            </button>            
 	            <div class="nav-collapse collapse visible-phone mobile-menu">
 	                <ul class="nav">
-	                    <li class="active"><a href="index.html">Home</a></li>
+	                    <li class="active"><a href="index.html">Rates</a></li>
 	                    <li><a href="chart-showcase.html">Charts</a></li>
 	                    <li><a href="user-list.html">Users</a></li>
 	                    <li><a href="form-showcase.html">Forms</a></li>
 	                    <li><a href="gallery.html">Gallery</a></li>
-	                    <li><a href="icons.html">Icons</a></li>
-	                    <li><a href="calendar.html">Calendar</a></li>
-	                    <li><a href="tables.html">Tables</a></li>
-	                    <li><a href="ui-elements.html">UI Elements</a></li>
 	                </ul>
 	            </div>
 	            <!-- end navbar for mobile devices -->
