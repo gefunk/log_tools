@@ -119,6 +119,8 @@ $(document).ready(function() {
 		{
 		 	$(this).attr("disabled", true);
 		}
+	}).on('changeDate', function (ev) {
+    	$(this).datepicker('hide');
 	});
 
 	/*
