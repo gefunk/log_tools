@@ -1,7 +1,8 @@
 /** twitter typehead responsive fix **/
 	
 span.twitter-typeahead{
-	width: 100%;
+	width: 97%;
+	
 }
 
 span.twitter-typeahead input{
@@ -68,11 +69,11 @@ div#results-header small{
 div.result-row{
 	border-bottom: 1px solid #EDF2F7;
     color: #526273;
-    padding-top: 1em;
-    padding-bottom: 1em;
+	padding-top: 1em;
+	padding-bottom: 1em;
     vertical-align: middle;
     font-size: 12px;
-    padding-left: 1em;
+    
 }
 
 div.result-row:hover{
