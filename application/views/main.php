@@ -1,13 +1,13 @@
 <div id="search">
 	<div class="row-fluid">
 		<div class="span12">
-			<h4> Search <small>Enter an origin and destination</small></h4>
+			<h4> Search <small class="hidden-phone">Enter an origin and destination</small></h4>
 		</div>
-		<div id="route-search" class="span11">
-			<div class="span5">
+		<div id="route-search" class="span12">
+			<div class="span6">
 				<input id="origin" placeholder="Origin" />
 			</div>
-			<div class="span5">
+			<div class="span6">
 				<input id="destination" placeholder="Destination" />
 			</div>
 		</div>
