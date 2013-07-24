@@ -5,7 +5,7 @@
 		</div>
 		<div id="route-search" class="span11">
 			<div class="span5">
-				<input id="origin" placeholder="Origin"/>
+				<input id="origin" placeholder="Origin" />
 			</div>
 			<div class="span5">
 				<input id="destination" placeholder="Destination" />
@@ -162,7 +162,10 @@
 	</div>
 	<div class="body">
 	  <div class="menu">
-		<a class="item" href="#">Any Carrier</a>
+		<div class="header">
+		  <a class="item" href="#">Any Carrier</a>
+		</div>
+		
 		<label class="checkbox item">
 			<input type="checkbox" />
 			Maersk
@@ -192,6 +195,9 @@
 	<div class="body">
 	  <div class="menu">
 		<a class="item" href="#">Any Container</a>
+		<div class="divider">
+			&nbsp;
+		</div>
 		<label class="checkbox item">
 			<input type="checkbox" />
 			20 Foot

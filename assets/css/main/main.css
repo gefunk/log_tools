@@ -131,4 +131,16 @@ div.filter-dropdown{
 	position: absolute;
 	top:0;
 	left:0;
+	
 }
+
+div.filter-dropdown a,label {
+	cursor: pointer;
+}
+
+div.filter-dropdown div.menu > div.header{
+	padding-bottom:5px;
+	margin-bottom: 5px;
+	border-bottom: 1px solid #E6E8E9;
+}
+
