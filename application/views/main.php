@@ -3,7 +3,7 @@
 		<div class="span12">
 			<h4> Search <small>Enter an origin and destination</small></h4>
 		</div>
-		<div id="route-search" class="span12">
+		<div id="route-search" class="span11">
 			<div class="span5">
 				<input id="origin" placeholder="Origin"/>
 			</div>
@@ -44,45 +44,22 @@
 	</div>
 
 	<div class="row-fluid">
-		<div class='span8'>
-		<div id="sort">
-			<div class="btn-group ">
-				<a class="btn glow dropdown-toggle" data-toggle="dropdown" href="#"> Sort <span class="caret"></span> </a>
-				<ul class="dropdown-menu">
-					<li>
-						<a href="#">Price</a>
-					</li>
-				</ul>
+		<div id="filters" class='span11'>
+			<div class="span5">
+				<div id="carrier" class="filter" data-filter-dropdown="carrier-drop">
+				Any Carrier
+				<i class="icon-caret-down"></i>
+				</div>
+				<div id="container" class="filter" data-filter-dropdown="container-drop">
+				Any Container
+				<i class="icon-caret-down"></i>
+				</div>	
 			</div>
-		</div>
-		<div id="carrier">
-			<div class="btn-group ">
-				<a class="btn glow dropdown-toggle" data-toggle="dropdown" href="#"> Any Carrier <span class="caret"></span> </a>
-				<ul class="dropdown-menu">
-					<li>
-						<a href="#">Any Carrier</a>
-					</li>
-					<li class="divider"></li>
-					<li>
-						<a href="#">
-							<label class="checkbox">
-								<input type="checkbox" />
-								Maersk
-							</label>
-						</a>
-					</li>
-					<li>
-						
-						<a href="#">
-							<label class="checkbox">
-								<input type="checkbox" />
-								ANL
-							</label>
-						</a>
-					</li>
-				</ul>
+			
+			<div id="sort" class="filter pull-right">
+				Sort by Price
+				<i class="icon-caret-down"></i>
 			</div>
-		</div>
 		</div>
 	</div>
 
@@ -122,7 +99,7 @@
 			<ul id="legs">
 				<li>
 					<h4>
-						<i class='icon-plane'></i>
+						<i class='icon-truck'></i>
 						Atlanta, GA, US <i class="icon-long-arrow-right"></i> Savannah, GA, US
 					</h4>
 					
@@ -133,6 +110,7 @@
 				</li>
 				<li>
 					<h4>
+						<i class='icon-anchor'></i>
 						Savannah, GA, US <i class="icon-long-arrow-right"></i> Shanghai, CN
 					</h4>
 					<div>
@@ -176,3 +154,64 @@
 	</div>
 </div>
 
+
+<div id="carrier-drop" class="pop-dialog filter-dropdown" data-toggle="off">
+	<div class="pointer">
+		<div class="arrow"></div>
+		<div class="arrow_border"></div>
+	</div>
+	<div class="body">
+	  <div class="menu">
+		<a class="item" href="#">Any Carrier</a>
+		<label class="checkbox item">
+			<input type="checkbox" />
+			Maersk
+		</label>
+		<label class="checkbox item">
+				<input type="checkbox" />
+				ANL
+		</label>
+		<label class="checkbox item">
+				<input type="checkbox" />
+				Hanjin
+		</label>
+		<label class="checkbox item">
+				<input type="checkbox" />
+				Hapag-Lloyd
+		</label>
+	  </div>
+	</div>
+</div>
+
+
+<div id="container-drop" class="pop-dialog filter-dropdown" data-toggle="off">
+	<div class="pointer">
+		<div class="arrow"></div>
+		<div class="arrow_border"></div>
+	</div>
+	<div class="body">
+	  <div class="menu">
+		<a class="item" href="#">Any Container</a>
+		<label class="checkbox item">
+			<input type="checkbox" />
+			20 Foot
+		</label>
+		<label class="checkbox item">
+				<input type="checkbox" />
+				40 Foot
+		</label>
+		<label class="checkbox item">
+				<input type="checkbox" />
+				40 Foot Open Top
+		</label>
+		<label class="checkbox item">
+				<input type="checkbox" />
+				45 Foot
+		</label>
+		<label class="checkbox item">
+				<input type="checkbox" />
+				45 Foot Open Top
+		</label>
+	  </div>
+	</div>
+</div>

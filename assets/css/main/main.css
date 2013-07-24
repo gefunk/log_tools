@@ -110,3 +110,25 @@ div#carrier ul.dropdown-menu label.checkbox{
 	color:inherit;
 }
 
+
+
+div.filter{
+	display: inline;
+    background: linear-gradient(to bottom, #FFFFFF 0%, #F8F8F8 47%, #F4F4F4 100%) repeat scroll 0 0 transparent;
+    border: 1px solid #DEDEDE;
+    border-radius: 4px 4px 4px 4px;
+    box-shadow: 1px 1px 4px 0 #EFEFEF;
+    
+    color: #313D4C;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 4px 12px 4px 12px;
+    text-shadow: 1px 1px 1px #FFFFFF;
+}
+
+div.filter-dropdown{
+	display: none;
+	position: absolute;
+	top:0;
+	left:0;
+}
