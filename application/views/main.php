@@ -33,19 +33,11 @@
 </div>
 
 <div id="results-group">
-	<div class="row-fluid">
-		<div id="results-header" class="span6">
-			<span class="location origin">Savannah</span>
-			<span class="icon-long-arrow-right"></span>
-			<span class="location destination">Shanghai</span>
-			<span class="date"><small>Thu, Aug 18, 2013</small></span>
-		</div>
-
-	</div>
-
-	<div class="row-fluid">
-		<div id="filters" class='span11'>
-			<div class="span5">
+	
+	
+	<div id="filters" class="row-fluid">
+		<div class='span11'>
+			
 				<div id="carrier" class="filter" data-filter-dropdown="carrier-drop">
 				Any Carrier
 				<i class="icon-caret-down"></i>
@@ -54,14 +46,31 @@
 				Any Container
 				<i class="icon-caret-down"></i>
 				</div>	
-			</div>
 			
-			<div id="sort" class="filter pull-right">
-				Sort by Price
-				<i class="icon-caret-down"></i>
-			</div>
+			
+			
 		</div>
 	</div>
+	
+	<div class="separator">
+		&nbsp;
+	</div>
+	
+	<div class="row-fluid">
+		<div id="results-header" class="span6">
+			<span class="location origin">Savannah</span>
+			<span class="icon-long-arrow-right"></span>
+			<span class="location destination">Shanghai</span>
+			<span class="date"><small>Thu, Aug 18, 2013</small></span>
+		</div>
+		<div id="sort" class="span2 filter pull-right">
+				Sort by Price
+				<i class="icon-caret-down"></i>
+		</div>
+
+	</div>
+
+	
 
 	<div class="row-fluid result-row">
 		<div class="span2">
@@ -194,9 +203,8 @@
 	</div>
 	<div class="body">
 	  <div class="menu">
-		<a class="item" href="#">Any Container</a>
-		<div class="divider">
-			&nbsp;
+		<div class="header">
+		  <a class="item" href="#">Any Container</a>
 		</div>
 		<label class="checkbox item">
 			<input type="checkbox" />
