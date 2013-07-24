@@ -174,11 +174,16 @@ class ReferenceModel extends CI_Model
 		if(! $data = $this->cache->get($key)){
 			$search_terms = $this->clean_search_term($search_term);
 	
-			$match_string = "";
-			
+			$match_string = "+";
+					
 			foreach($search_terms as $term){
+				// only include wildcard if search term has more than 4 characters
+				//$match_string .= "+".$term.(strlen($term) > 2 ? "*" : "" )." ";
 				$match_string .= $term." ";
 			}
+				
+					// remove trailing space
+			$match_string = rtrim($match_string)."*";
 			
 			$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
 			$this->db->from('ref_ports rp');
@@ -242,6 +247,9 @@ class ReferenceModel extends CI_Model
 				$this->db->where("MATCH(search_term) AGAINST ('$match_string' IN BOOLEAN MODE)");
 				$this->db->order_by("found", "desc");
 				$this->db->order_by("hit_count", "desc");
+				$this->db->order_by("ocean", "desc");
+				$this->db->order_by("rail", "desc");
+				$this->db->order_by("road", "desc");
 				$this->db->limit($size);
 				
 				$query = $this->db->get();
