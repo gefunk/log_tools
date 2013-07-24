@@ -23,13 +23,7 @@ div#search h4{
     font-style: italic;
 }
 
-    
-
-div#search > div.row-fluid{
-	/*box-shadow: -1px 0 5px 2px #F9F9F9 inset;*/
-	border-bottom: 1px solid #EFEEF3;
-}
-
+   
 
 
 div#route-search input {
@@ -110,6 +104,9 @@ div#carrier ul.dropdown-menu label.checkbox{
 	color:inherit;
 }
 
+div#filters{
+	margin-top: 1em;
+}
 
 
 div.filter{
@@ -142,5 +139,12 @@ div.filter-dropdown div.menu > div.header{
 	padding-bottom:5px;
 	margin-bottom: 5px;
 	border-bottom: 1px solid #E6E8E9;
+}
+
+div.separator{
+	border-top: 1px solid #EDEFF1;
+    box-shadow: 0 3px 4px -1px #FAFAFA inset;
+    margin-top: 20px;
+    padding-top: 10px;
 }
 
