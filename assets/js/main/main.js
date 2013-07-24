@@ -116,4 +116,37 @@ $(document).ready(function(){
         $("input#destination").data("type", datum.type).data("value", datum.id);
      });
      
+     //filter clicks
+     $("div.filter").click(function(e){
+     	var offset = $(this).position();
+     	var top = offset.top+$(this).outerHeight()+5;
+     	var left = offset.left;
+     	var dropdown_id = "#"+$(this).data("filter-dropdown");
+     	if($(dropdown_id).data("toggle") == 'off'){
+     		e.stopPropagation();
+     		$("div.filter-dropdown").data('toggle', 'off').css("display", "none");
+     		$(dropdown_id).css({top: top,left: left}).show().data('toggle','on');
+     	}
+     });
+     
+     $("div.filter-dropdown").click(function(e){
+     	e.stopPropagation();
+     });
+     
+     
+     $("div.container-fluid").click(function(e){
+     	console.log("Container fluid click event");
+     	// only fire event if the user isnt clicking on a filter
+	     $("div.filter-dropdown").trigger({
+			type: "closefilters"
+		});
+     });
+     
+     
+     
+     $("div.filter-dropdown").on("closefilters", function(){
+     	console.log("event close filter fired");
+     	$(this).data('toggle', 'off').css("display", "none");
+     });
+     
 });
