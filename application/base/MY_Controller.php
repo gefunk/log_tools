@@ -28,6 +28,15 @@ class MY_Controller extends CI_Controller {
 						);
 						// set customer session data
 						$this->session->set_userdata($customer_data);
+						// set the cookie for the customer
+						$customer_cookie = array(
+				    		'name'   => 'amfitir_customer',
+				    		'value'  => $customer_id,
+				    		'expire' => '86500', // set to 24 hours
+				    		'secure' => $cookie_secure
+						);
+						set_cookie($customer_cookie);
+						
 						// change the base url to point to the new customer subdomain
 						// setting this to https so all our future hits use https
 						$this->config->set_item('base_url','https://'.$subdomain.'.amfitir.com/') ;
