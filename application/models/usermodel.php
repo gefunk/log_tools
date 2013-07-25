@@ -26,13 +26,27 @@ class UserModel extends CI_Model
 		return FALSE;
 	}
 	
+	/**
+	 * verify admin login info vs database table
+	 */
+	function check_admin_login($identity, $password)
+	{
+		$encrypted_password = $this->encrypt_password($password);
+		$where_data = array("email" => $identity, 'password' => $encrypted_password);
+		$query = $this->db->get_where('admin_users', $where_data);
+		if($query->num_rows() == 1){
+			return $encrypted_password;
+		}	
+		return FALSE;
+	}
+	
 	function add($identity, $password, $customer_id, $additional_data)
 	{
 		$user_data = array(
-						"email" => $identity,
-						"password" => $this->encrypt_password($password),
-						"customer" => $customer_id
-						);
+			"email" => $identity,
+			"password" => $this->encrypt_password($password),
+			"customer" => $customer_id
+		);
 		$this->db->insert('users', $user_data);
 		
 	}
@@ -52,6 +66,21 @@ class UserModel extends CI_Model
 			if($row->customer == $customer_id){
 				return TRUE;
 			}
+		}
+		return FALSE;
+	}
+	
+	/**
+	* check the admin login status
+	* @param $hash the hash stored in the cookie
+	*/
+	function is_admin_valid_for_login_hash($hash)
+	{
+		$this->db->select("id")->from("admin_users")->where("password", $hash);
+		$query = $this->db->get();
+		// should only be one result for a hash
+		if($query->num_rows() == 1){
+			return TRUE;
 		}
 		return FALSE;
 	}
