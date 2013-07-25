@@ -33,7 +33,7 @@ class Login extends CI_Controller {
 			//redirect them back to the login page
 			$this->session->set_flashdata('messages', "incorrect login");
 			//use redirects instead of loading views for compatibility with MY_Controller libraries	
-			$redir_link = 'login/admin';
+			$redir_link = 'admin/login';
 			
 		}
 		
