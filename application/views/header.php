@@ -64,7 +64,7 @@
 		<!-- navbar -->
 	    <div class="navbar navbar-inverse">
 	        <div class="navbar-inner">
-	            <a class="brand" href="index.html"><img src="<?php echo base_url(); ?>assets/img/nav-logo.png">
+	            <a class="brand" href="<?php echo site_url(); ?>"><img src="<?php echo base_url(); ?>assets/img/nav-logo.png">
 	            		<span class="hidden-phone">Amfitir Rate Manager</span>
 	            	</a>
 
