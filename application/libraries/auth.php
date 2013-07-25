@@ -216,6 +216,22 @@ class Auth
 		//$this->session->sess_destroy();
 		//$this->session->sess_create();
 	}
+	/**
+	* log user out of the system
+	*/
+	public function logout_admin()
+	{
+		// remove cookie
+		if (get_cookie('amfitir_admin'))
+		{
+			delete_cookie('amfitir_admin');
+		}
+		$this->session->unset_userdata('amfitir_admin');
+		//Destroy the session
+		//$this->session->sess_destroy();
+		//$this->session->sess_create();
+	}
+	
 	
 	/**
 	 * __get
