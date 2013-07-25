@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Contract extends CI_Controller {
+class Contract extends MY_In_Controller {
 
 	public function __construct()
 	{

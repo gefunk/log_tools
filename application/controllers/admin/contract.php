@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Contract extends CI_Controller {
+class Contract extends MY_Admin_Controller {
 
 	public function __construct()
 	{
@@ -43,6 +43,9 @@ class Contract extends CI_Controller {
 		$this->load->view('admin/footer', $footer_data);
 	}
 
+	
+	
+	
 	/**
 	*
 	* CODE - CONTRACT RELEVANT SECTION
