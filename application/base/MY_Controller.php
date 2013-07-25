@@ -31,7 +31,7 @@ class MY_Controller extends CI_Controller {
 						// set the cookie for the customer
 						$customer_cookie = array(
 				    		'name'   => 'amfitir_customer',
-				    		'value'  => $customer_id,
+				    		'value'  => $customer["id"],
 				    		'expire' => '86500', // set to 24 hours
 				    		'secure' => TRUE
 						);
