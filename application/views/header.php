@@ -108,7 +108,7 @@
 	                    </a>
 	                </li>
 	                <li id="fat-menu" class="dropdown">
-	                    <a href="signin.html" role="button" class="logout">
+	                    <a href="<?php echo site_url(); ?>/logout" role="button" class="logout">
 	                        <span class="navbar_icon"></span>
 	                    </a>
 	                </li>
@@ -155,7 +155,7 @@
 	                </a>
 	            </li>
 	            <li class="">
-	                <a class="tab10" href="signin.html">
+	                <a class="tab10" href="<?php echo site_url(); ?>/logout">
 	                    <i class="sidebar-logout"></i>
 	                    <span>Logout</span>
 	                </a>
