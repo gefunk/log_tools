@@ -7,7 +7,14 @@ class MY_Out_Controller extends MY_Controller {
 		parent::__construct();
 		//if the user has the session, redirect them in NOW.
 		if($this->auth->isLoggedIn()){
-			redirect("main", "refresh");
+			if (defined('ENVIRONMENT') && ENVIRONMENT == 'development'){
+				// in dev it has to land on the main page
+				$redirect = "main";
+			}else{
+				// in production redirect them to the root
+				$redirect = "";
+			}	
+			redirect($redirect, "refresh");
 		}
 		
 	}
