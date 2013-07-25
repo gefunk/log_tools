@@ -42,12 +42,7 @@ class Auth
 	public function isLoggedIn()
 	{
 		$login_hash = $this->session->userdata("amfitir_loggedin");
-		$customer_id = NULL;
-		 
-		$remember_cookie = get_cookie('amfitir_remember');
-		$customer_cookie = get_cookie('amfitir_customer');
-		
-		
+		$customer_id = $this->session->userdata("customer_id");
 		/**
 		 * if the logged in session 
 		 * or the cookie are set then try to look up
@@ -55,23 +50,23 @@ class Auth
 		 * 
 		 * if they are not set then return not logged in
 		 */
-		if(isset($login_hash)){
-			$customer_id = $this->session->userdata("customer_id");
-			// get the login hash from the session or cookie
-			// found hash in user's session 
-		}elseif(isset($remember_cookie) && isset($customer_cookie)){
-			$login_hash = $remember_cookie;
-			$customer_id = $customer_cookie;
-			// found remember cookie
-			// add the hash back to the session
-			$this->session->set_userdata('amfitir_loggedin', $login_hash);
-			$this->session->set_userdata("customer_id", $customer_id);	
+		if($login_hash === FALSE){
+			// try to retrieve from cookie
+			$login_hash = get_cookie('amfitir_remember');
+			if($login_hash !== FALSE)
+				$this->session->set_userdata('amfitir_loggedin', $login_hash);
+		}
+		if($customer_id === FALSE){
+			$customer_id = get_cookie('amfitir_customer');
+			// if successful from cookie put it back into the session
+			if($customer_id !== FALSE)
+				$this->session->set_userdata('customer_id', $customer_id);
 		}
 				
 		/*
 		* check if this login hash is valid for this customer
 		*/
-		if(isset($login_hash)){
+		if($login_hash !== FALSE && $customer_id !== FALSE){
 			if($this->usermodel->is_customer_valid_for_login_hash($login_hash, $customer_id)){
 				return TRUE;
 			}else{
@@ -88,10 +83,8 @@ class Auth
 	*/
 	public function isAdminLoggedIn()
 	{
-		// load session and cookie
-		$logged_in_session = $this->session->userdata("amfitir_loggedin");
-		$remember_cookie = get_cookie('amfitir_remember');
-		
+		// load session and cookie, returns false if not set
+		$login_hash = $this->session->userdata("amfitir_admin");
 		/**
 		 * if the logged in session 
 		 * or the cookie are set then try to look up
@@ -99,24 +92,18 @@ class Auth
 		 * 
 		 * if they are not set then return not logged in
 		 */
-		if(isset($logged_in_session) || isset($remember_cookie)){
-			$login_hash = NULL;
-			
-			// get the login hash from the session or cookie
-			if($logged_in_session){
-				// found hash in user's session 
-				$login_hash = $logged_in_session;
-			}else if($remember_cookie){
-				// found remember cookie
-				$login_hash = $remember_cookie['value'];
-				// add the hash back to the session
-				$this->session->set_userdata('amfitir_loggedin', $remember_cookie['value']);
-			}
-			/*
-			* check if this login hash is valid for this customer
-			*/
-			if(isset($login_hash) && $this->usermodel->is_admin_valid_for_login_hash($login_hash)){
-							
+		if($login_hash === FALSE){
+			$login_hash =  get_cookie('amfitir_admin');
+			log_message("debug", "using remember cookie ".$login_hash);
+			// found remember cookie
+			// add the hash back to the session
+			$this->session->set_userdata('amfitir_admin', $login_hash);
+		}	
+		/*
+		* check if this login hash is valid for this customer
+		*/
+		if($login_hash !== FALSE){
+			if($this->usermodel->is_admin_valid_for_login_hash($login_hash)){
 				return TRUE;
 			}else{
 				// this user doesn't match for the customer, log them out
@@ -153,7 +140,9 @@ class Auth
 		// if login successful and remember is set to true set cookie
 		// set cookies SECURE to false unless using HTTPS
 		if($login_result){
+			log_message("debug", "Login Result".$login_result);
 			if($remember){
+				log_message("debug","Setting remember cookie");
 				$remember_cookie = array(
 				    'name'   => 'amfitir_remember',
 				    'value'  => $login_hash,
@@ -198,7 +187,7 @@ class Auth
 		if($login_result){
 			if($remember){
 				$remember_cookie = array(
-				    'name'   => 'amfitir_remember',
+				    'name'   => 'amfitir_admin',
 				    'value'  => $login_hash,
 				    'expire' => '300', // set to 5 minutes
 				    'secure' => $cookie_secure
@@ -206,7 +195,7 @@ class Auth
 				set_cookie($remember_cookie);
 			}
 			// set session cookie
-			$this->session->set_userdata('amfitir_loggedin', $login_hash);
+			$this->session->set_userdata('amfitir_admin', $login_hash);
 		}
 		return $login_result;
 	}

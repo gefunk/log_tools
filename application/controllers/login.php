@@ -25,6 +25,10 @@ class Login extends MY_Out_Controller {
 	public function signin_local($subdomain){
 		if (defined('ENVIRONMENT') && ENVIRONMENT == 'development'){
 			
+			/**
+			 * this does the function of MY_Controller in the 
+			 * dev environment
+			 */
 			$customer = $this->customermodel->get_customer_by_domain($subdomain);
 			// forward to customer login page
 			$customer_data = array(
@@ -33,6 +37,13 @@ class Login extends MY_Out_Controller {
 				"subdomain" => $subdomain
 			);
 			$this->session->set_userdata($customer_data);
+			$customer_cookie = array(
+				'name'   => 'amfitir_customer',
+				'value'  => $customer["id"],
+				'expire' => '86500', // set to 24 hours
+				'secure' => FALSE
+			);
+			$this->input->set_cookie($customer_cookie);
 			log_message("debug", "Set session data: ".$this->session->userdata("subdomain"));
 			$this->load->view("signin");
 		}else{
