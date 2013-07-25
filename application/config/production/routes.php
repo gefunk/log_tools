@@ -43,7 +43,7 @@
 * otherwise its a subdomain, go to the customer site
 */
 if (stripos($_SERVER['HTTP_HOST'], 'admin') != FALSE){
-	$route['default_controller'] = "admin";
+	$route['default_controller'] = "admin/contract";
 }elseif (stripos($_SERVER['HTTP_HOST'], 'www') === FALSE) {
 	$route['default_controller'] = "main";
 }else{
