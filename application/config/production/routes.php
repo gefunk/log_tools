@@ -42,7 +42,7 @@
 * if www is found within the host string, then forward to welcome
 * otherwise its a subdomain, go to the customer site
 */
-if (stripos($_SERVER['HTTP_HOST'], 'admin') === FALSE){
+if (stripos($_SERVER['HTTP_HOST'], 'admin') != FALSE){
 	$route['default_controller'] = "admin";
 }elseif (stripos($_SERVER['HTTP_HOST'], 'www') === FALSE) {
 	$route['default_controller'] = "main";
