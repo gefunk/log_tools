@@ -48,10 +48,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'econoproddb.logiwareinc.com';
-$db['default']['username'] = 'logiware';
-$db['default']['password'] = 'logiware';
-$db['default']['database'] = 'rate_management';
+$db['default']['hostname'] = 'teela.amfitir.com';
+$db['default']['username'] = 'tiaram';
+$db['default']['password'] = 'cHuvUThu55';
+$db['default']['database'] = 'ratemgt';
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;
