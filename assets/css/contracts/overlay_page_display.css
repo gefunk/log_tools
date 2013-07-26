@@ -1,0 +1,63 @@
+div#overlay-content{
+	z-index: 1006;
+	opacity: 1;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+div.bar{
+	top: 40%;
+}
+
+div.overlay-icon{
+	color: white;
+	position: absolute;
+	cursor: pointer;
+	opacity: 0.65;
+}
+
+div.overlay-icon:hover{
+	opacity: 1;
+}
+
+div.bar-inactive{
+	color: gray;
+}
+
+div#left-bar{
+	left: 2%;
+}
+
+div#right-bar{
+	right: 2%;
+}
+
+div#close-overlay{
+	top: 3%;
+	right: 3%;
+}
+
+
+
+div#overlay-body{
+	color: white;
+	text-align: center;
+	position: absolute;
+	width: 80%;
+	height: 100%;
+	left: 10%;
+}
+
+div #overlay-body-img{
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+div#overlay-body > img{
+	opacity: 1;
+	border: 1px solid black;
+}

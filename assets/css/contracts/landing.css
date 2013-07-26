@@ -1,0 +1,12 @@
+img.carrier-img {
+	width: 72px;
+	height: auto;
+	cursor: pointer;
+	border: 3px solid #FFF;
+	border-radius: 5px;
+}
+
+img.carrier-img:hover {
+	
+	border: 3px solid gray;
+}
