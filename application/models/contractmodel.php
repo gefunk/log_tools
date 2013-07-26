@@ -6,6 +6,7 @@ class ContractModel extends CI_Model
     {
         // Call the Model constructor
         parent::__construct();
+		$this->load->driver('cache', array('adapter' => 'memcached', 'backup' => 'dummy'));
     }
 
 	/**
@@ -91,11 +92,14 @@ class ContractModel extends CI_Model
 	{
 		$key = 'get_contracts_for_customer-'.$customer_id;
 		if(! $result = $this->cache->get($key)){
-			$this->db->select("c.id, start_date, end_date, number, rcarriers.name as carrier_name");
+			$this->db->select("c.id, start_date, end_date, number, rcarriers.name as carrier_name, rcarriers.image, cu.number_of_pages");
 			$this->db->from("contracts c");
 			$this->db->join('ref_carriers rcarriers', 'rcarriers.id = c.carrier');
+			$this->db->join('contract_uploads cu', 'cu.contract = c.id');
 			$this->db->where("c.customer", $customer_id);
-			$this->db->where("c.deleted", "0");		
+			$this->db->where("c.deleted", "0");
+			$this->db->order_by("cu.upload_time", "desc");
+			$this->db->limit(1);		
 			$query = $this->db->get();
 			$result = $query->result();
 			$this->cache->save($key, $result, WEEK_IN_SECONDS);
