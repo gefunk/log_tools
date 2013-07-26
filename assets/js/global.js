@@ -122,3 +122,24 @@ ejs.compile = function(template){
 	return compiled;
 }
 
+
+/**
+ * utility function to check 
+ * if element is in scrollable view
+ * @param {Object} elem
+ */
+function isScrolledIntoView(elem)
+{
+    var docViewTop = $(window).scrollTop();
+    var docViewBottom = docViewTop + $(window).height();
+
+    var elemTop = $(elem).offset().top;
+    var elemBottom = elemTop + $(elem).height();
+
+    return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+}
+
+
+
+
+

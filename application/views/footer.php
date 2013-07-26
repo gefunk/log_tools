@@ -1,6 +1,13 @@
 		
 			</div> <!-- end of the container div -->
 		</div><!-- end content div -->
+		
+		
+		<script type="text/javascript">
+			// sets the link on the page
+			var selected_link = "<?php echo $selected_link; ?>";	
+		</script>
+		
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/bootstrap.min.js"></script>
@@ -9,6 +16,10 @@
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/ejs/ejs.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/typeahead.min.js"></script>
 		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/global.js"></script>
+		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/global_customer.js"></script>
+		<script type="text/javascript" src="<?php echo base_url(); ?>assets/js/jquery.viewport.mini.js"></script>
+		
+		
 
 		<?php
 		// way to pass in javascript to append to end of document
