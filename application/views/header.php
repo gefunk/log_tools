@@ -61,6 +61,10 @@
 		</script>
 	</head>
 	<body>
+		
+		<div id="overlay"></div>
+		
+		
 		<!-- navbar -->
 	    <div class="navbar navbar-inverse">
 	        <div class="navbar-inner">
@@ -75,9 +79,9 @@
 	                <span class="icon-bar"></span>
 	            </button>            
 	            <div class="nav-collapse collapse visible-phone mobile-menu">
-	                <ul class="nav">
-	                    <li class="active"><a href="index.html">Rates</a></li>
-	                    <li><a href="chart-showcase.html">Charts</a></li>
+	                <ul id="phone-nav" class="nav">
+	                    <li id="rates"><a href="<?php echo site_url(); ?>/main">Rates</a></li>
+	                    <li id="contracts"><a href="<?php echo site_url(); ?>/contract">Contracts</a></li>
 	                    <li><a href="user-list.html">Users</a></li>
 	                    <li><a href="form-showcase.html">Forms</a></li>
 	                    <li><a href="gallery.html">Gallery</a></li>
@@ -120,29 +124,25 @@
 	    <!-- sidebar -->
 	    <div id="sidebar-nav" class="hidden-phone">
 	        <ul id="dashboard-menu">
-	            <li class="active">
-	                <div class="pointer">
-	                    <div class="arrow"></div>
-	                    <div class="arrow_border"></div>
-	                </div>
-	                <a class="tab1" href="index.html">
+	            <li id='rates'>
+	                <a class="tab1" href="<?php echo site_url(); ?>/main">
 	                    <i class="sidebar-forms"></i>
 	                    <span>Rates</span>
 	                </a>
 	            </li>       
-				<li class="">
-	                <a class="tab2" href="chart-showcase.html">
+				<li id='contracts'>
+	                <a class="tab2" href="<?php echo site_url(); ?>/contract">
 	                    <i class="sidebar-tables"></i>
 	                    <span>Contracts</span>
 	                </a>
 	            </li>     
-	            <li class="">
+	            <li id='analytics'>
 	                <a class="tab2" href="chart-showcase.html">
 	                    <i class="sidebar-charts"></i>
 	                    <span>Analytics</span>
 	                </a>
 	            </li>
-	            <li class="">
+	            <li id="users" class="">
 	                <a class="tab2" href="user-list.html">
 	                    <i class="icon-group"></i>
 	                    <span>Users</span>

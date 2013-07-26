@@ -26,6 +26,7 @@ class Main extends MY_In_Controller {
 	{
 		$header_data['title'] = "Query Rates";
 		$header_data['page_css'] = array('ui-elements.css','main/main.css');
+		$footer_data['selected_link'] = "rates";
 		$footer_data['scripts'] = array('main/main.js');
 		$this->load->view('header', $header_data);
 		$this->load->view('main');
