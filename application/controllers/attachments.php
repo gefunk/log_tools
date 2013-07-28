@@ -6,6 +6,7 @@ class Attachments extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->helper(array('form', 'url'));
+		$this->load->library('pngquant');
 		$this->load->model('attachments/attachmentmodel');
 		$this->load->model('attachments/datastore');
 	}
@@ -15,7 +16,9 @@ class Attachments extends CI_Controller {
 		$this->load->view('upload', array('error' => ' ' ));
 	}
 
-
+	
+	
+	
 	/** Asynchronous upload of Contracts **/
 
 	/**
@@ -41,7 +44,7 @@ class Attachments extends CI_Controller {
 			// save the contract into the db
 			$upload_id = $this->attachmentmodel->insert_uploaded_contract($contract_id, $file_name);
 			// get the number of pages from the pdf
-			$number_of_pages = 10;
+			$number_of_pages = 5;
 
 			if (defined('ENVIRONMENT') && (ENVIRONMENT != 'development')){
 				$command = "pdfinfo $local_file";
@@ -87,20 +90,35 @@ class Attachments extends CI_Controller {
 					// set the new dpi
 					// resize image to printer resolution
 					$img->setResolution(72,72);
+					 
+   					//$img->setImageCompressionQuality(90); 
+					
+					// strip extraneous data
+   					$img->stripImage(); 
+					// set depth to 8
+					$img->setimagedepth(8);
 					
 					$page_name = '/page-'.($page_number+1).'.png';
+					$compressed_name = '/page-'.($page_number+1).'-c.png';
 					$local_page = $dir.$page_name;
-					$img->writeImage($local_page);       // Write to disk
+					$img->writeImage($local_page); // Write to disk
 					ob_clean(); // clear buffer
 					$img->destroy();
-
-					// upload the image to amazon
-					if($this->datastore->put($local_page, $remote_path.'/pages/'.$page_name)){
+					
+					/**
+					* compress the file
+					*/
+					$compressed_file =  $dir.$compressed_name;
+					file_put_contents($compressed_file, $this->pngquant->compress_png($local_page));
+					
+					// upload the compressed image to amazon
+					if($this->datastore->put($compressed_file, $remote_path.'/pages/'.$page_name)){
 						// update progress
 						$progress = (($page_number+1) / $number_of_pages)*100;
 						$this->attachmentmodel->update_contract_process_progress($progress, $upload_id);
 						// delete local image file
 						unlink($local_page);
+						unlink($compressed_file);
 					}
 
 
