@@ -14,7 +14,7 @@ class Contract extends MY_In_Controller {
 	
 	public function index(){
 		$customer_id = $this->session->userdata("customer_id");
-		$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
+		$data['contracts'] = $this->contractmodel->get_uploaded_contracts_for_customer($customer_id);
 		$header_data['title'] = "View Contracts";
 		$header_data["page_css"] = array("contracts/landing.css","contracts/overlay_page_display.css");
 		$footer_data['scripts'] = array("contracts/landing.js");
