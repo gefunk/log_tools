@@ -92,13 +92,11 @@ class ContractModel extends CI_Model
 	{
 		$key = 'get_contracts_for_customer-'.$customer_id;
 		if(! $result = $this->cache->get($key)){
-			$this->db->select("c.id, start_date, end_date, number, rcarriers.name as carrier_name, rcarriers.image, cu.number_of_pages");
+			$this->db->select("c.id, start_date, end_date, number, rcarriers.name as carrier_name, rcarriers.image");
 			$this->db->from("contracts c");
 			$this->db->join('ref_carriers rcarriers', 'rcarriers.id = c.carrier');
-			$this->db->join('contract_uploads cu', 'cu.contract = c.id');
 			$this->db->where("c.customer", $customer_id);
 			$this->db->where("c.deleted", "0");
-			$this->db->order_by("cu.upload_time", "desc");
 			$this->db->limit(1);		
 			$query = $this->db->get();
 			$result = $query->result();
@@ -106,6 +104,29 @@ class ContractModel extends CI_Model
 		}
 		return $result;
 	}
+
+	/*
+	* get all contracts for a customer
+	*/
+	function get_uploaded_contracts_for_customer($customer_id)
+	{
+		$key = 'get_contracts_for_customer-'.$customer_id;
+		if(! $result = $this->cache->get($key)){
+			$this->db->select("c.id, start_date, end_date, number, rcarriers.name as carrier_name, rcarriers.image, cu.number_of_pages");
+			$this->db->from("contracts c");
+			$this->db->join('ref_carriers rcarriers', 'rcarriers.id = c.carrier');
+			$this->db->join('contract_uploads cu', 'c.id = cu.contract');
+			$this->db->where("c.customer", $customer_id);
+			$this->db->where("c.deleted", "0");
+			$this->db->order_by("cu.upload_time");
+			$this->db->limit(1);		
+			$query = $this->db->get();
+			$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		return $result;
+	}
+
 	
 	
 	function get_contract_dates($contract_number)
