@@ -74,7 +74,9 @@
 
 	<div class="row-fluid result-row">
 		<div class="span2">
-			<img class="carrier-img" src="<?php echo base_url(); ?>assets/img/carriers/cma_cgm.jpg" />
+			<div class="carrier-img">
+				<div class="carrier-sprite carrier-apl"></div>
+			</div>
 		</div>
 
 		<div class="span2">
@@ -87,7 +89,6 @@
 				General Cargo
 			</p>
 		</div>
-		<div class="span2 hidden-phone"></div>
 		<div class="span3" style="text-align: right;">
 			<table id="prices">
 				<tr>
@@ -142,23 +143,57 @@
 
 	</div>
 	<div class="row-fluid result-row">
-		<div class="span1">
-			<img class="carrier-img" src="<?php echo base_url(); ?>assets/img/carriers/anl.jpg" />
+		<div class="span2">
+			<div class="carrier-img">
+				<div class="carrier-sprite carrier-anl"></div>
+			</div>
+		</div>
+		<div class="span2">
+			<p>
+				40 foot container
+			</p>
+		</div>
+		<div class="span2">
+			<p>
+				General Cargo
+			</p>
+		</div>
+		<div class="span3" style="text-align: right;">
+			<table id="prices">
+				<tr>
+					<td><span class="label label-success">sell</span></td>
+					<td>$ 2300.00</td>
+				</tr>
+				<tr class="hidden-phone">
+					<td><span class="label">cost</span></td>
+					<td>$ 2000.00</td>
+				</tr>
+				<tr class="hidden-phone">
+					<td><span class="label label-info">margin</span></td>
+					<td>$ 300.00</td>
+				</tr>
+			</table>
 		</div>
 	</div>
 	<div class="row-fluid result-row">
 		<div class="span1">
-			<img class="carrier-img" src="<?php echo base_url(); ?>assets/img/carriers/maersk.svg" />
+			<div class="carrier-img">
+				<div class="carrier-sprite carrier-maersk"></div>
+			</div>
 		</div>
 	</div>
 	<div class="row-fluid result-row">
 		<div class="span1">
-			<img class="carrier-img" src="<?php echo base_url(); ?>assets/img/carriers/hapag.png" />
+			<div class="carrier-img">
+				<div class="carrier-sprite carrier-hapag"></div>
+			</div>
 		</div>
 	</div>
 	<div class="row-fluid result-row">
 		<div class="span1">
-			<img class="carrier-img" src="<?php echo base_url(); ?>assets/img/carriers/zim.jpg" />
+			<div class="carrier-img">
+				<div class="carrier-sprite carrier-zim"></div>
+			</div>
 		</div>
 	</div>
 </div>

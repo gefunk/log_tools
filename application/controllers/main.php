@@ -25,7 +25,7 @@ class Main extends MY_In_Controller {
 	public function index()
 	{
 		$header_data['title'] = "Query Rates";
-		$header_data['page_css'] = array('ui-elements.css','main/main.css');
+		$header_data['page_css'] = array('lib/famfamflag.css','carriers.css','ui-elements.css','main/main.css');
 		$footer_data['selected_link'] = "rates";
 		$footer_data['scripts'] = array('main/main.js');
 		$this->load->view('header', $header_data);
@@ -45,6 +45,10 @@ class Main extends MY_In_Controller {
 	}
 	
 
+
+	public function sprites(){
+		$this->load->view("testsprite");
+	}
 	
 	
 	public function testsearchlanes()
