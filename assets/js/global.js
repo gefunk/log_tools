@@ -82,7 +82,7 @@ function create_start_to_date_fields (from_date_id, to_date_id, options) {
 	}).data('datepicker');
 }
 
-/*
+/**
 * sql date format is YYYY-MM-DD
 * we return a javascript date object
 * @param sql date in sql date format
@@ -105,6 +105,7 @@ function update_port_hit_count (port_id) {
 
 /**
  * convert first letter of each word to upper case
+ * @param {Object} str, the string to convert to upper case
  */
 function toTitleCase(str)
 {
