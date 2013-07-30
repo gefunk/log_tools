@@ -34,7 +34,8 @@ var contractPageViewer = {
 	initHTML: function(){
 		// show html
 		var html = new EJS({url: base_url+"assets/templates/contracts/contract-overlay.ejs"}).render();
-		$("body").append(html).css("overflow-y","hidden");
+		$("body").append(html);
+		$("html, body").css("overflow","hidden");
 		$("div#overlay-body").scrollTop(0);
 		$("div#overlay-body > p").html("<span id='page_number'>1</span> of "+contractPageViewer.total_pages);
 		contractPageViewer.initScrollHandler();	
@@ -114,7 +115,7 @@ var contractPageViewer = {
 	},
 	destroy: function(){
 		$('div#overlay-body-img').unbind('scroll');
-		$("body").css("overflow-y","visible");
+		$("html, body").css("overflow","auto");
 		$("div#overlay-content").remove();
 		$("div#overlay").hide();
 		contractPageViewer.contract_id = null;
