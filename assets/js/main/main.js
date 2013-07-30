@@ -37,7 +37,7 @@ function transform_port_to_datum(port) {
 		tokens : tokens,
 		id : port.id,
 		type : "port",
-		flag : base_url + "assets/img/flags_iso/24/" + port.country_code.toLowerCase() + ".png",
+		flag : port.country_code.toLowerCase(),
 		port_code : port.country_code + port.port_code,
 		transport_icons : transport_icons
 	};
@@ -65,13 +65,13 @@ function transform_city_to_datum(city) {
 		tokens : tokens,
 		id : city.id,
 		type : "city",
-		flag : base_url + "assets/img/flags_iso/24/" + city.country_code.toLowerCase() + ".png"
+		flag : city.country_code.toLowerCase()
 	};
 }
 
 var dropdown_datasets = [{
 	name : 'ports',
-	header : '<h5>Ports</h5>',
+	header : '<h5>UN Port</h5>',
 	remote : {
 		url : site_url + "/services/search_ports/%QUERY",
 		filter : function(parsedResponse) {
