@@ -1,0 +1,66 @@
+
+.carrier-img{
+	display: table-cell;
+	width: 60px;
+	height: 60px;
+}
+
+.carrier-sprite{
+	display: inline-block;
+	width: 60px;
+}
+
+.carrier-anl{
+	background: url("../img/carriers/carrier_sprite.png") 0 0;
+	height: 60px;
+}
+
+.carrier-apl{
+	background: url("../img/carriers/carrier_sprite.png") 0 -60px;
+	height: 38px;
+}
+
+.carrier-cma-cgm{
+	background: url("../img/carriers/carrier_sprite.png") 0 -99px;
+	height: 44px;
+}
+
+.carrier-cosco{
+	background: url("../img/carriers/carrier_sprite.png") 0 -140px;
+	height: 43px;
+}
+
+.carrier-hanjin{
+	background: url("../img/carriers/carrier_sprite.png") 0 -189px;
+	height: 22px;
+}
+
+.carrier-hapag{
+	background: url("../img/carriers/carrier_sprite.png") 0 -213px;
+	height: 17px;
+}
+
+.carrier-maersk{
+	background: url("../img/carriers/carrier_sprite.png") 0 -228px;
+	height: 40px;
+}
+
+.carrier-msc{
+	background: url("../img/carriers/carrier_sprite.png") 0 -269px;
+	height: 53px;
+}
+
+.carrier-oocl{
+	background: url("../img/carriers/carrier_sprite.png") 0 -321px;
+	height: 36px;
+}
+
+.carrier-zim{
+	background: url("../img/carriers/carrier_sprite.png") 0 -357px;
+	height: 22px;
+}
+
+.carrier-evergreen{
+	background: url("../img/carriers/carrier_sprite.png") 0 -379px;
+	height: 60px;
+}
