@@ -109,6 +109,11 @@ $(document).ready(function() {
 		}
 	});
 
+	
+	if(isMobileDevice()){
+		$("input#ship_date").attr('readonly', "true");	
+	}
+
 	$("input#ship_date").datepicker({
 		showOn: 'button',
 	 	onClose: function(dateText, inst) 

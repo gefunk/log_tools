@@ -140,7 +140,35 @@ function isScrolledIntoView(elem)
     return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
 }
 
+/**
+ * find if envirionment is phone, tablet or desktop
+ * useful for using javascript
+ */
+function findBootstrapEnvironment() {
+	   	var envs = ['phone', 'tablet', 'desktop'];
+	
+	    $el = $('<div>');
+	    $el.appendTo($('body'));
+	
+	    for (var i = envs.length - 1; i >= 0; i--) {
+	        var env = envs[i];
+	
+	        $el.addClass('hidden-'+env);
+	        if ($el.is(':hidden')) {
+	            $el.remove();
+	            return env;
+	        }
+	    };
+}
 
-
+/**
+ * returns if mobile device or note 
+ */
+function isMobileDevice(){
+	if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) )
+ 		return true;
+	else
+		return false;
+}
 
 
