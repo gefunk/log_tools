@@ -247,6 +247,7 @@ class ReferenceModel extends CI_Model
 				$this->db->where("MATCH(search_term) AGAINST ('$match_string' IN BOOLEAN MODE)");
 				$this->db->order_by("found", "desc");
 				$this->db->order_by("hit_count", "desc");
+				$this->db->order_by("population", "desc");
 				$this->db->order_by("ocean", "desc");
 				$this->db->order_by("rail", "desc");
 				$this->db->order_by("road", "desc");
