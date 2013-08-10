@@ -11,11 +11,12 @@
 				<input id="destination" placeholder="Destination" />
 			</div>
 		</div>
-		<div id="route-dates" class="span12">
-			<div class="input-prepend">
-				<span class="add-on"><i class="icon-calendar"></i></span>
-				<input id="ship_date" span="4" type="text" placeholder="Ship Date" />
+		<div id="route-dates" class="span2">
+			<div id="ship-date" data-date-format="mm/dd/yyyy" data-date="<?php echo date('m/d/Y'); ?>">
+				<i class="icon-calendar"></i>
+				<span id="ship-date-display"><?php echo date('m/d/Y'); ?></span>
 			</div>
+			
 		</div>
 
 		<div class="span12">
