@@ -27,10 +27,9 @@
 								</td>
 								<td class="to">to</td>
 								<td>
-									<div class="input-append" id="to-date-decorate" data-date-format="mm/dd/yyyy">
-								    	<input type="text" name="to_date" value="" id="to_date" placeholder="End Date" />
-								    	<span class="add-on"><i class="icon-calendar"></i></span>
-								    </div>
+									<a class="btn btn-small" id="to-date" data-date-format="mm/dd/yyyy">
+								    	<i class="icon-calendar"></i>
+								    </a>
 									
 								</td>
 							</tr>
