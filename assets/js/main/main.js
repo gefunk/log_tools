@@ -114,17 +114,8 @@ $(document).ready(function() {
 		$("input#ship_date").attr('readonly', "true");	
 	}
 
-	$("input#ship_date").datepicker({
-		showOn: 'button',
-	 	onClose: function(dateText, inst) 
-		{ 
-		    $(this).attr("disabled", false);
-		},
-		beforeShow: function(input, inst) 
-		{
-		 	$(this).attr("disabled", true);
-		}
-	}).on('changeDate', function (ev) {
+	$("div#ship-date").datepicker().on('changeDate', function (ev) {
+		$(this).children("span").text($(this).data('date'));
     	$(this).datepicker('hide');
 	});
 
