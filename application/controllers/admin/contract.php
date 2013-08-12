@@ -516,7 +516,14 @@ class Contract extends MY_Admin_Controller {
 		$this->load->view('admin/footer');
 
 	}
-
+	
+	/**
+	 * mongo db test
+	 */
+	public function testmongo(){
+		$this->output->enable_profiler(TRUE);
+		var_dump( $this->mongo_db->get("bios"));
+	}
 
     public function testemail()
     {
