@@ -69,7 +69,7 @@ class ContractModel extends CI_Model
 		$key = 'get_contract_from_id-'.$contract_id;
 		if(! $result = $this->cache->get($key)){
 			
-			$this->db->select("customers.name as customer, customers.id as customer_id, contracts.id as contract_id, ref_carriers.name as carrier, ref_carriers.id as carrier_id, contracts.number as contract_number, contracts.end_date, contracts.start_date");
+			$this->db->select("customers.name as customer, customers.id as customer_id, contracts.id as id, ref_carriers.name as carrier, ref_carriers.id as carrier_id, contracts.number as number, contracts.end_date, contracts.start_date");
 			$this->db->from("contracts");
 			$this->db->join('ref_carriers', 'contracts.carrier = ref_carriers.id');
 			$this->db->join('customers', 'contracts.customer = customers.id');

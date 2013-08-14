@@ -28,7 +28,7 @@ class Line extends CI_Controller {
 		
 		// header data
 		$header_data['title'] = "Add new Line Item";
-		$header_data['page_css'] = array('admin/contract/line/add.css');
+		$header_data['page_css'] = array('lib/famfamflag.css','admin/contract/line/add.css');
 		// pass javascript to footer
 		$footer_data["scripts"] = 
 						array(
