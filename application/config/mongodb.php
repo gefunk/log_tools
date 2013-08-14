@@ -16,7 +16,7 @@
  * ['mongo_host_db_flag']   If running in auth mode and the user does not have global read/write then set this to true
  */
 
-$config['default']['mongo_hostbase'] = '127.0.0.1:27017';
+$config['default']['mongo_hostbase'] = 'localhost:27017';
 $config['default']['mongo_database'] = 'ratemgt';
 $config['default']['mongo_username'] = '';
 $config['default']['mongo_password'] = '';

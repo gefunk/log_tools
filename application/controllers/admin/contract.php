@@ -27,37 +27,69 @@ class Contract extends MY_Admin_Controller {
 
 	}
 
-	public function index($customer_id=NULL)
+	public function all($customer_id)
 	{
-		$header_data['title'] = "View Contracts";
-		$data['customers'] = $this->customermodel->get_customers();
-		if($customer_id != NULL){
-			$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
-			$data["customer_id"] = $customer_id;
-			$data["carriers"] = $this->referencemodel->get_carriers();
-		}
+		$header_data['title'] = "All Contracts";
+		
+		$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
+		$data["customer"] =  $this->customermodel->get_customer_by_id($customer_id);
+		$data["carriers"] = $this->referencemodel->get_carriers();
+		$data['page'] = 'contracts';
+		
 		$footer_data["scripts"] = array("admin/contract/view.js", "admin/contract/upload.js");
 
 		$this->load->view('admin/header', $header_data);
-		$this->load->view('admin/contract/view', $data);
+		$this->load->view("admin/customers/manager-header", $data);
+		$this->load->view('admin/contract/landing', $data);
+		$this->load->view("admin/customers/manager-footer");
 		$this->load->view('admin/footer', $footer_data);
 	}
 
 	
+	public function manage($contract_id){
+		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
+		$data["customer"] =  $this->customermodel->get_customer_by_id($data['contract']->customer_id);
+		$data['page'] = 'contracts';
+		
+		$header_data['title'] = "Contract - ".$data['contract']->number;
+		$footer_data = NULL;
+		
+		$this->load->view('admin/header', $header_data);
+		$this->load->view("admin/customers/manager-header", $data);
+		$this->load->view('admin/contract/manage', $data);
+		$this->load->view("admin/customers/manager-footer");
+		$this->load->view('admin/footer', $footer_data);
+	}
 	
 	
 	/**
-	*
-	* CODE - CONTRACT RELEVANT SECTION
-	*
-	*/
+	 * Add contract view
+	 */
+	public function add($customer_id){
+		$header_data['title'] = "All Contracts";
+		
+		$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
+		$data["customer"] =  $this->customermodel->get_customer_by_id($customer_id);
+		$data["carriers"] = $this->referencemodel->get_carriers();
+		$data['page'] = 'contracts';
+		
+		$footer_data["scripts"] = array("admin/contract/view.js", "admin/contract/upload.js");
+
+		$this->load->view('admin/header', $header_data);
+		$this->load->view("admin/customers/manager-header", $data);
+		$this->load->view('admin/contract/new', $data);
+		$this->load->view("admin/customers/manager-footer");
+		$this->load->view('admin/footer', $footer_data);
+	}
+	
+	
 
 
 	/**
 	* add a new contract into the system
 	* accessible via /admin/contract/add
 	*/
-	public function add($customer_id)
+	public function addnew($customer_id)
 	{
 		//$this->output->enable_profiler(TRUE);
 		// page level data

@@ -19,9 +19,6 @@ class Lineitemmodel extends CI_Model
 	*/
 	public function add_line_item($lineitem, $log=TRUE)
 	{
-		
-
-		
 		$data = array(
 			"origin" => $lineitem->origin,
 			"origin_type" => $lineitem->origin_type,

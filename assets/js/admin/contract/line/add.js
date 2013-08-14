@@ -1,40 +1,86 @@
+/**
+ * transformation function
+ * from port result object
+ * to datum for twitter typeahead
+ * @param {Object} port
+ */
+function transform_port_to_datum(port) {
+	var name = port.name;
+	var tokens = new Array();
+	tokens.push(port.name);
+	if (port.state && /\S/.test(port.state)) {
+		name += ", " + port.state;
+		tokens.push(port.state);
+	}
+	name += ", " + toTitleCase(port.country_name);
+	tokens.push(port.country_name);
+	tokens.push(port.country_code);
+
+	var transport_icons = new Array();
+	var transport_icon_path = base_url + "assets/img/transport_icons/";
+	var icon_size = 24;
+	if (port.rail == 1) {
+		transport_icons.push("icon-train");
+	}
+	if (port.road == 1) {
+		transport_icons.push("icon-truck");
+	}
+	if (port.airport == 1) {
+		transport_icons.push("icon-plane");
+	}
+	if (port.ocean == 1) {
+		transport_icons.push("icon-anchor");
+	}
+
+	return {
+		value : name,
+		tokens : tokens,
+		id : port.id,
+		type : "port",
+		flag : port.country_code.toLowerCase(),
+		port_code : port.country_code + port.port_code,
+		transport_icons : transport_icons
+	};
+}
+
+
+
+var dropdown_datasets = [{
+	name : 'ports',
+	remote : {
+		url : site_url + "/services/search_ports/%QUERY",
+		filter : function(parsedResponse) {
+			return parsedResponse.map(transform_port_to_datum);
+		}
+	},
+	template : base_url + 'assets/templates/port_suggestion.ejs',
+	engine : ejs,
+	limit : 5
+}];
+
+
+
+
+
+
+
 $(document).ready(function(){
 	
-	// attach to origin
-	attach_autocomplete_handler ({
-		source:  site_url+"/services/ports_type_ahead",
-		page_size: 10,
-		input_id: '#origin-select',
-		callback: function(obj){
-			var html = new EJS({url: base_url+'assets/templates/admin/contract/line/help_block.ejs'}).render(obj);
-			$("#origin-select").siblings("span.help-block").children("ul").html(html);
-			$("#origin").val(obj.id);
-			update_port_hit_count (obj.id);
-		},
-		formatter: function(port) {
-			
- 			return port.name+", "+port.country_name.toLowerCase();
-		}
-		
-	});
 	
-	// attach to destination
-	attach_autocomplete_handler ({
-		source:  site_url+"/services/ports_type_ahead",
-		page_size: 10,
-		input_id: '#destination-select',
-		callback: function(obj){
-			obj.base_url = base_url;
-			var html = new EJS({url: base_url+'assets/templates/admin/contract/line/help_block.ejs'}).render(obj);
-			$("#destination-select").siblings("span.help-block").children("ul").html(html);
-			$("#destination").val(obj.id);
-			update_port_hit_count (obj.id);
-		},
-		formatter: function(port) {
- 			return port.name+", "+port.country_name.toLowerCase();
+		/**
+	 * attach autocomplete functionality to
+	 * inputs
+	 */
+	$('input#origin-select, input#destination-select')
+	.typeahead(dropdown_datasets)
+	.on('typeahead:selected', function(event, datum) {
+		//$("input#origin").data("type", datum.type).data("value", datum.id);
+		$(this).data("type", datum.type).data("value", datum.id);
+		if(datum.type == 'port'){
+			$.post(site_url+'/services/increment_port_hit_count',{port_id: datum.id});
 		}
 	});
-	
+
 	// button to toggle inputs
 	$("button.toggle-group").click(function(){
 		if($(this).data('toggle') == 'off'){

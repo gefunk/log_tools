@@ -24,6 +24,21 @@ class CustomerModel extends CI_Model
 		$this->db->insert('customers', $data);
 	}
 	
+	function get_customer_by_id($customer_id){
+		$this->db->select('c.id, c.name, c.subdomain, rc.code as currency_code');
+		$this->db->from('customers c'); 
+		$this->db->join("ref_currency_codes rc", "c.default_currency = rc.id");
+		$this->db->where("c.id", $customer_id);
+		
+		$query = $this->db->get();
+		if ($query->num_rows() > 0){
+			return $query->row();
+		}else{
+			return FALSE;
+		}
+	    	
+	}
+	
 	
 	function get_users($customer_id){
 		$this->db->select('id, first_name, last_name, email, phone_num')->from('users');
