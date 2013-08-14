@@ -33,6 +33,19 @@ class Customer extends CI_Controller {
 								  $this->input->post("subdomain"));
 		redirect('admin/customer');
 	}
+
+	public function manager($customer_id){
+			
+		$data['customer'] = $this->customermodel->get_customer_by_id($customer_id);
+		$header_data['title'] = "Manage Customer - ".$data['customer']->name;
+		$data['page'] = 'customers';
+		$this->load->view('admin/header', $header_data);
+		$this->load->view('admin/customers/manager-header', $data);
+		$this->load->view('admin/customers/manager-view', $data);
+		$this->load->view("admin/customers/manager-footer");
+		$this->load->view('admin/footer');
+	}
+
 	
 	public function users($customer_id)
 	{
@@ -42,6 +55,8 @@ class Customer extends CI_Controller {
 		$this->load->view('admin/footer');
 		
 	}
+
+
 	
 	public function upload()
 	{

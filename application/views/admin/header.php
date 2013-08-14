@@ -9,6 +9,7 @@
 		<link href="<?php echo base_url(); ?>assets/css/bootstrap/bootstrap-responsive.css" rel="stylesheet" />
 		<link href="<?php echo base_url(); ?>assets/css/global.css" rel="stylesheet" />
 		<link href="<?php echo base_url(); ?>assets/css/datepicker.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/typeaheadjs-bootstrap.css">
 		<link rel="shortcut icon" type="image/x-icon" href="<?php echo base_url(); ?>assets/img/favicon.ico" />
 		<link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/font-awesome/font-awesome.min.css">
 		<!--[if IE 7]>
