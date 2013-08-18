@@ -1,6 +1,6 @@
-<div class="row-fluid">
+<div class="row">
 	<div class="span12">
-		<?php echo form_open('admin/customer/add'); ?>
+		<?php echo form_open('admin/customer/save'); ?>
 		  <fieldset>
 		    <legend>Add Customer</legend>
 		    <label>Customer Name</label>
@@ -16,7 +16,7 @@
 			<label>Subdomain</label>
 		    <input type="text" name="subdomain" id="subdomain" placeholder="Subdomain... e.g. demo" />
 		    <span class="help-block">Subdomain for customer, their web address</span>
-		    <button type="submit" class="btn">Add</button>
+		    <button type="submit" class="btn btn-primary">Add</button>
 		  </fieldset>
 		</form>
 	</div>
