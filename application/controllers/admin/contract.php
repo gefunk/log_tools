@@ -29,6 +29,8 @@ class Contract extends MY_Admin_Controller {
 
 	public function all($customer_id)
 	{
+		//$this->output->enable_profiler(TRUE);
+		
 		$header_data['title'] = "All Contracts";
 		
 		$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
@@ -83,101 +85,70 @@ class Contract extends MY_Admin_Controller {
 	}
 	
 	
+	
+	/**
+	 * Manage ports view
+	 */
+	public function ports($contract_id)
+	{
+		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
+		$data['port_groups'] = $this->portgroupmodel->get_port_groups_for_contract($contract_id);
+		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
+		$header_data['title'] = "Manage Ports";
+		// pass javascript to footer
+		#$footer_data["scripts"] = array("admin/contract/ports.js");
+		$data['page'] = 'contracts';
+		$this->load->view('admin/header', $header_data);
+		$this->load->view("admin/customers/manager-header", $data);
+		$this->load->view('admin/contract/ports', $data);
+		$this->load->view("admin/customers/manager-footer");
+		$this->load->view('admin/footer', $footer_data);
+		
+	}
+	
+	public function document($contract_id)
+	{
+		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
+		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
+		$data['page'] = 'contracts';
+		$header_data['title'] = "Manage Documents";
+		// pass javascript to footer
+		$footer_data["scripts"] = array("admin/contract/ports.js");
+		
+		$this->load->view('admin/header', $header_data);
+		$this->load->view("admin/customers/manager-header", $data);
+		$this->load->view('admin/contract/document', $data);
+		$this->load->view("admin/customers/manager-footer");
+		$this->load->view('admin/footer', $footer_data);
+		
+	}
+
+	
 
 
 	/**
 	* add a new contract into the system
 	* accessible via /admin/contract/add
 	*/
-	public function addnew($customer_id)
+	public function save($customer_id)
 	{
-		//$this->output->enable_profiler(TRUE);
-		// page level data
-		$header_data['title'] = "View Contracts";
-		// pass javascript to footer
-		$footer_data["scripts"] = array("admin/contract/view.js");
-		// load data from database
-		$data["customer_id"] = $customer_id;
-		$data["carriers"] = $this->referencemodel->get_carriers();
-		$data['customers'] = $this->customermodel->get_customers();
-
-
-		// code igniter framework - validation rules
-		$this->form_validation->set_rules('contract_number', 'Contract Number', 'required');
-		$this->form_validation->set_rules('start_date', 'Start Date', 'required');
-		$this->form_validation->set_rules('end_date', 'End Date', 'required');
-
-		// validate
-		if ($this->form_validation->run() == FALSE){
-			$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
-			// load view
-			$this->load->view('admin/header', $header_data);
-			$this->load->view('admin/contract/view', $data);
-			$this->load->view('admin/footer', $footer_data);
-		}else{
-			//retrieve post variables
-			$customer = $customer_id;
-			$carrier = $this->input->post('carrier');
-			$contract_number = $this->input->post('contract_number');
-			$start_date = $this->input->post('start_date');
-			$end_date = $this->input->post('end_date');
-
-			$attachment_prefix = $this->contracts->get_remote_url_for_asset($customer_id, $contract_id);
-			$attachment_id = NULL;
-			if(isset($_FILES) && !empty($_FILES) && !empty($_FILES["contract-file"])){
-				// get an attachment id
-				$attachment_id = $this->attachmentmodel->get_next_attachment_id("contract");
-				// loop through files
-				for($i=0; $i<count($_FILES['contract-file']); $i++){
-					if(isset($_FILES['contract-file']['name'][$i]) &&
-						$_FILES['contract-file']['error'][$i] == UPLOAD_ERR_OK)
-					{
-						// get file info for each file
-						$name = $_FILES['contract-file']['name'][$i];
-						$content_type = $_FILES['contract-file']['type'][$i];
-						$temp_path = $_FILES['contract-file']['tmp_name'][$i];
-						$remote_path = $attachment_prefix.$name;
-						$response = $this->assetstorage->upload_asset($temp_path, $remote_path);
-						// add asset to db, if it was succesfully uploaded
-						if($response["success"]){
-							$this->attachmentmodel->add_attachment_for_id(
-								$attachment_id,
-								$remote_path,
-								$content_type,
-								(($response["local"]) ? 0 : 1)
-							);
-						}
-					}
-
-				}
-			}
-
-
+		//retrieve post variables
+		$customer = $customer_id;
+		$carrier = $this->input->post('carrier');
+		$contract_number = $this->input->post('contract_number');
+		$start_date = $this->input->post('start_date');
+		$end_date = $this->input->post('end_date');
 			// add contract to database
-			$this->contractmodel->add_contract(
-									$contract_number,
-									$this->get_sql_date($start_date),
-									$this->get_sql_date($end_date),
-									$customer,
-									$carrier,
-									$attachment_id,
-									$attachment_prefix
-								);
-
-
-
-			// retrieve contract
-			$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
-			// reload the view with success message;
-			$message['type'] = "success";
-			$message["body"] = "Added Contract Successfully!";
-			$header_data["messages"] = array($message);
-			$this->load->view('admin/header', $header_data);
-			$this->load->view('admin/contract/view', $data);
-			$this->load->view('admin/footer', $footer_data);
-
-
-		}
+		$this->contractmodel->
+				add_contract(
+					$contract_number,
+					$this->get_sql_date($start_date),
+					$this->get_sql_date($end_date),
+					$customer,
+					$carrier
+				);
+			
+		redirect("admin/contract/all/".$customer_id);
 
 	}
 
@@ -309,7 +280,9 @@ class Contract extends MY_Admin_Controller {
 		$port_id = $this->input->post("port_id");
 		$group_id = $this->input->post('group_id');
 		
-		$this->portgroupmodel->add_port_to_group($port_id, $group_id);
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($this->portgroupmodel->add_port_to_group($port_id, $group_id)));
 	}
 
 	public function delete_port_from_group()
@@ -317,19 +290,6 @@ class Contract extends MY_Admin_Controller {
 		$port_id = $this->input->post("port_id");
 		$group_id = $this->input->post('group_id');
 		$this->portgroupmodel->remove_port_from_group($port_id, $group_id);
-	}
-
-	public function ports($contract_number)
-	{
-		$result = $this->contractmodel->get_contract_from_number($contract_number);
-		$data['port_groups'] = $this->portgroupmodel->get_port_groups_for_contract($result->contract_id);
-		$data['contract_id'] = $result->contract_id;
-		$header_data['title'] = "Manage Ports";
-		// pass javascript to footer
-		$footer_data["scripts"] = array("custom-selectors/custom.source.js", "admin/contract/ports.js");
-		$this->load->view('admin/header', $header_data);
-		$this->load->view('admin/contract/ports', $data);
-		$this->load->view('admin/footer', $footer_data);
 	}
 
 
@@ -555,6 +515,19 @@ class Contract extends MY_Admin_Controller {
 	public function testmongo(){
 		$this->output->enable_profiler(TRUE);
 		var_dump( $this->mongo_db->get("bios"));
+	}
+	
+	public function testmongoinsert(){
+		$this->output->enable_profiler(TRUE);
+		var_dump($this->mongo_db
+				->where("_id", 9)
+				->push("contracts", array("_id" => 30))
+				->update("customers"));
+	}
+	
+	public function testgetcustomerfromcontract($contract_id){
+		$this->output->enable_profiler(TRUE);
+		var_dump($this->customermodel->get_customer_from_contract($contract_id));
 	}
 
     public function testemail()

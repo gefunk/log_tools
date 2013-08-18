@@ -1,3 +1,27 @@
+
+
+
+
+var dropdown_datasets = [{
+	name : 'ports',
+	header : '<h5>UN Port</h5>',
+	remote : {
+		url : site_url + "/services/search_ports/%QUERY",
+		filter : function(parsedResponse) {
+			return parsedResponse.map(transform_port_to_datum);
+		}
+	},
+	template : base_url + 'assets/templates/port_suggestion.ejs',
+	engine : ejs,
+	limit : 5
+}];
+
+
+
+
+
+
+
 $(document).ready(function(){
 	
 	// load ports
@@ -36,7 +60,6 @@ $(document).ready(function(){
 				for(var i in data.results){
 					var port = data.results[i];
 					html += new EJS({url: base_url+'assets/templates/admin/contract/port-admin-li.ejs'}).render(port);
-					
 				}
 				$("ul#ports-list").html(html);
 			} 
@@ -44,35 +67,25 @@ $(document).ready(function(){
 	});
 	
 	
-	// attach to port - input
-	attach_autocomplete_handler ({
-		source:  site_url+"/services/ports_type_ahead",
-		page_size: 10,
-		input_id: '#port-input',
-		callback: function(obj){
-			$.post(
-				site_url+"/admin/contract/save_new_port_to_group",
-				{
-					port_id: obj.id,
-					group_id: $("#port-groups").val()
-				} 
-			);
-			var html = new EJS({url: base_url+'assets/templates/admin/contract/port-admin-li.ejs'}).render(obj);
-			$("ul#ports-list").append(html);
-			update_port_hit_count (obj.id);
-			$("#port-input").focus().select();
-		},
-		formatter: function(port) {
-			var port_name = port.name;
-			if(port.state)
-				port_name += ", "+port.state;
-			port_name += ", "+port.country_code;
-			return port_name;
- 			
+	$('input#port-input').typeahead(dropdown_datasets).on('typeahead:selected', function(event, datum) {
+		//$("input#origin").data("type", datum.type).data("value", datum.id);
+		$(this).data("type", datum.type).data("value", datum.id);
+		if(datum.type == 'port'){
+			$.post(site_url+'/services/increment_port_hit_count',{port_id: datum.id});
 		}
-		
 	});
 	
+	$("button#add-port-to-group").click(function(){
+		var port_id = $("input#port-input").data("value");
+		if(port_id != null && port_id.length > 0){
+			$.post(site_url+"/admin/contract/save_new_port_to_group", {port_id: port_id, group_id: $("#port-groups").val()})
+			.done(function(data){
+				console.log(data[0]);
+				var html = new EJS({url: base_url+'assets/templates/admin/contract/port-admin-li.ejs'}).render(data[0]);
+				$("ul#ports-list").append(html);
+			});
+		}
+	});
 	
 	
 	// handle delete 
