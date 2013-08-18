@@ -22,6 +22,9 @@ class CustomerModel extends CI_Model
 	function add($customer_name, $currency_code, $subdomain){
 		$data = array('name' => $customer_name, 'default_currency' => $currency_code, 'subdomain' => $subdomain);
 		$this->db->insert('customers', $data);
+		$customer_id = $this->db->insert_id();
+		// create a new customer id in mongodb
+		$this->mongo_db->insert("customers", array("_id" => $customer_id, "contracts" => array()));
 	}
 	
 	function get_customer_by_id($customer_id){
@@ -39,6 +42,28 @@ class CustomerModel extends CI_Model
 	    	
 	}
 	
+	function get_customer_from_contract($contract_id){
+		$this->db->select("customer")->from("contracts")->where("id", $contract_id);
+		
+		$query = $this->db->get();
+		if ($query->num_rows() > 0){
+			$customer_id = $query->row()->customer;
+			$this->db->select('c.id, c.name, c.subdomain, rc.code as currency_code');
+			$this->db->from('customers c');
+			$this->db->join("ref_currency_codes rc", "c.default_currency = rc.id");
+			$this->db->where("c.id", $customer_id);
+		
+			$query = $this->db->get();
+			if ($query->num_rows() > 0){
+				return $query->row();
+			}else{
+				return FALSE;
+			}
+		}else{
+			return FALSE;
+		}
+		
+	}
 	
 	function get_users($customer_id){
 		$this->db->select('id, first_name, last_name, email, phone_num')->from('users');

@@ -17,20 +17,26 @@ class ContractModel extends CI_Model
 				$start_date, 
 				$end_date,
 				$customer,
-				$carrier,
-				$attachment,
-				$attachment_prefix)
+				$carrier)
 	{
 		$data = array(
 			'start_date' => $start_date, 
 			'end_date' => $end_date,
 			'number' => $contract_number,
 			'customer' => $customer,
-			'carrier' => $carrier,
-			'attachment' => $attachment,
-			'attachment_prefix' => $attachment_prefix);
+			'carrier' => $carrier
+			);
 		$this->db->insert('contracts', $data);
+		$contract_id = $this->db->insert_id();
+		
+		// remove from cache
 		$this->cache->delete('get_contracts_for_customer-'.$customer);
+		// add contract to mongo db
+		return $this->mongo_db
+				->where("_id", intval($customer))
+				->push("contracts", array("_id" => $contract_id))
+				->update("customers");
+		
 	}
 	
 	/**
@@ -97,7 +103,6 @@ class ContractModel extends CI_Model
 			$this->db->join('ref_carriers rcarriers', 'rcarriers.id = c.carrier');
 			$this->db->where("c.customer", $customer_id);
 			$this->db->where("c.deleted", "0");
-			$this->db->limit(1);		
 			$query = $this->db->get();
 			$result = $query->result();
 			$this->cache->save($key, $result, WEEK_IN_SECONDS);
