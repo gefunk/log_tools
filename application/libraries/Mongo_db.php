@@ -8,7 +8,7 @@
  * @copyright 2012 Alex Bilbie.
  * @license   MIT License http://www.opensource.org/licenses/mit-license.php
  * @version   Release: 2.0
- * @link      https://github.com/alexbilbie/codeigniter-mongodb-library
+ * @link      https://github.com/alexbilbie/codeigniter-mongodb-library/tree/v2
  */
 class Mongo_db
 {

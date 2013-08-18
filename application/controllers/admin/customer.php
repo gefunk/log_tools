@@ -27,7 +27,16 @@ class Customer extends CI_Controller {
 	*/
 	public function add()
 	{
-		$this->output->enable_profiler(TRUE);
+		//$this->output->enable_profiler(TRUE);
+		$data['customers'] = $this->customermodel->get_customers();
+		$data['currency_codes'] = $this->referencemodel->get_currency_codes(FALSE);
+		$header_data['title'] = "Add New Customer";
+		$this->load->view('admin/header', $header_data);
+		$this->load->view('admin/customers/add', $data);
+		$this->load->view('admin/footer');	
+	}
+	
+	public function save(){
 		$this->customermodel->add($this->input->post("customer_name"),
 								  $this->input->post("currency_code"),
 								  $this->input->post("subdomain"));

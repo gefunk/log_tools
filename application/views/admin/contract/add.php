@@ -2,7 +2,7 @@
 	<div class="span10">
 		<?php echo validation_errors(); ?>
 
-		<?php echo form_open('admin/contract/add'); ?>
+		<?php echo form_open('admin/contract/save/'.$customer_id); ?>
 		  <fieldset>
 		    <legend>New Contract</legend>
 		    

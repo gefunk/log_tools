@@ -4,7 +4,7 @@
 	<li class="active">New</li>
 </ul>  
 
-		<?php echo form_open_multipart('admin/contract/add/'.$customer->id); ?>
+		<?php echo form_open('admin/contract/save/'.$customer->id); ?>
 		  <fieldset>
 		    <legend>Add a New Contract</legend>
 		    <label>Carrier</label>

@@ -19,7 +19,7 @@
 			<?php endforeach; ?>
 		</table>
 		
-		<button class="btn btn-primary">New Customer</button>
+		<a href="<?php echo site_url().'/admin/customer/add'; ?>" class="btn btn-primary">New Customer</a>
 	</div>
 	
 </div>
