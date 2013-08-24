@@ -48,7 +48,7 @@ class CustomerModel extends CI_Model
 		$query = $this->db->get();
 		if ($query->num_rows() > 0){
 			$customer_id = $query->row()->customer;
-			$this->db->select('c.id, c.name, c.subdomain, rc.code as currency_code');
+			$this->db->select('c.id, c.name, c.subdomain, c.default_currency, rc.code as currency_code');
 			$this->db->from('customers c');
 			$this->db->join("ref_currency_codes rc", "c.default_currency = rc.id");
 			$this->db->where("c.id", $customer_id);
