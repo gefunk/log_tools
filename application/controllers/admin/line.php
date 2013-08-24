@@ -20,7 +20,25 @@ class Line extends CI_Controller {
 	}
 
 
-	public function add($contract_number)
+
+	public function add($contract_id){
+		
+		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
+		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
+		$data['page'] = 'contracts';
+		$header_data['title'] = "Line Items";
+		// pass javascript to footer
+		//$footer_data["scripts"] = array("admin/contract/ports.js");
+		
+		$this->load->view('admin/header', $header_data);
+		$this->load->view("admin/customers/manager-header", $data);
+		$this->load->view('admin/contract/document', $data);
+		$this->load->view("admin/customers/manager-footer");
+		$this->load->view('admin/footer');
+		
+	}
+
+	public function addold($contract_number)
 	{
 		//$this->output->enable_profiler(TRUE);
 		$result = $this->contractmodel->get_contract_from_number($contract_number);
@@ -95,9 +113,20 @@ class Line extends CI_Controller {
 
 	public function all($contract_id)
 	{
-		$line_items = $this->lineitemmodel->get_line_items_for_contract($contract_id);
+		//$line_items = $this->lineitemmodel->get_line_items_for_contract($contract_id);
 		
+		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
+		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
+		$data['page'] = 'contracts';
+		$header_data['title'] = "Line Items";
+		// pass javascript to footer
+		//$footer_data["scripts"] = array("admin/contract/ports.js");
 		
+		$this->load->view('admin/header', $header_data);
+		$this->load->view("admin/customers/manager-header", $data);
+		$this->load->view('admin/contract/line/manage', $data);
+		$this->load->view("admin/customers/manager-footer");
+		$this->load->view('admin/footer');
 		
 	}
 	
