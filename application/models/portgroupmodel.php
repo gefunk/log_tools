@@ -116,6 +116,19 @@ class PortGroupModel extends CI_Model
 		return $data;
 	}
 	
+	
+	function typeahead_port_groups($contract_id, $query){
+		$data = NULL;
+		$key = "typeahead_port_groups-".$query;
+		if(! $data = $this->cache->get($key)){
+			$this->db->select("id, name")->from("contract_entry_port_group_name")->where('contract', $contract_id)->like('name', $query);					
+			$query = $this->db->get();
+			$data = $query->result_array();
+			$this->cache->save($key, $data, WEEK_IN_SECONDS);
+			
+		}
+		return $data;
+	}
 
 }
 

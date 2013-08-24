@@ -141,6 +141,25 @@ class Services extends CI_Controller {
 		
 	}
 	
+	
+	/**
+	 * PORT GROUP SECTION
+	 */
+	public function search_port_groups($contract_id, $query, $test=FALSE){
+		$content_type = 'application/json';
+		if($test){
+			$this->output->enable_profiler(TRUE);
+			$content_type = 'text/html';
+		}
+		$groups = $this->portgroupmodel->typeahead_port_groups($contract_id, urldecode($query));
+		$this->output
+		    ->set_content_type($content_type)
+		    ->set_output(json_encode($groups));	
+	}
+	
+	
+	 
+	
 	public function get_port_groups($contract_id)
 	{
 		$result = $this->portgroupmodel->get_port_groups_for_contract($contract_id);
