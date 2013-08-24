@@ -20,4 +20,5 @@ class Cache extends MY_Admin_Controller {
 		$this->cache->clean();
 	}
 	
+	
 }

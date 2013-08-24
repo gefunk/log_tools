@@ -31,7 +31,7 @@ $(document).ready(function() {
 	 * attach autocomplete functionality to
 	 * inputs
 	 */
-	$('input#origin, input#destination').typeahead(dropdown_datasets).on('typeahead:selected', function(event, datum) {
+	$('#origin, #destination').typeahead(dropdown_datasets).on('typeahead:selected', function(event, datum) {
 		//$("input#origin").data("type", datum.type).data("value", datum.id);
 		$(this).data("type", datum.type).data("value", datum.id);
 		if(datum.type == 'port'){

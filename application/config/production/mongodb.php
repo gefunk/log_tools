@@ -16,13 +16,6 @@
  * ['mongo_host_db_flag']   If running in auth mode and the user does not have global read/write then set this to true
  */
 
-$config['default']['mongo_hostbase'] = 'mongo.amfitir.com:27017';
-$config['default']['mongo_database'] = 'ratemgt';
-$config['default']['mongo_username'] = '';
-$config['default']['mongo_password'] = '';
-$config['default']['mongo_persist']  = FALSE;
-$config['default']['mongo_persist_key']	 = 'ci_persist';
-$config['default']['mongo_replica_set']  = FALSE;
-$config['default']['mongo_query_safety'] = 'safe';
-$config['default']['mongo_suppress_connect_error'] = TRUE;
-$config['default']['mongo_host_db_flag']   = FALSE;
+ 
+$config['mongo_server'] = "mongo.amfitir.com:27017";
+$config['mongo_dbname'] = 'ratemgt';
