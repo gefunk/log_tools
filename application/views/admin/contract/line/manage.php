@@ -4,10 +4,31 @@
 	<li class="active">Line Items</li>
 </ul>  
 
-<table class="table table-bordered">
-	<tr>
-		<th>Origin</th>
-		<th>Destination</th>
+
+		<div>
+			Origin
+			<input id="origin" />
+		</div>
+
+		<div>
+			Destination
+			<input id="destination" />
+		</div>
+		<?php foreach($containers as $container): ?>
+		<div>
+			<?php echo $container['text'] ?>
+			<select>
+				<?php foreach($currencies as $currency): ?>
+				<option 
+					value="<?php echo $currency->id ?>" 
+					<?php if($customer->default_currency == $currency->id) { echo 'SELECTED="true"'; } ?>>
+					<?php echo $currency->code; ?>
+				</option>
+				<?php endforeach; ?>
+			</select>
+			<input class="container-value" type="text" data-container-type='<?php echo $container['type'] ?>' />
+		</div>
+		<?php endforeach; ?>
 		
-	</tr>
+		
 </table>

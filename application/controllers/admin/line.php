@@ -117,6 +117,8 @@ class Line extends CI_Controller {
 		
 		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
 		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
+		$data['containers'] = $this->containermodel->get_containers_for_contract($contract_id);
+		$data['currencies'] = $this->referencemodel->get_currency_codes();
 		$data['page'] = 'contracts';
 		$header_data['title'] = "Line Items";
 		// pass javascript to footer
