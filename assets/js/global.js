@@ -243,5 +243,10 @@ function transform_city_to_datum(city) {
 	};
 }
 
+function transform_port_group_to_datum(port_group){
+	var tokens = new Array();
+	tokens.push(port_group.name);
+	return {id: port_group.id, value: port_group.name, tokens: tokens, type:"port_group"};
+}
 
 
