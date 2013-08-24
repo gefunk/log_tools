@@ -32,3 +32,7 @@
 		
 		
 </table>
+
+<script language="javascript">
+	var contract_id = <?php echo $contract->id; ?>;
+</script>

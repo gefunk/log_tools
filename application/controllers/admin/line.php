@@ -121,14 +121,15 @@ class Line extends CI_Controller {
 		$data['currencies'] = $this->referencemodel->get_currency_codes();
 		$data['page'] = 'contracts';
 		$header_data['title'] = "Line Items";
+		$header_data['page_css'] = array('lib/famfamflag.css');
 		// pass javascript to footer
-		//$footer_data["scripts"] = array("admin/contract/ports.js");
+		$footer_data["scripts"] = array("admin/contract/line/all.js");
 		
 		$this->load->view('admin/header', $header_data);
 		$this->load->view("admin/customers/manager-header", $data);
 		$this->load->view('admin/contract/line/manage', $data);
 		$this->load->view("admin/customers/manager-footer");
-		$this->load->view('admin/footer');
+		$this->load->view('admin/footer', $footer_data);
 		
 	}
 	
