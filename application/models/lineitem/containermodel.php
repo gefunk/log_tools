@@ -11,6 +11,13 @@ class ContainerModel extends CI_Model {
     }
 
 
+	function get_ref_container_types(){
+		$this->db->select("id, description")->from("ref_container_types");
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+
 	/**
 	* Add a line container to a line item, save it to the DB
 	* @param $linecontainer the line container object to add to the db
@@ -51,6 +58,38 @@ class ContainerModel extends CI_Model {
         return $container;
     }
 
+
+	function add_container_to_contract($contract_id, $rational_container_id, $container_name){
+		 // add container to mongo
+		$query = array("_id"=>intval($contract_id));
+		$update = array('$push' => array("containers" => array("type"=> $rational_container_id, "text" => $container_name)));
+		return $this->mongo->db->contracts->update($query, $update);
+	}
+	
+	function get_containers_for_contract($contract_id){
+		$query = array("_id"=>intval($contract_id));
+		$projection =  array("_id"=>FALSE, "containers"=>TRUE);
+		$doc = $this->mongo->db->contracts->findOne($query, $projection);
+		if(isset($doc) && isset($doc['containers'])){
+			foreach($doc['containers'] as &$container){
+				$this->db->select('description')->from('ref_container_types')->where('id', $container['type']);
+				$dbquery = $this->db->get();
+				if ($dbquery->num_rows() > 0)
+					$container['type_text'] = $dbquery->row()->description;
+			}
+			return $doc['containers'];
+		}else{
+			return NULL;
+		}
+	}
+	
+	function remove_container_from_contract($contract_id, $rational_container_id){
+		//db.contracts.update( { "_id": 28 }, { $pull: { "containers": {"type":"1"} } } )
+		$query = array("_id"=>intval($contract_id));
+		$update = array('$pull' => array("containers" => array("type"=> $rational_container_id)));
+		$this->mongo->db->contracts->update($query, $update);
+	}
+	
     /**
      * delete one container entry
      * @param $line_container_id the container id to remove from the line item

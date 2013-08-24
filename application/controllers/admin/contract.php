@@ -13,6 +13,7 @@ class Contract extends MY_Admin_Controller {
 
 		$this->load->model("contractmodel");
 		$this->load->model('customermodel');
+		$this->load->model('lineitem/containermodel');
 		$this->load->model("admin/currencycodes");
 		$this->load->model("referencemodel");
 		$this->load->model("lanemodel");
@@ -68,13 +69,14 @@ class Contract extends MY_Admin_Controller {
 	 * Add contract view
 	 */
 	public function add($customer_id){
-		$header_data['title'] = "All Contracts";
+		
 		
 		$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
 		$data["customer"] =  $this->customermodel->get_customer_by_id($customer_id);
 		$data["carriers"] = $this->referencemodel->get_carriers();
 		$data['page'] = 'contracts';
 		
+		$header_data['title'] = "All Contracts";
 		$footer_data["scripts"] = array("admin/contract/view.js", "admin/contract/upload.js");
 
 		$this->load->view('admin/header', $header_data);
@@ -102,7 +104,7 @@ class Contract extends MY_Admin_Controller {
 		$this->load->view("admin/customers/manager-header", $data);
 		$this->load->view('admin/contract/ports', $data);
 		$this->load->view("admin/customers/manager-footer");
-		$this->load->view('admin/footer', $footer_data);
+		$this->load->view('admin/footer');
 		
 	}
 	
@@ -123,8 +125,40 @@ class Contract extends MY_Admin_Controller {
 		
 	}
 
-	
+	public function containers($contract_id){
+		//$this->output->enable_profiler(TRUE);
+		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
+		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
+		$data['container_types'] = $this->containermodel->get_ref_container_types();
+		$data['containers'] = $this->containermodel->get_containers_for_contract($contract_id);
+		$data['page'] = 'contracts';
+		$header_data['title'] = "Manage Containers";
+		// pass javascript to footer
+		$footer_data["scripts"] = array("admin/contract/container.js");
+		
+		$this->load->view('admin/header', $header_data);
+		$this->load->view("admin/customers/manager-header", $data);
+		$this->load->view('admin/contract/containers', $data);
+		$this->load->view("admin/customers/manager-footer");
+		$this->load->view('admin/footer', $footer_data);
+	}
 
+	
+	public function add_container(){
+		$contract= $this->input->post('contract_id');
+		$text = $this->input->post('text');
+		$type =$this->input->post('type');
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output( json_encode($this->containermodel->add_container_to_contract($contract, $type, $text)));
+	}
+	
+	public function delete_container(){
+		$contract_id= $this->input->post('contract_id');
+		$rational_container_id =$this->input->post('type');
+		$this->containermodel->remove_container_from_contract($contract_id, $rational_container_id);
+	}
+	
 
 	/**
 	* add a new contract into the system
@@ -514,7 +548,8 @@ class Contract extends MY_Admin_Controller {
 	 */
 	public function testmongo(){
 		$this->output->enable_profiler(TRUE);
-		var_dump( $this->mongo_db->get("bios"));
+		$doc = $this->mongo->db->contracts->findOne(array("_id"=>39), array("_id"=>FALSE, "containers"=>TRUE));
+		var_dump( $doc['containers'] );
 	}
 	
 	public function testmongoinsert(){
@@ -523,6 +558,15 @@ class Contract extends MY_Admin_Controller {
 				->where("_id", 9)
 				->push("contracts", array("_id" => 30))
 				->update("customers"));
+	}
+	
+	public function testaddcontainer_to_contract($contract_id, $rational_container_id, $container_name){
+		$this->output->enable_profiler(TRUE);
+		$query = array("_id"=>intval($contract_id));
+		$update = array('$push' => array("containers" => array("type"=> $rational_container_id, "text" => $container_name)));
+		echo $contract_id. " Type: ".gettype($contract_id);
+		//var_dump($this->mongo->db->contracts->findOne($query));
+		var_dump($this->mongo->db->contracts->update($query, $update));
 	}
 	
 	public function testgetcustomerfromcontract($contract_id){
