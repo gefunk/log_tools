@@ -24,7 +24,7 @@ class CustomerModel extends CI_Model
 		$this->db->insert('customers', $data);
 		$customer_id = $this->db->insert_id();
 		// create a new customer id in mongodb
-		$this->mongo_db->insert("customers", array("_id" => $customer_id, "contracts" => array()));
+		$this->mongo->db->customers->insert(array("_id" => $customer_id));
 	}
 	
 	function get_customer_by_id($customer_id){
