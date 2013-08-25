@@ -14,7 +14,6 @@
 
   <label>Port Group</label>
   <select id="port-groups">
-  	<option value="0" selected="true">----</option>
   </select>
 
 	<ul id="ports-list">

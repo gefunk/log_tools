@@ -32,11 +32,9 @@ class ContractModel extends CI_Model
 		// remove from cache
 		$this->cache->delete('get_contracts_for_customer-'.$customer);
 		// add contract to mongo db
-		return $this->mongo_db
-				->where("_id", intval($customer))
-				->push("contracts", array("_id" => $contract_id))
-				->update("customers");
-		
+		$contract_data = array("_id" => $contract_id, "customer" => intval($customer));
+		// add new contract document
+		return $this->mongo->db->contracts->insert($contract_data);
 	}
 	
 	/**

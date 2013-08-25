@@ -97,14 +97,15 @@ class Contract extends MY_Admin_Controller {
 		$data['port_groups'] = $this->portgroupmodel->get_port_groups_for_contract($contract_id);
 		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
 		$header_data['title'] = "Manage Ports";
+		$header_data['page_css'] = array('lib/famfamflag.css', "admin/contract/port_groups.css");
 		// pass javascript to footer
-		#$footer_data["scripts"] = array("admin/contract/ports.js");
+		$footer_data["scripts"] = array("admin/contract/ports.js");
 		$data['page'] = 'contracts';
 		$this->load->view('admin/header', $header_data);
 		$this->load->view("admin/customers/manager-header", $data);
 		$this->load->view('admin/contract/ports', $data);
 		$this->load->view("admin/customers/manager-footer");
-		$this->load->view('admin/footer');
+		$this->load->view('admin/footer', $footer_data);
 		
 	}
 	
@@ -133,6 +134,7 @@ class Contract extends MY_Admin_Controller {
 		$data['containers'] = $this->containermodel->get_containers_for_contract($contract_id);
 		$data['page'] = 'contracts';
 		$header_data['title'] = "Manage Containers";
+		
 		// pass javascript to footer
 		$footer_data["scripts"] = array("admin/contract/container.js");
 		
