@@ -6,12 +6,12 @@
 
 
 		<div>
-			Origin
+			Origin:
 			<input id="origin" />
 		</div>
 
 		<div>
-			Destination
+			Destination:
 			<input id="destination" />
 		</div>
 		<?php foreach($containers as $container): ?>
@@ -29,6 +29,37 @@
 			<input class="container-value" type="text" data-container-type='<?php echo $container['type'] ?>' />
 		</div>
 		<?php endforeach; ?>
+		<div>
+			Cargo:
+			<select id="cargo_type">
+			<?php foreach($cargo_types as $type): ?>
+				<option value="<?php echo $type ?>"><?php echo $type ?></option>
+			<?php endforeach; ?>
+			</select>	
+		</div>
+		
+		<div>
+			Effective:<input type="text" id="effective" value="<?php echo $effective_date ?>" />
+			Ends:<input type="text" id="enddate" value="<?php echo $expires_date ?>" />
+		</div>
+		
+		
+		<div>
+			<button id="refresh-line-products" class="btn">Refresh Products</button>
+		</div>
+		<div id="results">
+			<table id="line-item-products" class="table table-condensed">
+				<tr>
+					<th>Origin</th>
+					<th>Destination</th>
+					<th>Container</th>
+					<th>Value</th>
+					<th></th>
+				</tr>
+			</table> 
+			<button id="save" class="btn btn-primary">Save</button> 
+		</div>
+		
 		
 		
 </table>

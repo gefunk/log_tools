@@ -12,4 +12,15 @@ class MY_Admin_Controller extends CI_Controller {
 		}	
 	}
 	
+	/**
+	* UTILITIES
+	* convert bootstrap date to SQL date 
+	*/
+	function get_sql_date($date)
+	{
+		$format = "m/j/Y";
+		$sql_date = date_parse_from_format ( $format , $date );
+		return $sql_date['year']."-".$sql_date['month']."-".$sql_date['day'];
+
+	}
 }

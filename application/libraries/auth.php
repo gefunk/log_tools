@@ -43,6 +43,7 @@ class Auth
 	{
 		$login_hash = $this->session->userdata("amfitir_loggedin");
 		$customer_id = $this->session->userdata("customer_id");
+		log_message("debug", "Checking logged in hash: ".$login_hash." Customer ID: ".$customer_id);
 		/**
 		 * if the logged in session 
 		 * or the cookie are set then try to look up
@@ -62,6 +63,7 @@ class Auth
 			if($customer_id !== FALSE)
 				$this->session->set_userdata('customer_id', $customer_id);
 		}
+		
 				
 		/*
 		* check if this login hash is valid for this customer
@@ -72,6 +74,18 @@ class Auth
 			}else{
 				// this user doesn't match for the customer, log them out
 				$this->logout();
+			}
+		}else{
+			/**
+		 	* Haven't been able to restore from cookie 
+		 	*
+		 	* check if an admin is trying to access
+		 	* we want to allow admin's to view any customer
+		 	*/
+			$login_hash = $this->session->userdata("amfitir_admin");
+			// user is an admin
+			if($this->usermodel->is_admin_valid_for_login_hash($login_hash)){
+				return TRUE;
 			}
 		}
 		return FALSE;
@@ -123,7 +137,7 @@ class Auth
 	*/
 	public function login($identity, $password, $remember, $customer_id)
 	{
-		log_message("debug", "Passed into Auth: ".$identity." Password: ".$password);
+		log_message("debug", "Passed into Auth: ".$identity." Password: ".$password." Customer ID: ".$customer_id);
 		$login_hash = $this->usermodel->check_login($identity, $password, $customer_id);
 		log_message('debug', 'REMEMBER: '.$remember);
 		$login_result = !empty($login_hash);

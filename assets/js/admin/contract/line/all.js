@@ -38,4 +38,40 @@ $(document).ready(function(){
 			$.post(site_url+'/services/increment_port_hit_count',{port_id: datum.id});
 		}
 	});
+	
+	
+	$("#save").click(function(){
+		var data = {
+			origin: $("#origin").data('value'),
+			origin_type: $("#origin").data('type'),
+			destination: $("#destination").data('value'),
+			destination_type: $("#destination").data('type'),
+			cargo: $("#cargo_type").val(),
+			effective_date: $("#effective").val(),
+			expires: $("#enddate").val(),
+			contract_id: contract_id
+		};
+		
+		var containers = new Array();
+		$("input.container-value").each(function(){
+			if($(this).val() != ''){
+				var container = 
+				{
+					type: $(this).data('container-type'),
+					value: $(this).val(),
+					currency: $(this).siblings("select").val()
+				};
+				containers.push(container);
+			}
+			
+		});
+			
+		data['containers'] = containers;
+		data['items'] = LineItemCalculator.product;
+		//console.log("Data", data, "Line Items:", LineItemCalculator.product);
+		
+		$.post(site_url+"/admin/line/save", data).done(function(){
+			console.log("Complete");
+		});	
+	});
 });
