@@ -17,28 +17,30 @@ class Lineitemmodel extends CI_Model
 	* @param $lineitem the line item object to insert
     * @param $log set this to FALSE if you don't want to add a line in the log, used when updating
 	*/
-	public function add_line_item($lineitem, $log=TRUE)
+	public function add_line_item(
+							$origin, 
+							$origin_type, 
+							$destination, 
+							$destination_type,
+							$effective,
+							$expires,
+							$containers,
+							$contract,
+							$cargo)
 	{
-		$data = array(
-			"origin" => $lineitem->origin,
-			"origin_type" => $lineitem->origin_type,
-			"destination" => $lineitem->destination,
-			"destination_type" => $lineitem->destination_type,
-			"cargo" => $lineitem->cargo,
-			"effective" => $lineitem->effective,
-			"expires" => $lineitem->expires,
-			"currency" => $lineitem->currency,
-			"service" => $lineitem->service,
-			"contract" => $lineitem->contract
-		);
 		
-		$this->db->insert('line_items', $data);
-        $line_item_id = $this->db->insert_id();
+		$line_item = array(
+			'origin' => array("id" => $origin, "type" => $origin_type),
+			'destination' => array("id" => $destination, "type" => $destination_type),
+			'effective' => new MongoDate($effective),
+			'expires' => new MongoDate($expires),
+			'contract' => $contract,
+			'containers' => $containers,
+			'cargo' => $cargo
+		);
+		$this->mongo->db->lineitems->insert($line_item);
         
-        if($log)
-		  $this->amfitirlog->log_new_contract_line_item($line_item_id);
-        
-		return $line_item_id;
+		return $line_item["_id"];
 	}
     
     
