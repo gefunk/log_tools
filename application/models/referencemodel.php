@@ -265,7 +265,6 @@ class ReferenceModel extends CI_Model
 	
 	
 	
-	
 	/*
 	* list of transport types:
 	* container yard, rail, truck

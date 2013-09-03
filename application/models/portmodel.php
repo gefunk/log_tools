@@ -63,5 +63,23 @@ class PortModel extends CI_Model
 		}
 	}
 	
+	
+	/**
+	 * get all the info for a specific port
+	 */
+	function get_port_information($port_id) {
+		$this -> db -> select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
+		$this -> db -> from('ref_ports rp');
+		$this -> db -> join('ref_country_codes rcc', 'rcc.code = rp.country_code');
+		$this -> db -> join('ref_us_can_region_codes ruscrc', 'ruscrc.iso_region = rp.state_code', 'left');
+		$this -> db -> where("rp.id", $port_id);
+		$query = $this->db->get();
+		if ($query->num_rows() > 0)
+		{
+			return $query->row();
+		}else{
+			return NULL;
+		}
+	}
 
 }

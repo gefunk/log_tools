@@ -28,4 +28,5 @@
   <li><a href="<?php echo site_url().'/admin/contract/document/'.$contract->id; ?>">Document</a></li>
   <li><a href="<?php echo site_url().'/admin/contract/ports/'.$contract->id; ?>">Port Groups</a></li>
   <li><a href="<?php echo site_url().'/admin/contract/containers/'.$contract->id; ?>">Containers</a></li>
+  <li><a href="<?php echo site_url().'/admin/contract/cargo/'.$contract->id; ?>">Cargo</a></li>
 </ul>

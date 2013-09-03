@@ -22,6 +22,7 @@ class Contract extends MY_Admin_Controller {
 		$this->load->model('assetstorage');
 		$this->load->model("attachments/attachmentmodel");
 		$this->load->model("attachments/datastore");
+		$this->load->model('cargomodel');
 
 		$this->load->library("contracts");
 		$this->load->library("async");
@@ -159,6 +160,60 @@ class Contract extends MY_Admin_Controller {
 		$contract_id= $this->input->post('contract_id');
 		$rational_container_id =$this->input->post('type');
 		$this->containermodel->remove_container_from_contract($contract_id, $rational_container_id);
+	}
+	
+	/**
+	 * load the cargo management screen
+	 * @param $contract_id - the contract for the cargo manager
+	 */
+	public function cargo($contract_id){
+		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
+		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
+		$data['page'] = 'contracts';
+		$header_data['title'] = "Manage Cargo";
+		// pass javascript to footer
+		$footer_data["scripts"] = array("admin/contract/cargo.js");
+		
+		$this->load->view('admin/header', $header_data);
+		$this->load->view("admin/customers/manager-header", $data);
+		$this->load->view('admin/contract/cargo', $data);
+		$this->load->view("admin/customers/manager-footer");
+		$this->load->view('admin/footer', $footer_data);
+	}
+	
+	/**
+	 * list of cargo types
+	 * @param $contract_id - the contract to get the cargo types for
+	 */
+	public function get_cargo_types($contract_id){
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output( 
+		    	json_encode($this->cargomodel->get_cargo_types_for_contracts($contract_id)));
+	}
+	
+	/**
+	 * Add a new cargo type to this contract
+	 */
+	public function add_cargo_type(){
+		$cargo = $this->input->post('cargo');
+		$contract_id = $this->input->post('contract_id');
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output( 
+		    	json_encode($this->cargomodel->add_cargo_type_to_contract($contract_id, $cargo)));
+	}
+	
+	/**
+	 * remove a cargo type from this contract
+	 */
+	public function remove_cargo_type(){
+		$cargo = $this->input->post('cargo');
+		$contract_id = $this->input->post('contract_id');
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output( 
+		    	json_encode($this->cargomodel->remove_cargo_type_from_contract($contract_id, $cargo)));
 	}
 	
 
@@ -331,7 +386,7 @@ class Contract extends MY_Admin_Controller {
 
 
 	/**
-	* SECTION - CHARGE RULES
+	* SECTION - TESTING
 	*/
 
 	/**
@@ -393,6 +448,8 @@ class Contract extends MY_Admin_Controller {
 
 		echo var_dump($conditions);
 	}
+
+
 
 
 	public function getlanesaffected()
@@ -604,16 +661,7 @@ class Contract extends MY_Admin_Controller {
 
 
 
-	/**
-	* UTILITIES
-	*/
-	function get_sql_date($date)
-	{
-		$format = "m/j/Y";
-		$sql_date = date_parse_from_format ( $format , $date );
-		return $sql_date['year']."-".$sql_date['month']."-".$sql_date['day'];
 
-	}
 
 }
 
