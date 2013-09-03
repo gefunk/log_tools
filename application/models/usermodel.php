@@ -6,6 +6,7 @@ class UserModel extends CI_Model
     {
         // Call the Model constructor
         parent::__construct();
+		$this->load->driver('cache', array('adapter' => 'memcached', 'backup' => 'dummy'));
     }
 
 	/**
@@ -16,10 +17,19 @@ class UserModel extends CI_Model
 	*/
 	function check_login($identity, $password, $customer_id)
 	{
+		
 		$encrypted_password = $this->encrypt_password($password);
-		$where_data = array("email" => $identity, 'password' => $encrypted_password, 'customer' => $customer_id);
-		$query = $this->db->get_where('users', $where_data);
-		if($query->num_rows() == 1){
+		log_message("debug", "User Model: ".$identity." Password: ".$encrypted_password." Customer ID: ".$customer_id);
+		$query = array("email" => $identity, "password" => $encrypted_password, 'customer' => intval($customer_id));
+		$projection = array("password" => 1);
+		$doc = $this->mongo->db->users->findOne($query, $projection);
+		
+		log_message("debug", "Doc: ".$doc);
+		
+		/**
+		 * return the encrypted password 
+		 */
+		if($doc['password'] == $encrypted_password){
 			return $encrypted_password;
 		}
 		
@@ -40,15 +50,41 @@ class UserModel extends CI_Model
 		return FALSE;
 	}
 	
-	function add($identity, $password, $customer_id, $additional_data)
+	
+	
+	/**
+	 * Add a new User
+	 */
+	function add($identity, $password, $customer_id)
 	{
 		$user_data = array(
 			"email" => $identity,
 			"password" => $this->encrypt_password($password),
-			"customer" => $customer_id
+			"customer" => $customer_id,
+			"active" => true,
+			"reset_on_signon" => true
 		);
-		$this->db->insert('users', $user_data);
+		$this->mongo->db->users->insert($user_data);
 		
+	}
+	
+	/**
+	 * deactivate the user
+	 */
+	function deactivate($identity, $customer_id){
+		$query = array("email"=>$identity, "customer" => $customer_id);
+		$update = array('$set' => array("active" => false));
+		return $this->mongo->db->users->update($query, $update);
+	}
+	
+	
+	/**
+	 * reset a user's password
+	 */
+	function reset_password($identity, $customer_id, $new_password){
+		$query = array("email"=>$identity, "customer" => $customer_id);
+		$update = array('$set' => array("password" => $this->encrypt_password($new_password)));
+		return $this->mongo->db->users->update($query, $update);
 	}
 	
 	/**
@@ -58,14 +94,12 @@ class UserModel extends CI_Model
 	*/
 	function is_customer_valid_for_login_hash($hash, $customer_id)
 	{
-		$this->db->select("customer")->from("users")->where("password", $hash);
-		$query = $this->db->get();
-		// should only be one result for a hash
-		if($query->num_rows() == 1){
-			$row = $query->row();
-			if($row->customer == $customer_id){
-				return TRUE;
-			}
+		$query = array("customer" => intval($customer_id), "password" => $hash);
+		$projection = array("customer" => 1);
+		$doc = $this->mongo->db->users->findOne($query, $projection);
+		// if the customer id is equal to the one passed in return true
+		if($doc['customer'] == $customer_id){
+			return TRUE;
 		}
 		return FALSE;
 	}

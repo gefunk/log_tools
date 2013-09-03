@@ -141,6 +141,22 @@ class Services extends CI_Controller {
 		
 	}
 	
+	/**
+	 * get all relevant information
+	 * for a specific port
+	 * @param the id of the port you need info for
+	 */
+	public function get_port_info_by_id($port_id, $test=FALSE){
+		$content_type = 'application/json';
+		if($test){
+			$this->output->enable_profiler(TRUE);	
+			$content_type = 'text/html';
+		}
+		$this->output
+		    ->set_content_type($content_type)
+		    ->set_output(json_encode($this->portmodel->get_port_information($port_id)));
+	}
+	
 	
 	/**
 	 * PORT GROUP SECTION
@@ -209,5 +225,7 @@ class Services extends CI_Controller {
 		$id = $this->input->post('port_id');
 		$this->portmodel->up_hit_count($id);
 	}
+	
+	
 	
 }
