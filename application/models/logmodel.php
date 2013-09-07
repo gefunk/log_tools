@@ -8,7 +8,36 @@ class Logmodel extends CI_Model
         parent::__construct();
     }
 
-        
+    
+	
+	/**
+	 * Log new contract line item
+	 * @param $user the user who did the change
+	 * @param $contract_id the contract which is affected by the change
+	 * @param $line_item_id the line item which was added
+	 * @param $rate_search_ids the rate search elements which were added to the rate search table 
+	 */
+	function new_contract_line_item($user, $contract_id, $line_item_id, $rate_search_ids){
+		$data = array("user" => $user,
+					"line_item" => $line_item_id,
+					"rate_search_terms" => $rate_search_ids);
+		$query = array("_id" => $contract_id);
+		$update = array(
+					'$addToSet' => array(
+						"log" =>array(
+							"type" => LOG_EVENT_ADD, 
+							"user" => $user, 
+							"line_item" => $line_item_id,
+							"search_terms" => $rate_search_ids,
+							"date" => new MongoDate()
+						)
+					)
+				);
+		$this->mongo->db->contracts->update($query, $update);
+	}
+	
+	
+	    
     /**
      * Log inserts or deletes to line item
      * @param $user the user id responsible for this event
