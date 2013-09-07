@@ -22,10 +22,10 @@
 
 <ul class="nav nav-pills">
   <li>
-    <a href="<?php echo site_url().'/admin/line/all/'.$contract->id ?>">Line Items</a>
+    <a href="<?php echo site_url().'/admin/line/manage/'.$contract->id ?>">Line Items</a>
   </li>
   <li><a href="#">Adjustments</a></li>
-  <li><a href="<?php echo site_url().'/admin/contract/document/'.$contract->id; ?>">Document</a></li>
+  <li><a href="<?php echo site_url().'/admin/document/manage/'.$contract->id; ?>">Document</a></li>
   <li><a href="<?php echo site_url().'/admin/contract/ports/'.$contract->id; ?>">Port Groups</a></li>
   <li><a href="<?php echo site_url().'/admin/contract/containers/'.$contract->id; ?>">Containers</a></li>
   <li><a href="<?php echo site_url().'/admin/contract/cargo/'.$contract->id; ?>">Cargo</a></li>
