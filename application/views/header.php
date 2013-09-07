@@ -125,7 +125,7 @@
 	    <div id="sidebar-nav" class="hidden-phone">
 	        <ul id="dashboard-menu">
 	            <li id='rates'>
-	                <a class="tab1" href="<?php echo site_url(); ?>/main">
+	                <a class="tab1" href="<?php echo site_url(); ?>/">
 	                    <i class="sidebar-forms"></i>
 	                    <span>Rates</span>
 	                </a>
@@ -143,7 +143,7 @@
 	                </a>
 	            </li>
 	            <li id="users" class="">
-	                <a class="tab2" href="user-list.html">
+	                <a class="tab2" href="<?php echo site_url(); ?>/users">
 	                    <i class="icon-group"></i>
 	                    <span>Users</span>
 	                </a>
