@@ -3,8 +3,8 @@
 
 $(document).ready(function(){
 	
+	contractUploader.initialize(contract_id);
 
-	
 	// when file change validate
 	$('input[name=contract-file]').change(function(){
 	    var file = this.files[0];
@@ -20,30 +20,10 @@ $(document).ready(function(){
 	    }
 	});
 
-
-	$('a.upload-button').click(function(){
-		$("div#upload-modal input[name='contract_number']").val($(this).data("contract-number"));
-		$("div#upload-modal input[name='contract_id']").val($(this).data("contract-id"));
-		$("div#upload-modal input[name='customer_id']").val($(this).data("customer-id"));
-		
-		// initialize new uploader
-		contractUploader.initialize($(this).data("contract-id"));
-		contractUploader.addCallbackSubscriber(show_upload_modal_status);
-		contractUploader.checkStatus();
-		
-		$('div#upload-modal').modal('show');
-	});
-
-	// handle close click
-	$("div#upload-modal .close").click(function(){
-		// stop any call backs
-		contractUploader.destroy();
-		$("div#upload-modal").modal('hide');
-	});
-
-
 	// button click upload
-	$('a#upload-file').click(function(e){
+	$('#upload-file').click(function(e){
+		
+		console.log("hey I am clicked sucka");
 		
 		e.preventDefault();
 	    var formData = new FormData($("div.modal-body > form")[0]);
@@ -53,11 +33,6 @@ $(document).ready(function(){
 	    
 	});
 	
-	$("a#overwrite-file").click(function(){
-		show_upload_modal_status(false);
-	});
-	
-
 });
 
 
@@ -81,7 +56,7 @@ var contractUploader = {
 	},
 	upload: function(formData){
 		 $.ajax({
-	        url: site_url+'/admin/contract/upload',  //server script to process data
+	        url: site_url+'/admin/document/upload',  //server script to process data
 	        type: 'POST',
 	        xhr: function() {  // custom xhr
 	            var myXhr = $.ajaxSettings.xhr();

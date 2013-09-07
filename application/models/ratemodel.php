@@ -39,7 +39,7 @@ class RateModel extends CI_Model
 			'currency' => $currency);
 		
 		$this->db->insert('rate_search', $data);
-					
+		return $this->db->insert_id();					
 	}
 
 }

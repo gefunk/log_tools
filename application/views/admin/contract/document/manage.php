@@ -6,3 +6,7 @@
 </ul>  
 
 
+
+<ul>
+	<li><a href="<?php echo site_url().'/admin/document/add/'.$contract->id; ?>">New Document</a></li>
+</ul>
