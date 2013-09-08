@@ -61,6 +61,7 @@ class UserModel extends CI_Model
 			"name" => $name,
 			"phone" => $phone,
 			"notes" => $notes,
+			"role" => "regular",
 			"active" => true,
 			"reset_on_signon" => true
 		);
@@ -203,6 +204,31 @@ class UserModel extends CI_Model
 	  return $password;
 	}
 	
+	
+	/**
+	 * Activate or De-activate user
+	 * @param identity - the email id of the user
+	 * @param $customer_id - the customer id for which the user belongs to 
+	 * @param $status - boolean value of status
+	 */
+	function set_user_status($identity, $customer_id, $status){
+		$query = array("email"=>$identity, "customer" => $customer_id);
+		$update = array('$set' => array("active" => $status));
+		return $this->mongo->db->users->update($query, $update);
+	} 
+	
+	/**
+	 * Set the Role for a user 
+	 *
+	 * @param $identity - the email id of the user
+	 * @param $customer_id - the customer the user blongs to
+	 * @param $role - the sting role you want to set for this user 'admin' or 'regular'
+	 */
+	function set_user_role($identity, $customer_id, $role){
+		$query = array("email"=>$identity, "customer" => $customer_id);
+		$update = array('$set' => array("role" => $role));
+		return $this->mongo->db->users->update($query, $update);
+	}
 	
 	
 	/**
