@@ -9,7 +9,6 @@ class Users extends MY_In_Controller {
 		
 		$this->load->model("usermodel");
 		$this->load->model("customermodel");
-		$this->load->helper('form');
 		$this->load->library('form_validation');
 	}
 
@@ -71,7 +70,7 @@ class Users extends MY_In_Controller {
         	$this->email->set_newline("\r\n");
         	$this->email->from($this->config->item("email_from"),'Do Not Reply'); // change it to yours
         	$this->email->to($email); // change it to yours
-        	$this->email->subject('Congratulations, You have been registered for Amfitir.com');
+        	$this->email->subject("Congratulations, You have been registered for $customer->subdomain.amfitir.com");
 			$data['subject'] = "Please log on to Customer Site";
 			$data['register_user'] = $logged_in_user['name'];
 			$data['customer'] = $customer->name;
