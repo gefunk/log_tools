@@ -5,6 +5,20 @@
 		<h2>Create a new user</h2>
 	</div>
 
+	<div class="row-fluid visible-phone">
+		<?php if(validation_errors()) { ?>
+				<div class="alert alert-danger">
+					<?php echo validation_errors(); ?>	
+				</div>
+			<?php } ?>
+			
+			<?php if(isset($success)){ ?>
+				<div class="alert alert-success">
+					<?php echo $success; ?>	
+				</div>
+			<?php } ?>
+	</div>
+
 	<div class="row-fluid form-wrapper">
 		<div class="span9 with-sidebar">
 			<div class="container">
@@ -36,13 +50,13 @@
 		</div>
 		<div class="span3 form-sidebar pull-right">
 			<?php if(validation_errors()) { ?>
-				<div class="alert alert-danger">
+				<div class="alert alert-danger hidden-phone">
 					<?php echo validation_errors(); ?>	
 				</div>
 			<?php } ?>
 			
 			<?php if(isset($success)){ ?>
-				<div class="alert alert-success">
+				<div class="alert alert-success hidden-phone">
 					<?php echo $success; ?>	
 				</div>
 			<?php } ?>
