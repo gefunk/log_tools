@@ -21,9 +21,9 @@ class Users extends MY_In_Controller {
 		$data['users'] = $this->usermodel->get_users_for_customer($customer_id);
 		
 		$header_data['title'] = "Manage Users";
-		$header_data['page_css'] = array('user-list.css','main/main.css');
+		$header_data['page_css'] = array('user-list.css');
 		$footer_data['selected_link'] = "users";
-		$footer_data['scripts'] = array('main/main.js');
+		$footer_data['scripts'] = array('users/all.js');
 		
 		$user_header_data["user_link"] = "all";
 		
@@ -33,12 +33,17 @@ class Users extends MY_In_Controller {
 		$this->load->view('footer', $footer_data);
 	}
 
+	/**
+	 * Add new user
+	 */
 	public function add(){
 		
 		$view = NULL;
 		$data = array();
 		
-		
+		/**
+		 * validate user add information
+		 */
 		$this->form_validation->set_rules('name', 'Name', 'required');
 		$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
 		$this->form_validation->set_rules('phone', 'Phone', 'is_natural');
@@ -91,20 +96,27 @@ class Users extends MY_In_Controller {
 		
 	}
 	
-	public function addnew(){
+	
+	/**
+	 * change the role of a user from the user management screen
+	 */
+	public function changerole(){
+		$email = $this->input->post("user_identity");
+		$role =  $this->input->post("role");
+		$customer_id = intval($this->session->userdata("customer_id"));
+		return $this->usermodel->set_user_role($email, $customer_id, $role);
+	}
+	
+	/**
+	 * change the status of a user from the user management screen
+	 */
+	public function changestatus(){
+		$email = $this->input->post("user_identity");
+		$status = (boolean) $this->input->post("status");
+		$customer_id = intval($this->session->userdata("customer_id"));
+		return $this->usermodel->set_user_status($email, $customer_id, $status);
 		
 	}
 	
-	function test_customer_id(){
-		$customer_id = $this->session->userdata("customer_id");
-		var_dump( $this->session->all_userdata());
-		echo "Logged in: ".$this->auth->isLoggedIn();
-	}
-
-	function test_admin_login(){
-		$this->output->enable_profiler(TRUE);
-		$hash = "";
-		echo $this->usermodel->is_admin_valid_for_login_hash($hash);
-	}
 
 }
