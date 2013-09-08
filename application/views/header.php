@@ -82,7 +82,7 @@
 	                <ul id="phone-nav" class="nav">
 	                    <li id="rates"><a href="<?php echo site_url(); ?>/main">Rates</a></li>
 	                    <li id="contracts"><a href="<?php echo site_url(); ?>/contract">Contracts</a></li>
-	                    <li><a href="user-list.html">Users</a></li>
+	                    <li id="users"><a href="<?php echo site_url(); ?>/users">Users</a></li>
 	                    <li><a href="form-showcase.html">Forms</a></li>
 	                    <li><a href="gallery.html">Gallery</a></li>
 	                </ul>
@@ -125,7 +125,7 @@
 	    <div id="sidebar-nav" class="hidden-phone">
 	        <ul id="dashboard-menu">
 	            <li id='rates'>
-	                <a class="tab1" href="<?php echo site_url(); ?>/">
+	                <a class="tab1" href="<?php echo site_url().((defined('ENVIRONMENT') && ENVIRONMENT == 'development') ? '/main' : ''); ?>">
 	                    <i class="sidebar-forms"></i>
 	                    <span>Rates</span>
 	                </a>
@@ -142,7 +142,7 @@
 	                    <span>Analytics</span>
 	                </a>
 	            </li>
-	            <li id="users" class="">
+	            <li id="users">
 	                <a class="tab2" href="<?php echo site_url(); ?>/users">
 	                    <i class="icon-group"></i>
 	                    <span>Users</span>
