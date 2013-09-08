@@ -51,13 +51,15 @@ class Auth
 		 * 
 		 * if they are not set then return not logged in
 		 */
-		if($login_hash === FALSE){
+		if(!isset($login_hash) || $login_hash === FALSE){
+			log_message("debug", "trying to retrieve from cookie");
 			// try to retrieve from cookie
 			$login_hash = get_cookie('amfitir_remember');
+			log_message("debug", "Login Hash Cookie: ".$login_hash);
 			if($login_hash !== FALSE)
 				$this->session->set_userdata('amfitir_loggedin', $login_hash);
 		}
-		if($customer_id === FALSE){
+		if(!isset($customer_id) || $customer_id === FALSE){
 			$customer_id = get_cookie('amfitir_customer');
 			// if successful from cookie put it back into the session
 			if($customer_id !== FALSE)
@@ -76,6 +78,7 @@ class Auth
 				$this->logout();
 			}
 		}else{
+			log_message("debug", "Logging in Administrator");
 			/**
 		 	* Haven't been able to restore from cookie 
 		 	*
@@ -84,7 +87,7 @@ class Auth
 		 	*/
 			$login_hash = $this->session->userdata("amfitir_admin");
 			// user is an admin
-			if($this->usermodel->is_admin_valid_for_login_hash($login_hash)){
+			if(isset($hash) && !empty($hash) && $this->usermodel->is_admin_valid_for_login_hash($login_hash)){
 				return TRUE;
 			}
 		}
