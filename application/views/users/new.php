@@ -8,9 +8,7 @@
 	<div class="row-fluid form-wrapper">
 		<div class="span9 with-sidebar">
 			<div class="container">
-				<?php $attributes = array('class' => 'new_user_form inline-input', 'id' => 'new-user-form'); 
-					echo form_open('users/add', $attributes);
-				?>
+				<form action="<?php echo site_url(); ?>/users/add" method="POST" class="new_user_form inline-input" id="new-user-form">
 					<div class="span12 field-box">
 						<label>Name:</label>
 						<input type="text" name="name" class="span9">
