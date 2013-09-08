@@ -57,7 +57,7 @@ class UserModel extends CI_Model
 		$user_data = array(
 			"email" => $identity,
 			"password" => $this->encrypt_password($password),
-			"customer" => $customer_id,
+			"customer" => intval($customer_id),
 			"name" => $name,
 			"phone" => $phone,
 			"notes" => $notes,
