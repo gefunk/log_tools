@@ -19,12 +19,9 @@ class UserModel extends CI_Model
 	{
 		
 		$encrypted_password = $this->encrypt_password($password);
-		log_message("debug", "User Model: ".$identity." Password: ".$encrypted_password." Customer ID: ".$customer_id);
-		$query = array("email" => $identity, "password" => $encrypted_password, 'customer' => intval($customer_id));
+		$query = array("active" => true, "email" => $identity, "password" => $encrypted_password, 'customer' => intval($customer_id));
 		$projection = array("password" => 1);
 		$doc = $this->mongo->db->users->findOne($query, $projection);
-		
-		log_message("debug", "Doc: ".$doc);
 		
 		/**
 		 * return the encrypted password 
@@ -55,21 +52,40 @@ class UserModel extends CI_Model
 	/**
 	 * Add a new User
 	 */
-	function add($identity, $password, $customer_id)
+	function add($identity, $password, $name, $phone, $notes, $customer_id)
 	{
 		$user_data = array(
 			"email" => $identity,
 			"password" => $this->encrypt_password($password),
 			"customer" => $customer_id,
+			"name" => $name,
+			"phone" => $phone,
+			"notes" => $notes,
 			"active" => true,
 			"reset_on_signon" => true
 		);
 		$this->mongo->db->users->insert($user_data);
-		
+	}
+	
+	/**
+	 * check if the username is unique
+	 * @param $identity the username you are checking
+	 * @param $customer_id we are only worried about usernames within a customer group
+	 */
+	function check_unique_username($identity, $customer_id){
+		$query = array("email" => $identity, "customer" => $customer_id);
+		$projection = array("email" => 1);
+		$cursor = $this->mongo->db->users->find($query, $projection);
+		if($cursor->hasNext()){
+			return TRUE;
+		}
+		return FALSE;
 	}
 	
 	/**
 	 * deactivate the user
+	 * @param the identity of the user(  email address )
+	 * @param the customer for which you want to deactivate
 	 */
 	function deactivate($identity, $customer_id){
 		$query = array("email"=>$identity, "customer" => $customer_id);
@@ -94,7 +110,7 @@ class UserModel extends CI_Model
 	*/
 	function is_customer_valid_for_login_hash($hash, $customer_id)
 	{
-		$query = array("customer" => intval($customer_id), "password" => $hash);
+		$query = array("customer" => intval($customer_id), "password" => $hash, "active" => TRUE);
 		$projection = array("customer" => 1);
 		$doc = $this->mongo->db->users->findOne($query, $projection);
 		// if the customer id is equal to the one passed in return true
@@ -110,13 +126,81 @@ class UserModel extends CI_Model
 	*/
 	function is_admin_valid_for_login_hash($hash)
 	{
-		$this->db->select("id")->from("admin_users")->where("password", $hash);
-		$query = $this->db->get();
-		// should only be one result for a hash
-		if($query->num_rows() == 1){
-			return TRUE;
+		
+			$this->db->select("id")->from("admin_users")->where("password", $hash);
+			$query = $this->db->get();
+			// should only be one result for a hash
+			if($query->num_rows() == 1){
+				return TRUE;
+			}
+		
+		return FALSE;
+	}
+	
+	
+	/**
+	 * get the user name based on user hash
+	 * @param $hash the login hash for the user
+	 */
+	function get_user_for_hash($hash){
+		$query = array("password" => $hash);
+		$projection = array("name"=> 1, "email" => 1);
+		$doc = $this->mongo->db->users->findOne($query, $projection);
+		// if the customer id is equal to the one passed in return true
+		if(isset($doc)){
+			return $doc;	
 		}
 		return FALSE;
+	}
+	
+	
+	/**
+	 * get the role for the user
+	 * @param $hash - login hash which is used to verify user
+	 */
+	function get_role_for_user_by_hash($hash){
+		$query = array("password" => $hash);
+		$projection = array("role" => 1);
+		$doc = $this->mongo->db->users->findOne($query, $projection);
+		// if the customer id is equal to the one passed in return true
+		if(isset($doc)){
+			return $doc['role'];	
+		}
+		return FALSE;
+	}
+	
+	/**
+	 * get all users for a customer
+	 * @param $customer_id - the customer id that you want the users for
+	 */
+	function get_users_for_customer($customer_id){
+		$query = array("customer" => intval($customer_id));
+		$projection = array("active" => 1, "reset" => 1, "role" => 1, "email" => 1);
+		return $this->mongo->db->users->find($query, $projection);
+	}
+	
+	
+	/**
+	 * function used to generate temporary password
+	 */
+	function generatePassword ($length = 8)
+	{
+	  // given a string length, returns a random password of that length
+	  $password = "";
+	  // define possible characters
+	  $possible = "0123456789abcdfghjkmnpqrstvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	  $i = 0;
+	  // add random characters to $password until $length is reached
+	  while ($i < $length) {
+	    // pick a random character from the possible ones
+	    $char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
+	    // we don't want this character if it's already in the password
+	    if (!strstr($password, $char)) {
+	      $password .= $char;
+	      $i++;
+	    }
+	  }
+	  return $password;
 	}
 	
 	
