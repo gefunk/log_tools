@@ -2,6 +2,11 @@
 
 class Async {
 
+	/**
+	 * Asynchronous post - Does not wait for result
+	 * @param $url - url to post to
+	 * @param $param - the data to send to the url
+	 */
 	function post($url, $params = array()){
 
 	    $post_params = array();
@@ -27,6 +32,27 @@ class Async {
 
 	        fwrite($fp, $out);
 	        fclose($fp);
+	}
+	
+	/**
+	 * Asynchronous GET
+	 * Does not wait for the page to return
+	 * @param $url - the url to make the request to
+	 */
+	function get($url){
+		$parts=parse_url($url);
+
+	    $fp = fsockopen($parts['host'],
+	            isset($parts['port'])?$parts['port']:80,
+	            $errno, $errstr, 30);
+
+	    $out = "GET ".$parts['path']." HTTP/1.1\r\n";
+	    $out.= "Host: ".$parts['host']."\r\n";
+	    $out.= "Accept: text/html\r\n";
+	    $out.= "User-Agent: Amfitir/Cache Expire 0.1\r\n";
+	    $out.= "Connection: Close\r\n\r\n";
+		fwrite($fp, $out);
+	    fclose($fp);
 	}
 
 }
