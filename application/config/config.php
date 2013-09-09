@@ -383,5 +383,8 @@ $config['pdf_image_height'] = 2112;
 // Amazon Email Service config
 $config["email_from"] = "no-reply@amfitir.com";
 
+// we don't have to expire cache on dev
+$config['amfitir_servers'] = NULL;
+
 /* End of file config.php */
 /* Location: ./application/config/config.php */
