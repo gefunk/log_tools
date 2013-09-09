@@ -58,6 +58,8 @@ class Users extends MY_In_Controller {
 			
 		if ($this->form_validation->run() != FALSE)
 		{
+			
+			
 			// validation success!, get the form information
 			$name = $this->input->post("name");
 			$email = $this->input->post("email");
@@ -85,7 +87,14 @@ class Users extends MY_In_Controller {
         	$this->email->message($msg);
         	$this->email->send(); 
 			
+			
+			// expire cache for user listing screen
+			$this->load->library('nginxcache');
+			$this->nginxcache->expire($customer->subdomain, 'users');
+			
 			$data['success'] = "User $name has been registered";
+			
+			
 		}
 		
 		$this->load->view('header', $header_data);
@@ -118,5 +127,10 @@ class Users extends MY_In_Controller {
 		
 	}
 	
+	
+	function test_cache_expire($key){
+		$this->load->library('nginxcache');
+		$this->nginxcache->expire('demo', $key);
+	}
 
 }
