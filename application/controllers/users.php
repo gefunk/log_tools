@@ -10,6 +10,7 @@ class Users extends MY_In_Controller {
 		$this->load->model("usermodel");
 		$this->load->model("customermodel");
 		$this->load->library('form_validation');
+		$this->load->library('nginxcache');
 	}
 
 	public function index(){
@@ -89,7 +90,7 @@ class Users extends MY_In_Controller {
 			
 			
 			// expire cache for user listing screen
-			$this->load->library('nginxcache');
+			
 			$this->nginxcache->expire($customer->subdomain, 'users');
 			
 			$data['success'] = "User $name has been registered";
@@ -113,7 +114,12 @@ class Users extends MY_In_Controller {
 		$email = $this->input->post("user_identity");
 		$role =  $this->input->post("role");
 		$customer_id = intval($this->session->userdata("customer_id"));
+		// expire nginx cache after role change
+		$customer = $this->customermodel->get_customer_by_id($customer_id);
+		$this->nginxcache->expire($customer->subdomain, 'users');
+		
 		return $this->usermodel->set_user_role($email, $customer_id, $role);
+		
 	}
 	
 	/**
@@ -123,14 +129,12 @@ class Users extends MY_In_Controller {
 		$email = $this->input->post("user_identity");
 		$status = (boolean) $this->input->post("status");
 		$customer_id = intval($this->session->userdata("customer_id"));
+		// expire nginx cache after status change
+		$customer = $this->customermodel->get_customer_by_id($customer_id);
+		$this->nginxcache->expire($customer->subdomain, 'users');
+		
 		return $this->usermodel->set_user_status($email, $customer_id, $status);
 		
-	}
-	
-	
-	function test_cache_expire($key){
-		$this->load->library('nginxcache');
-		$this->nginxcache->expire('demo', $key);
 	}
 
 }
