@@ -56,7 +56,7 @@ class ReferenceModel extends CI_Model
 	{
 		$key = 'get_container_types-'.$carrier_id.'-'.$array;
 		if(! $result = $this->cache->get($key)){
-			$this->db->select('id, container_type, carrier, description')->from('ref_container_types')->where('carrier', $carrier_id); 
+			$this->db->select('id, container_type, description')->from('ref_container_types'); 
 			$query = $this->db->get();
 			if($array)
 				$result = $query->result_array();
