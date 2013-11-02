@@ -7,9 +7,10 @@ class Contracts {
 	* @param customer_id the customer we are uploading the contract for
 	* @param the contract id of the contract we are looking for
 	*/
-	function get_remote_url_for_contract($customer_id, $contract_number)
+	function get_remote_url_for_contract($customer_id, $contract_number, $file_name)
 	{
-		return "customer-".$customer_id."/"."contract-".$contract_number."/";
+		$date = new DateTime();
+		return "customer-".$customer_id."/"."contract-".$contract_number."/".$file_name."/".$date->getTimestamp()."/";
 	}
 
 }

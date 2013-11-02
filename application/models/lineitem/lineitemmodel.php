@@ -79,28 +79,17 @@ class Lineitemmodel extends CI_Model
      */
     public function get_line_item($id)
     {
-        $query = $this->db->get_where("line_items", array("id" => $id));
-        $line_item = NULL;
-        if($query->num_rows() > 0){
-            $row = $query->row();
-            $line_item = self::convertRowToLineItem($row);
-        }
+        $line_item = $this->mongo->db->lineitems->find(array("_id" => $id));
         return $line_item;
     }
     
     
     /**
      * get all line items for a contract
+	 * @return $line_items - mongo cursor to list of line items which belong to this contract
      */
     public function get_line_items_for_contract($contract_id){
-        $query = $this->db->get_where("line_items", array("container" => $container_id));
-        $line_items = NULL;
-        if($query->num_rows() > 0){
-            $line_items = array();
-            foreach($query->result() as $row){
-                array_push($line_items, self::convertRowToLineItem($row));
-            }   
-        }
+        $line_items = $this->mongo->db->lineitems->find(array("contract" => $contract_id));
         return $line_items;
     }
     

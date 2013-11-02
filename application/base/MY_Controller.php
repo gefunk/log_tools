@@ -12,7 +12,7 @@ class MY_Controller extends CI_Controller {
 		* by subdomain
 		*/
 		// only do the subdomain checking for prod and qa
-		if (defined('ENVIRONMENT') && (ENVIRONMENT == 'production' || ENVIRONMENT == 'testing')){
+		// if (defined('ENVIRONMENT') && (ENVIRONMENT == 'production' || ENVIRONMENT == 'testing')){
 			// check for subdomain
 			$subdomain = array_shift(explode(".",$_SERVER['HTTP_HOST'])); 
 			// check subdomain is not already set to the same, so we don't constantly keep hitting it
@@ -45,7 +45,8 @@ class MY_Controller extends CI_Controller {
 				// set the subdomain so we don't check it all the time
 				$this->session->set_userdata("subdomain", $subdomain);
 			}
-		}
+			
+			//}
 			
 		
 		
