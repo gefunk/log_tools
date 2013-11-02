@@ -25,7 +25,7 @@ class Attachments extends CI_Controller {
 	* Asynchronously Upload files to server
 	* @param the key to use when creating a folder in the s3 bucket or locally
 	*/
-	function async_upload_contract_remote(){
+	function async_upload_contract(){
 
 		// set execution time to be forever
 		ini_set('MAX_EXECUTION_TIME', -1);
@@ -40,9 +40,9 @@ class Attachments extends CI_Controller {
 		// upload the files to s3
 		if($this->datastore->put($local_file, $remote_path.'/'.$file_name)){
 			// successful upload
-
+			
 			// save the contract into the db
-			$upload_id = $this->attachmentmodel->insert_uploaded_contract($contract_id, $file_name);
+			$upload_id = $this->attachmentmodel->insert_uploaded_document($contract_id, $remote_path, $file_name);
 			// get the number of pages from the pdf
 			$number_of_pages = 5;
 
@@ -61,6 +61,9 @@ class Attachments extends CI_Controller {
 
 				// make all the pages
 				for($page_number = 0; $page_number < $number_of_pages; $page_number++){
+					
+					
+					
 					$page = $local_file."[".$page_number."]";
 					log_message("info", "Working on Contract ".$local_file." page: ".$page);
 					$img = new Imagick();
@@ -98,8 +101,8 @@ class Attachments extends CI_Controller {
 					// set depth to 8
 					$img->setimagedepth(8);
 					
-					$page_name = '/page-'.($page_number+1).'.png';
-					$compressed_name = '/page-'.($page_number+1).'-c.png';
+					$page_name = '/'.($page_number+1).'.png';
+					$compressed_name = '/'.($page_number+1).'-c.png';
 					$local_page = $dir.$page_name;
 					$img->writeImage($local_page); // Write to disk
 					ob_clean(); // clear buffer
@@ -115,8 +118,9 @@ class Attachments extends CI_Controller {
 					if($this->datastore->put($compressed_file, $remote_path.'/pages/'.$page_name)){
 						// update progress
 						$progress = (($page_number+1) / $number_of_pages)*100;
-						$this->attachmentmodel->update_contract_process_progress($progress, $upload_id);
-						// delete local image file
+						// record total pages in document
+						$this->attachmentmodel->insert_uploaded_page($page, $upload_id);
+						// delete local image file(s)
 						unlink($local_page);
 						unlink($compressed_file);
 					}
@@ -125,8 +129,7 @@ class Attachments extends CI_Controller {
 				}
 
 				log_message("info", "Number of pages: ".$number_of_pages." in contract upload id ".$upload_id);
-				// record total pages in document
-				$this->attachmentmodel->insert_uploaded_contract_page($number_of_pages, $upload_id);
+				
 			}
 
 
