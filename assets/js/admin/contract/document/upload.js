@@ -16,20 +16,17 @@ $(document).ready(function(){
 	    	$("div#upload-message").html("Please only upload PDF's");
 	    	$(this).replaceWith("<input name='file' type='file' />");
 	    }else{
-	    	$("div#upload-message").html("Click Upload to send file to server");
+	    	$("div#upload-message").html("Click Upload to send file to server").removeClass("hide");
 	    }
 	});
 
 	// button click upload
-	$('#upload-file').click(function(e){
-		
-		console.log("hey I am clicked sucka");
-		
+	$('#upload-file').click(function(e){		
 		e.preventDefault();
 	    var formData = new FormData($("div.modal-body > form")[0]);
 	   	// upload the form
 	   	contractUploader.upload(formData);
-	   	$("div#upload-message").html("");
+	   	$("div#upload-message").html("").addClass("hide");
 	    
 	});
 	
@@ -127,7 +124,7 @@ function show_upload_modal_status (status) {
 		$("a#upload-file").show();
 		$("input[name=contract-file]").show();
 		$("div#upload-progress").show();
-	}else if(status < 100){
+	}else if(status < 99){
 		
 		$("input[name=contract-file]").hide();
 		$("div#upload-progress").hide();

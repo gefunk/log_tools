@@ -17,6 +17,9 @@
 		  
 		</div>
 	  	<input name="contract-file" type="file" />
+	  	<input name="customer_id" type="hidden" value="<?php echo $customer->id; ?>" />
+	  	<input name="contract_id" type="hidden" value="<?php echo $contract->id; ?>" />
+	  	
 	  	
 		<div id="upload-progress">
 			<p>File Upload Progress</p>
@@ -27,8 +30,9 @@
 		
 	</form>
   </div>
+  <div id="upload-message" class="alert alert-info hide"></div>
   <div>
-    <a id="upload-file" href="#" class="btn btn-primary">Upload</a>
+    <button id="upload-file" class="btn btn-primary">Upload</button>
   </div>
 </div>
 

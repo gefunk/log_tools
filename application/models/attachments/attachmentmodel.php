@@ -9,47 +9,25 @@ class AttachmentModel extends CI_Model
     }
 
 	/**
-	* get an attachment id to use
-	* @param element_type the type of element this attachment refers to
-	* @return the id of the attachment inserted
-	*/
-	function get_next_attachment_id($element_type)
-	{
-		$data = array("element" => $element_type);
-		$this->db->insert("attachment", $data);
-		return $this->db->insert_id();
-	}
-	
-	/*
-	CREATE TABLE `attachment_storage` (
-	  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-	  `key` varchar(255) NOT NULL DEFAULT '',
-	  `content_type` varchar(255) NOT NULL DEFAULT '',
-	  `attachment_id` int(11) unsigned NOT NULL,
-	  `local` tinyint(1) NOT NULL DEFAULT '0',
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-	*/
-	function add_attachment_for_id($attachment_id, $key, $content_type, $local)
-	{
-		$data = array("key" => $key, "content_type" => $content_type, "local" => $local, "attachment_id" => $attachment_id);
-		$this->db->insert("attachment_storage", $data);
-	}
-	
-	
-	/**
 	* once a contract is uploaded 
 	* we want to save it in the db to pull it again
 	*/
-	function insert_uploaded_contract($contract_id, $filename)
+	function insert_uploaded_document($contract_id, $remote_path, $file_name)
 	{
-		$data = array(
-			"contract" => $contract_id,
-			"filename" => $filename
-		);
-		
-		$this->db->insert("contract_uploads", $data);
-		return $this->db->insert_id();
+		$query = array("_id" => intval($contract_id));
+		$document_id = new MongoId();
+		$update = array(
+					'$addToSet' => array(
+						"documents" =>array(
+							"_id" => $document_id, 
+							"path" => $remote_path, 
+							"file_name" => $file_name,
+							"date" => new MongoDate()
+						)
+					)
+				);
+		$this->mongo->db->contracts->update($query, $update);
+		return $document_id;
 	}
 	
 	/**
@@ -57,21 +35,18 @@ class AttachmentModel extends CI_Model
 	* @param $page_number the page number that corresponds to the page number on the contract
 	* @param $upload_id corresponds to the version of the contract uploaded
 	*/
-	function insert_uploaded_contract_page($page_number, $upload_id)
+	function insert_uploaded_page($page, $upload_id)
 	{
-		$data = array("number_of_pages" => $page_number);
-		$this->db->where("id", $upload_id);
-		$this->db->update("contract_uploads", $data);
+		$query = array("document._id" => $upload_id);
+		$update = array('$addToSet' => array("documents" => array("pages" => array("name" => $page, "progress" => 0))));
+		$this->mongo->db->contracts->update($query, $update);
 	}
 	
-	function update_contract_process_progress($progress, $id)
+	function update_document_process_progress($upload_id, $page, $progress)
 	{
-		$data = array(
-		               'status' => $progress
-		            );
-
-		$this->db->where('id', $id);
-		$this->db->update('contract_uploads', $data);
+		$query = array("documents._id" => $upload_id, "documents.pages.name" => $page);
+		$update = array('$addToSet' => array("documents" => array("pages" => array("progress" => $progress))));
+		$this->mongo->db->contracts->update($query, $update);
 	}
 	
 	

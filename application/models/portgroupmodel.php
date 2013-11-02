@@ -65,7 +65,7 @@ class PortGroupModel extends CI_Model
 	 */
 	function get_port_groups_for_contract($contract_id)
 	{
-		$key = "get_port_groups-".$contract_id;
+		$key = "get_port_groups-by-contract-".$contract_id;
 		if(! $result = $this->cache->get($key)){
 			$this->db->select("id,name");
 			$this->db->from("contract_entry_port_group_name");
@@ -74,6 +74,28 @@ class PortGroupModel extends CI_Model
 			
 			$result = $query->result();
 			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		return $result;
+	}
+	
+	/*
+	* @param $group_id the id of the port group to retrieve
+	* @return the result with the port group if found
+	*/
+	function get_port_group($group_id)
+	{
+		$key = "get_port_groups-".$group_id;
+		if(! $result = $this->cache->get($key)){
+			$this->db->select("name");
+			$this->db->from("contract_entry_port_group_name");
+			$this->db->where("id", $group_id);
+			$query = $this->db->get();
+			$result = NULL;
+			if ($query->num_rows() > 0)
+			{
+			   $result = $query->row();
+			   $this->cache->save($key, $result, WEEK_IN_SECONDS);
+		   	}
 		}
 		return $result;
 	}

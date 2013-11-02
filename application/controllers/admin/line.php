@@ -17,6 +17,7 @@ class Line extends MY_Admin_Controller {
 		$this->load->model("referencemodel");
 		$this->load->model('customermodel');
 		$this->load->model('portgroupmodel');
+		$this->load->model('portmodel');
 		$this->load->model('cargomodel');
 		$this->load->model('ratemodel');
 		
@@ -138,31 +139,77 @@ class Line extends MY_Admin_Controller {
 	 */
 	public function manage($contract_id)
 	{
-		
-		redirect('admin/line/add/'.$contract_id);
-		//$line_items = $this->lineitemmodel->get_line_items_for_contract($contract_id);
-		
-		/**
 		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
 		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
-		$data['containers'] = $this->containermodel->get_containers_for_contract($contract_id);
-		$data['cargo_types'] = $this->cargomodel->get_cargo_types_for_contracts($contract_id);
-		$data['currencies'] = $this->referencemodel->get_currency_codes();
-		$data['effective_date'] = date( 'm/d/Y', strtotime($data['contract']->start_date)); 
-		$data['expires_date'] = date( 'm/d/Y', strtotime($data['contract']->end_date));
+		//redirect('admin/line/add/'.$contract_id);
+		$line_items = $this->lineitemmodel->get_line_items_for_contract($contract_id);
+		
+
 		$data['page'] = 'contracts';
 		$header_data['title'] = "Line Items";
 		$header_data['page_css'] = array('lib/famfamflag.css', 'admin/contract/line/manage.css');
 		// pass javascript to footer
-		$footer_data["scripts"] = array("admin/contract/line/all.js", "admin/contract/line/line_item_calculate.js");
+		$footer_data["scripts"] = array("admin/contract/line/all.js");
+		
+		
+		$line_items = array();
+		$cursor = $this->lineitemmodel->get_line_items_for_contract(intval($contract_id));
+		while ( $cursor->hasNext() )
+		{
+		    $li = $this->convert_li_to_view($cursor->getNext());
+			array_push($line_items, $li);
+		}
+		
+		$data['line_items'] = $line_items;
 		
 		$this->load->view('admin/header', $header_data);
 		$this->load->view("admin/customers/manager-header", $data);
 		$this->load->view('admin/contract/line/manage', $data);
 		$this->load->view("admin/customers/manager-footer");
 		$this->load->view('admin/footer', $footer_data);
-		 * */
 		 
+		
+	}
+	
+	
+	public function test_portgroupmodel($port_group=3){
+		var_dump($this->portgroupmodel->get_port_group($port_group));
+	}
+	
+	public function test_lineitems_list($contract_id=28)
+	{
+		$line_items = array();
+		$cursor = $this->lineitemmodel->get_line_items_for_contract(intval($contract_id));
+		while ( $cursor->hasNext() )
+		{
+		    $li = $this->convert_li_to_view($cursor->getNext());
+			array_push($line_items, $li);
+		}
+		var_dump($line_items);
+	}
+	
+	public function convert_li_to_view($li)
+	{
+		$li['origin'] = $this->convert_location_to_actual($li['origin']);
+		$li['destination'] = $this->convert_location_to_actual($li['destination']);
+		$li['effective'] = date('M/d/Y', $li['effective']->sec);
+		$li['expires'] = date('M/d/Y', $li['expires']->sec);
+		foreach($li['containers'] as &$container){
+			$container['type'] =  $this->referencemodel->get_container_by_id($container['type']);
+			$container['currency'] = $this->referencemodel->get_currency_by_id($container['currency']);
+		}
+		return $li;
+	}
+	
+	public function convert_location_to_actual($location)
+	{
+		// get group for origin 
+		if ($location['type'] == 'port'){
+			$location['value'] = $this->portmodel->get_port_information($location['id']);
+		} else if ($location['type'] == 'port_group'){
+			$location['value'] = $this->portgroupmodel->get_port_group($location['id']);
+		}
+		return $location;
 		
 	}
 	
