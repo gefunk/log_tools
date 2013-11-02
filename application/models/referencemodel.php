@@ -52,9 +52,30 @@ class ReferenceModel extends CI_Model
 		return $result;
 	}
 	
-	function get_container_types($carrier_id, $array = FALSE)
+	/*
+	* get currency by id
+	* @param $currency_id the id of the currency
+	* @return id, description, code, symbol of currency
+	*/
+	function get_currency_by_id($currency_id)
 	{
-		$key = 'get_container_types-'.$carrier_id.'-'.$array;
+		$key = 'get_currency_by_id-'.$currency_id;
+		if(! $result = $this->cache->get($key)){
+			$this->db->select('id, description, code, symbol')
+				->from('ref_currency_codes')->where('id', $currency_id); 
+			$query = $this->db->get();
+			$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		return $result;
+	}
+	
+	/*
+	* get all containers for a specific carrier
+	*/
+	function get_container_types($array = FALSE)
+	{
+		$key = 'get_container_types';
 		if(! $result = $this->cache->get($key)){
 			$this->db->select('id, container_type, description')->from('ref_container_types'); 
 			$query = $this->db->get();
@@ -66,6 +87,23 @@ class ReferenceModel extends CI_Model
 		}
 		return $result;
 	}
+	
+	/*
+	* get container info by id
+	*/
+	function get_container_by_id($id)
+	{
+		$key = 'get_container_by_id-'.$id;
+		if(! $result = $this->cache->get($key)){
+			$this->db->select('id, container_type, description')
+				->from('ref_container_types')->where('id', $id); 
+			$query = $this->db->get();
+			$result = $query->result();
+			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+		}
+		return $result;
+	}
+	
 	
 	function search_cities($search_term, $page=NULL, $page_size=NULL, $array=FALSE)
 	{

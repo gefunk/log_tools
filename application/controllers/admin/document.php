@@ -62,6 +62,8 @@ class Document extends MY_Admin_Controller {
 		$this->load->view('admin/footer', $footer_data);
 	}
 	
+	
+	
 	/**
 	 * upload contract document to the system
 	 * @param contract_id the contract id for which this upload belongs to
@@ -72,14 +74,10 @@ class Document extends MY_Admin_Controller {
 
 		$customer_id = $this->input->post("customer_id");
 		$contract_id = $this->input->post('contract_id');
-		$contract_number = $this->input->post('contract_number');
-					
-		// standard path to retrieve and put contracts	
-		$remote_path = $this->contracts->get_remote_url_for_contract($customer_id, $contract_id);
 
 		if(isset($_FILES) && !empty($_FILES) && !empty($_FILES["contract-file"])){
 			// get an attachment id
-			$attachment_id = $this->attachmentmodel->get_next_attachment_id("contract");
+			
 				if(isset($_FILES['contract-file']['name']) &&
 					$_FILES['contract-file']['error'] == UPLOAD_ERR_OK)
 				{
@@ -87,6 +85,9 @@ class Document extends MY_Admin_Controller {
 						$name = $_FILES['contract-file']['name'];
 						$content_type = $_FILES['contract-file']['type'];
 
+						// standard path to retrieve and put contracts	
+						$remote_path = $this->contracts->get_remote_url_for_contract($customer_id, $contract_id, $name);
+						
 						// move file to uploads directory
 						$upload_status = move_uploaded_file($_FILES["contract-file"]["tmp_name"], $this->config->item('upload_directory').$_FILES["contract-file"]["name"]);
 						
@@ -97,10 +98,10 @@ class Document extends MY_Admin_Controller {
 			            		"remote_path" => $remote_path
 							);
 							// upload the file to the backend
-							$this->async->post(site_url()."/attachments/async_upload_contract_remote", $params);
+							$this->async->post(site_url()."/attachments/async_upload_contract", $params);
 							$this->output
 		    					->set_content_type('application/json')
-		    					->set_output(json_encode(array("success" => true, "attachment_id" => $attachment_id)));
+		    					->set_output(json_encode(array("success" => true)));
 						}else{
 							// upload failed
 							$this->output
