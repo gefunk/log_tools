@@ -22,7 +22,6 @@ class UserModel extends CI_Model
 		$query = array("active" => true, "email" => $identity, "password" => $encrypted_password, 'customer' => intval($customer_id));
 		$projection = array("password" => 1);
 		$doc = $this->mongo->db->users->findOne($query, $projection);
-		
 		/**
 		 * return the encrypted password 
 		 */

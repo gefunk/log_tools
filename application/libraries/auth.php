@@ -142,6 +142,9 @@ class Auth
 	{
 		log_message("debug", "Passed into Auth: ".$identity." Password: ".$password." Customer ID: ".$customer_id);
 		$login_hash = $this->usermodel->check_login($identity, $password, $customer_id);
+		if(!$login_hash){
+			log_message("debug", "login hash is false");
+		}
 		log_message('debug', 'REMEMBER: '.$remember);
 		$login_result = !empty($login_hash);
 		log_message('debug', "login_hash: ".$login_hash." login_result: ".$login_result);

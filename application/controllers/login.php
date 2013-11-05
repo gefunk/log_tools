@@ -72,14 +72,9 @@ class Login extends MY_Out_Controller {
 			//if the login was un-successful
 			//redirect them back to the login page
 			$this->session->set_flashdata('messages', "incorrect login");
-			if (defined('ENVIRONMENT') && (ENVIRONMENT == 'development')){
-				log_message("debug", "Customer ID: ",$this->session->userdata("customer_id")." Subdomain: ".$this->session->userdata("subdomain"));
-				$redir_link = 'login/signin_local/'.$this->session->userdata("subdomain");
-			}else{
-				log_message("debug", "this should only happen in qa or production");
-				//use redirects instead of loading views for compatibility with MY_Controller libraries	
-				$redir_link = 'login';
-			}
+			//use redirects instead of loading views for compatibility with MY_Controller libraries	
+			$redir_link = 'login';
+			
 		}
 		
 		log_message('debug', 'LOGIN REDIRECT LINK: '.$redir_link);
