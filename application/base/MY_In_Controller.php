@@ -7,12 +7,8 @@ class MY_In_Controller extends MY_Controller {
 		parent::__construct();
 		//if user doesnt have the session redirect them out NOW!
 		if(!$this->auth->isLoggedIn()){
-			if (defined('ENVIRONMENT') && ENVIRONMENT == 'development'){
-				redirect('login/signin_local/'.$this->session->userdata("subdomain"), "refresh");
-			}else{
-				// in production redirect them to the login controller
-				redirect("login", "refresh");
-			}	
+			// redirect them to the login controller
+			redirect("login", "refresh");
 		}	
 	}
 	
