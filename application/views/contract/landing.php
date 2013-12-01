@@ -10,7 +10,7 @@
 		<img 
 			class="carrier-img" 
 			src="<?php echo base_url().'assets/img/carriers/'.$contract->image; ?>" 
-			data-contract-id="<?php echo $contract->id; ?>"
+			data-contract-id="<?php echo $contract->_id; ?>"
 			data-pages="<?php echo $contract->number_of_pages; ?>" />
 	</div>
 	<?php endforeach; ?>

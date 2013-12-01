@@ -12,15 +12,15 @@ class PortGroupModel extends CI_Model
 
 	function add_port_group($name, $contract)
 	{
-		$data = array(
-			"name" => $name,
-			"contract" => $contract
-		);
-		$this->db->insert("contract_entry_port_group_name", $data);
-		$group_id = $this->db->insert_id();
+			
+		$group = array('_id' => new MongoId(), 'name' =>$name);
+		$query = array("_id"=> new MongoId($contract));
+		$update = array('$addToSet' => array('port_groups' => $group));
+		$this->mongo->db->contracts->update($query, $update);
+		
 		// clear the cache so it is the latest
 		$this->cache->delete("get_port_groups-".$contract);
-		return $group_id;
+		return (string) $group["_id"];
 	}
 
 	/*
@@ -67,13 +67,18 @@ class PortGroupModel extends CI_Model
 	{
 		$key = "get_port_groups-by-contract-".$contract_id;
 		if(! $result = $this->cache->get($key)){
-			$this->db->select("id,name");
-			$this->db->from("contract_entry_port_group_name");
-			$this->db->where("contract", $contract_id);
-			$query = $this->db->get();
 			
-			$result = $query->result();
-			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+			$query = array('_id' => new MongoId($contract_id));
+			$projection = array('$elemMatch' => "port_groups");
+			$cursor = $this->mongo->db->contracts->find($query, $projection);
+			
+			$results = array();
+			foreach($cursor as $doc){
+				$results[] = (object) $doc;
+			}
+			
+			if(!empty($results))
+				$this->cache->save($key, $results, WEEK_IN_SECONDS);
 		}
 		return $result;
 	}

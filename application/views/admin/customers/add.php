@@ -9,7 +9,7 @@
 			<label>Currency</label>
 			<select name="currency_code" id="currency_code">
 				<?php foreach($currency_codes as $code): ?>
-					<option value="<?php echo $code->id; ?>"><?php echo $code->code." - ".$code->description ?></option>
+					<option value="<?php echo $code->code; ?>"><?php echo $code->code." - ".$code->description ?></option>
 				<?php endforeach; ?>
 			</select>
 		    <span class="help-block">Default Currency for Customer</span>
