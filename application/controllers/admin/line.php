@@ -59,7 +59,7 @@ class Line extends MY_Admin_Controller {
 	public function save()
 	{
 		
-		$contract_id = intval($this->input->post("contract_id"));
+		$contract_id = $this->input->post("contract_id");
 		
 		$cargo = $this->input->post('cargo');
 		$origin = intval($this->input->post('origin'));

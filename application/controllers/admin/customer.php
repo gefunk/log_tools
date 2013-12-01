@@ -44,7 +44,6 @@ class Customer extends CI_Controller {
 	}
 
 	public function manager($customer_id){
-			
 		$data['customer'] = $this->customermodel->get_customer_by_id($customer_id);
 		$header_data['title'] = "Manage Customer - ".$data['customer']->name;
 		$data['page'] = 'customers';

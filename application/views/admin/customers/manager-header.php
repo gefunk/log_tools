@@ -6,10 +6,10 @@
 		<div class="span2">
 			<ul class="nav nav-tabs nav-stacked">
 	  			<li class="<?php echo ($page == 'customers') ? 'active' : ''; ?>">
-	    			<a href="<?php echo site_url().'/admin/customer/manager/'.$customer->id; ?>">Overview</a>
+	    			<a href="<?php echo site_url().'/admin/customer/manager/'.$customer->_id; ?>">Overview</a>
 	  			</li>
 	  			<li class="<?php echo ($page == 'contracts') ? 'active' : ''; ?>">
-	  				<a href="<?php echo site_url().'/admin/contract/all/'.$customer->id; ?>">Contracts</a>
+	  				<a href="<?php echo site_url().'/admin/contract/all/'.$customer->_id; ?>">Contracts</a>
 	  			</li>
 	  			<li class="<?php echo ($page == 'users') ? 'active' : ''; ?>">
 	  				<a href="#">Users</a>

@@ -23,4 +23,10 @@ class MY_Admin_Controller extends CI_Controller {
 		return $sql_date['year']."-".$sql_date['month']."-".$sql_date['day'];
 
 	}
+	
+	function get_mongo_date($date){
+		$format = "m/j/Y";
+		$mongo_date = DateTime::createFromFormat ( $format , $date );
+		return new MongoDate($mongo_date->getTimestamp());
+	}
 }

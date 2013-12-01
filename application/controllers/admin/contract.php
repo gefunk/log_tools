@@ -23,6 +23,7 @@ class Contract extends MY_Admin_Controller {
 		$this->load->model("attachments/attachmentmodel");
 		$this->load->model("attachments/datastore");
 		$this->load->model('cargomodel');
+		$this->load->model('carriermodel');
 
 		$this->load->library("contracts");
 		$this->load->library("async");
@@ -35,12 +36,21 @@ class Contract extends MY_Admin_Controller {
 		
 		$header_data['title'] = "All Contracts";
 		
-		$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
+		
+		$contracts = $this->contractmodel->get_contracts_for_customer($customer_id);
+		
+		$data['contracts'] = array();
+		
+		foreach($contracts as $contract){
+			$contract['carrier'] = (object) $this->carriermodel->get_carrier_by_id($contract['carrier']);
+			$data['contracts'][] = (object) $contract;
+		}
+		
 		$data["customer"] =  $this->customermodel->get_customer_by_id($customer_id);
-		$data["carriers"] = $this->referencemodel->get_carriers();
+		
 		$data['page'] = 'contracts';
 		
-		$footer_data["scripts"] = array("admin/contract/view.js", "admin/contract/upload.js");
+		$footer_data["scripts"] = array("admin/contract/view.js");
 
 		$this->load->view('admin/header', $header_data);
 		$this->load->view("admin/customers/manager-header", $data);
@@ -51,8 +61,10 @@ class Contract extends MY_Admin_Controller {
 
 	
 	public function manage($contract_id){
-		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
-		$data["customer"] =  $this->customermodel->get_customer_by_id($data['contract']->customer_id);
+		$contract = (object) $this->contractmodel->get_contract_from_id($contract_id);
+		$contract->carrier = (object) $this->carriermodel->get_carrier_by_id($contract->carrier);
+		$data['contract'] = $contract;
+		$data["customer"] =  $this->customermodel->get_customer_by_id($data['contract']->customer);
 		$data['page'] = 'contracts';
 		
 		$header_data['title'] = "Contract - ".$data['contract']->number;
@@ -216,11 +228,13 @@ class Contract extends MY_Admin_Controller {
 		$this->contractmodel->
 				add_contract(
 					$contract_number,
-					$this->get_sql_date($start_date),
-					$this->get_sql_date($end_date),
+					$this->get_mongo_date($start_date),
+					$this->get_mongo_date($end_date),
 					$customer,
 					$carrier
 				);
+				
+			
 			
 		redirect("admin/contract/all/".$customer_id);
 
@@ -568,6 +582,28 @@ class Contract extends MY_Admin_Controller {
 
     }
 
+    
+	public function test_date_parse(){
+		$parsed_date = DateTime::createFromFormat("Y-m-d",'2013-11-19');
+		var_dump($parsed_date);
+		echo $parsed_date->format('Y-m-d');
+	}
+	
+	public function test_contract_number($contract_number){
+		$contract_number = rawurldecode($contract_number);
+		var_dump($this->contractmodel->get_contract_from_number($contract_number));
+	}
+
+	function test_carriers(){
+		foreach($this->referencemodel->get_carriers() as $carrier){
+			echo $carrier['name'];	
+			#var_dump($carrier);
+		}
+	}
+	
+	function test_customer_get($contract_id){
+		var_dump($this->customermodel->get_customer_id_from_contract($contract_id));
+	}
 
 	public function emailraw()
 	{
