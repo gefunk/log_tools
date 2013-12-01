@@ -19,7 +19,7 @@ class CargoModel extends CI_Model {
 		// expire cache
 		$key = 'get_cargo_types_for_contracts-'.$contract_id;
 		$this->cache->delete($key);
-		$query = array("_id"=>intval($contract_id));
+		$query = array("_id"=>new MongoId($contract_id));
 		$update = array('$push' => array("cargo_types" => $cargo));
 		return $this->mongo->db->contracts->update($query, $update);
 	}	
@@ -30,7 +30,7 @@ class CargoModel extends CI_Model {
 	function get_cargo_types_for_contracts($contract_id){
 		$key = 'get_cargo_types_for_contracts-'.$contract_id;
 		if(! $result = $this->cache->get($key)){
-			$query = array("_id"=>intval($contract_id));
+			$query = array("_id"=>new MongoId($contract_id));
 			$projection = array("cargo_types" => 1);
 			$doc = $this->mongo->db->contracts->findOne($query, $projection);
 			$result = $doc['cargo_types'];		
@@ -47,7 +47,7 @@ class CargoModel extends CI_Model {
 	function remove_cargo_type_from_contract($contract_id, $cargo){
 		$key = 'get_cargo_types_for_contracts-'.$contract_id;
 		$this->cache->delete($key);
-		$query = array("_id"=>intval($contract_id));
+		$query = array("_id"=>new MongoId($contract_id));
 		$update = array('$pull' => array("cargo_types" => $cargo));
 		return $this->mongo->db->contracts->update($query, $update);
 	}

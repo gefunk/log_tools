@@ -3,9 +3,9 @@
 </ul>  
 	<!-- customer information -->
 	<div>
-		<div>Internal Id: <strong><?php echo $customer->id; ?></strong></div>
+		<div>Internal Id: <strong><?php echo $customer->_id; ?></strong></div>
 		<div>
-		Default Currency: <strong><?php echo $customer->currency_code; ?></strong>
+		Default Currency: <strong><?php echo $customer->currency; ?></strong>
 		</div>
 		<div>
 		Subdomain: <strong><?php echo $customer->subdomain; ?></strong>

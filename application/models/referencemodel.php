@@ -28,10 +28,10 @@ class ReferenceModel extends CI_Model
 	{
 		$key = 'get_carriers';
 		if(! $result = $this->cache->get($key)){
-			$this->db->select('id, name')->from('ref_carriers'); 
-			$query = $this->db->get();
-	    	$result = $query->result();
-			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+			$result = (object) $this->mongo->db->carriers->find();
+			if($result){
+				$this->cache->save($key, $result, DAY_IN_SECONDS);
+			}
 		}
 		return $result;
 	}

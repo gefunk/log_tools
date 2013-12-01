@@ -61,13 +61,13 @@ class ContainerModel extends CI_Model {
 
 	function add_container_to_contract($contract_id, $rational_container_id, $container_name){
 		 // add container to mongo
-		$query = array("_id"=>intval($contract_id));
+		$query = array("_id"=>new MongoId($contract_id));
 		$update = array('$push' => array("containers" => array("type"=> $rational_container_id, "text" => $container_name)));
 		return $this->mongo->db->contracts->update($query, $update);
 	}
 	
 	function get_containers_for_contract($contract_id){
-		$query = array("_id"=>intval($contract_id));
+		$query = array("_id"=>new MongoId($contract_id));
 		$projection =  array("_id"=>FALSE, "containers"=>TRUE);
 		$doc = $this->mongo->db->contracts->findOne($query, $projection);
 		if(isset($doc) && isset($doc['containers'])){
@@ -85,7 +85,7 @@ class ContainerModel extends CI_Model {
 	
 	function remove_container_from_contract($contract_id, $rational_container_id){
 		//db.contracts.update( { "_id": 28 }, { $pull: { "containers": {"type":"1"} } } )
-		$query = array("_id"=>intval($contract_id));
+		$query = array("_id"=>new MongoId($contract_id));
 		$update = array('$pull' => array("containers" => array("type"=> $rational_container_id)));
 		$this->mongo->db->contracts->update($query, $update);
 	}
