@@ -1,17 +1,17 @@
 
 <ul class="breadcrumb">
-	<li><a href="<?php echo site_url().'/admin/contract/all/'.$customer->id; ?>">All Contracts</a><span class="divider">/</span></li>
+	<li><a href="<?php echo site_url().'/admin/contract/all/'.$customer->_id; ?>">All Contracts</a><span class="divider">/</span></li>
 	<li class="active">New</li>
 </ul>  
 
-		<?php echo form_open('admin/contract/save/'.$customer->id); ?>
+		<?php echo form_open('admin/contract/save/'.$customer->_id); ?>
 		  <fieldset>
 		    <legend>Add a New Contract</legend>
 		    <label>Carrier</label>
 			<select id="carrier" name="carrier">
 				<option value="0">-- Please Select Carrier --</option>
-				<?php foreach($carriers as $row): ?>
-					<option value="<?php echo $row->id ?>"><?php echo $row->name; ?></option>
+				<?php foreach($carriers as $carrier): ?>
+					<option value="<?php echo $carrier['_id'] ?>"><?php echo $carrier['name']; ?></option>
 				<?php endforeach; ?>
 			</select>
 			<span class="help-block">The carrier which wrote this contract.</span>

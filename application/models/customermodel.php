@@ -1,68 +1,50 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class CustomerModel extends CI_Model 
+class CustomerModel extends Base_Model 
 {
     function __construct()
     {
         // Call the Model constructor
         parent::__construct();
-		$this->load->driver('cache', array('adapter' => 'memcached', 'backup' => 'dummy'));
     }
 
+	/**
+	 * get all customers for amfitir
+	 */
 	function get_customers()
-	{
-		$this->db->select('c.id, c.name, c.subdomain, rc.code as currency_code');
-		$this->db->from('customers c'); 
-		$this->db->join("ref_currency_codes rc", "c.default_currency = rc.id");
-		
-		$query = $this->db->get();
-	    return $query->result();
+	{		
+		$cursor = $this->mongo->db->customers->find();
+		return $this->convert_mongo_cursor_to_object($cursor);
+
 	}
 	
 	function add($customer_name, $currency_code, $subdomain){
-		$data = array('name' => $customer_name, 'default_currency' => $currency_code, 'subdomain' => $subdomain);
-		$this->db->insert('customers', $data);
-		$customer_id = $this->db->insert_id();
-		// create a new customer id in mongodb
-		$this->mongo->db->customers->insert(array("_id" => $customer_id));
+		$data = array('name' => $customer_name, 'currency' => $currency_code, 'subdomain' => $subdomain);
+		$this->mongo->db->customers->insert($data);
 	}
 	
+	/**
+	 * get a customer by id
+	 * @param $customer_id the id of the customer you want to retrieve
+	 */
 	function get_customer_by_id($customer_id){
-		$this->db->select('c.id, c.name, c.subdomain, rc.code as currency_code');
-		$this->db->from('customers c'); 
-		$this->db->join("ref_currency_codes rc", "c.default_currency = rc.id");
-		$this->db->where("c.id", $customer_id);
+		return (object) $this->mongo->db->customers->findOne(array("_id" => new MongoId($customer_id)));		
+	}
+	
+	
+	function get_customer_id_from_contract($contract_id){
+		$contract_query = array("_id" => new MongoId($contract_id));
+		$contract_projection = array('customer');
+		$customer_id = $this->mongo->db->contracts->findOne($contract_query, $contract_projection);
+		if($customer_id)	
+			return $customer_id['customer'];
 		
-		$query = $this->db->get();
-		if ($query->num_rows() > 0){
-			return $query->row();
-		}else{
-			return FALSE;
-		}
-	    	
+		return NULL;
+
 	}
 	
 	function get_customer_from_contract($contract_id){
-		$this->db->select("customer")->from("contracts")->where("id", $contract_id);
-		
-		$query = $this->db->get();
-		if ($query->num_rows() > 0){
-			$customer_id = $query->row()->customer;
-			$this->db->select('c.id, c.name, c.subdomain, c.default_currency, rc.code as currency_code');
-			$this->db->from('customers c');
-			$this->db->join("ref_currency_codes rc", "c.default_currency = rc.id");
-			$this->db->where("c.id", $customer_id);
-		
-			$query = $this->db->get();
-			if ($query->num_rows() > 0){
-				return $query->row();
-			}else{
-				return FALSE;
-			}
-		}else{
-			return FALSE;
-		}
-		
+		return $this->get_customer_by_id($this->get_customer_id_from_contract($contract_id));
 	}
 	
 	function get_users($customer_id){
@@ -75,11 +57,11 @@ class CustomerModel extends CI_Model
 	{
 		$key = 'get_customer_default_currency-'.$customer_id;
 		if(! $result =  $this->cache->get($key)){
-			$this->db->select('default_currency')->from('customers')->where("id", $customer_id);
-			$query = $this->db->get();
-			$row = $query->row();
-			$result = $row->default_currency;
-			$this->cache->save($key, $result, WEEK_IN_SECONDS);
+			$query = array("_id" => $customer_id);
+			$projection = array('$elemMatch' => 'currency');
+			$result = (object) $this->mongo->db->customers->findOne($query, $projection);
+			if($result)
+				$this->cache->save($key, $result, WEEK_IN_SECONDS);
 		}
 		return $result;
 	}
