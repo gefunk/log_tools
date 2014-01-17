@@ -69,12 +69,12 @@ class PortGroupModel extends CI_Model
 		if(! $result = $this->cache->get($key)){
 			
 			$query = array('_id' => new MongoId($contract_id));
-			$projection = array('$elemMatch' => "port_groups");
+			$projection = array("port_groups" => 1);
 			$cursor = $this->mongo->db->contracts->find($query, $projection);
 			
-			$results = array();
+			$result = array();
 			foreach($cursor as $doc){
-				$results[] = (object) $doc;
+				$result[] = (object) $doc['port_groups'];
 			}
 			
 			if(!empty($results))

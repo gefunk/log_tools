@@ -226,6 +226,33 @@ class AwsInterface{
      
 
 	/**
+	 * 
+	 * Copy an object from one location to another within S3 
+	 *
+	 * @param $sourceBucket = Your Source Bucket Name
+	 * @param $sourceKeyname = Your Source Object Key
+	 * @param $targetBucket = Your Target Bucket Name
+	 * @param $targetKeyname = Your Target Key Name
+	 */
+	function copyObject($sourceBucket, $sourceKeyname, $targetBucket, $targetKeyname){
+		// Copy an object.
+		try{
+			$this->s3Client->copyObject(array(
+			    'Bucket'     => $targetBucket,
+			    'Key'        => $targetKeyname,
+			    'CopySource' => "{$sourceBucket}/{$sourceKeyname}"
+			));	
+			return true;
+		}catch (S3Exception $e) {
+            if($this->debug){
+                return $e->getMessage();
+            }
+        }   
+		return false;
+		
+	}
+
+	/**
 	* Gets a temporary url for a s3 object
 	* @param $keypath, the full path to the remote object
 	* @return returns a string representing the url

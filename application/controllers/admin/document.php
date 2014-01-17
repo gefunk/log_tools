@@ -71,37 +71,32 @@ class Document extends MY_Admin_Controller {
 	 */
 	public function upload()
 	{
-
-		$customer_id = $this->input->post("customer_id");
-		$contract_id = $this->input->post('contract_id');
-
-		if(isset($_FILES) && !empty($_FILES) && !empty($_FILES["contract-file"])){
-			// get an attachment id
+		
+		
+		if(isset($_FILES) && !empty($_FILES) && !empty($_FILES["file"])){
 			
-				if(isset($_FILES['contract-file']['name']) &&
-					$_FILES['contract-file']['error'] == UPLOAD_ERR_OK)
-				{
-						// get file info for each file
-						$name = $_FILES['contract-file']['name'];
-						$content_type = $_FILES['contract-file']['type'];
+			if(isset($_FILES['file']['name']) &&
+					$_FILES['file']['error'] == UPLOAD_ERR_OK)
+					{
 
-						// standard path to retrieve and put contracts	
-						$remote_path = $this->contracts->get_remote_url_for_contract($customer_id, $contract_id, $name);
-						
 						// move file to uploads directory
-						$upload_status = move_uploaded_file($_FILES["contract-file"]["tmp_name"], $this->config->item('upload_directory').$_FILES["contract-file"]["name"]);
+						$upload_status = move_uploaded_file($_FILES["file"]["tmp_name"], $this->config->item('upload_directory').$_FILES["file"]["name"]);
 						
+						// if upload was successful
 						if($upload_status){
+							// get a mongoid to use as document id to track this file
+							// save the contract into the db
+							$document = $this->attachmentmodel->insert_uploaded_document($_FILES["file"]["name"]);
+						
 							$params = array(
-								"contract_id" => $contract_id,
-			            		"contract_filename" => $name,
-			            		"remote_path" => $remote_path
+								"document_id" => (string) $document['_id'],
+			            		"contract_filename" => $_FILES["file"]["name"]
 							);
-							// upload the file to the backend
-							$this->async->post(site_url()."/attachments/async_upload_contract", $params);
+							// upload the file to the conversion service
+							$this->async->post(site_url()."/attachments/async_convert_pdf", $params);
 							$this->output
 		    					->set_content_type('application/json')
-		    					->set_output(json_encode(array("success" => true)));
+		    					->set_output(json_encode(array("success" => true, "document" => $document)));
 						}else{
 							// upload failed
 							$this->output
@@ -112,13 +107,13 @@ class Document extends MY_Admin_Controller {
 					
 				}else{
 					$this->output
-		    ->set_content_type('application/json')
-		    ->set_output( json_encode(array("success" => false, "error"=> $_FILES['contract-file']['error'])));
+		    			->set_content_type('application/json')
+		    			->set_output( json_encode(array("success" => false, "error"=> $_FILES['file']['error'])));
 				}
 		}else{
 			$this->output
-		    ->set_content_type('application/json')
-		    ->set_output( json_encode(array("success" => false, "error"=> "$_FILES parameter is empty: ".var_dump($_FILES))));
+		    	->set_content_type('application/json')
+		    	->set_output( json_encode(array("success" => false, "error"=> "$_FILES parameter is empty: ".var_dump($_FILES))));
 		}
 			
 		
@@ -128,13 +123,14 @@ class Document extends MY_Admin_Controller {
 	/**
 	 * get upload status for contract
 	 */
-	public function upload_status($contract_id)
+	public function conversion_progress_status($document_id)
 	{
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->attachmentmodel->get_latest_upload_for_contract($contract_id)));
+		    ->set_output(json_encode($this->attachmentmodel->get_document_process_progress($document_id)));
 	}
 
-	
+
+
 	
 }
