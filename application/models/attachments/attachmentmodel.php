@@ -30,7 +30,7 @@ class AttachmentModel extends CI_Model
 	 */
 	function set_remote_path_for_document($document_id, $remote_path){
 		$query = array("_id" => new MongoId($document_id));
-		$update = array('path' => $remote_path);
+		$update = array('$set' => array('path' => $remote_path));
 		$this->mongo->db->documents->update($query, $update, array("w" => 1));	
 	}
 	
@@ -53,7 +53,7 @@ class AttachmentModel extends CI_Model
 	function update_document_progress($document_id, $status, $percent)
 	{
 		$query = array("_id" => new MongoId($document_id));
-		$update = array("progress" => array("status" => $status, "percent"=> $percent));
+		$update = array('$set' => array("progress" => array("status" => $status, "percent"=> $percent)));
 		$this->mongo->db->documents->update($query, $update);
 	}
 	
