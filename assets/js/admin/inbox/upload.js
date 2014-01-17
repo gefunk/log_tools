@@ -49,7 +49,7 @@ var uploader = uploader || {};
 	                	'progress',
 						function(e){
 							var percent = ((e.loaded/e.total)*100)+"%";
-							broadcast({event: 'progress', data: "+percent+"});
+							broadcast({event: 'progress', data: percent});
 						}, 
 						false
 					); 

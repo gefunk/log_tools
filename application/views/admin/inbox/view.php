@@ -34,7 +34,7 @@
 					<div><?php echo $status; ?></div>
 					<div class="progress <?php echo $bar_class; ?>">
   						<div class="bar" 
-  						style="width: <?php echo $doc['progress']['percent']; ?> %;"></div>
+  						style="width: <?php echo $doc['progress']['percent']; ?>%;"></div>
 					</div>
 				<?php endif; ?>
 				</td>
