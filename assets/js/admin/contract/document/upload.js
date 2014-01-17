@@ -14,7 +14,7 @@ $(document).ready(function(){
 	    //your validation
 	    if(!type.contains('pdf')){
 	    	$("div#upload-message").html("Please only upload PDF's");
-	    	$(this).replaceWith("<input name='file' type='file' />");
+	    	$(this).replaceWith("<input name='contract-file' type='file' />");
 	    }else{
 	    	$("div#upload-message").html("Click Upload to send file to server").removeClass("hide");
 	    }

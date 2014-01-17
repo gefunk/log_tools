@@ -11,41 +11,38 @@ class Attachments extends CI_Controller {
 		$this->load->model('attachments/datastore');
 	}
 
-	function index()
-	{
-		$this->load->view('upload', array('error' => ' ' ));
-	}
-
 	
-	
-	
-	/** Asynchronous upload of Contracts **/
-
 	/**
-	* Asynchronously Upload files to server
-	* @param the key to use when creating a folder in the s3 bucket or locally
+	* Asynchronously Upload files to Remote Data Store
+	* This service accepts only PDF's, the PDF's are converted to images and stored remotely
+	* 
 	*/
-	function async_upload_contract(){
+	function async_convert_pdf(){
 
-		// set execution time to be forever
+		// set execution time to be forever, this will allow long running processes
 		ini_set('MAX_EXECUTION_TIME', -1);
 
-		// local_files is the local file path
-		$contract_id = $this->input->post("contract_id");
 		$file_name = $this->input->post("contract_filename");
+		// locally located file
 		$local_file = $this->config->item('upload_directory').$file_name;
-		// remote_paths is where to put the file in the remote location
-		$remote_path = $this->input->post("remote_path");
+		// the document id / upload id is the document id in mongo
+		$upload_id = $this->input->post("document_id");
+		// where to store the file on the remote server
+		$remote_path = $upload_id;
 
+		// update progress with uploading message
+		$this->attachmentmodel->update_document_progress($upload_id, "Uploading to Data Store", 0);		
 		// upload the files to s3
 		if($this->datastore->put($local_file, $remote_path.'/'.$file_name)){
-			// successful upload
+			// mark file as uploaded
+			$this->attachmentmodel->update_document_progress($upload_id, "PDF Upload Complete", 100);
 			
-			// save the contract into the db
-			$upload_id = $this->attachmentmodel->insert_uploaded_document($contract_id, $remote_path, $file_name);
-			// get the number of pages from the pdf
+			// initialize number of pages, in development we set this to 5
 			$number_of_pages = 5;
 
+			/*
+			 * Get actual page count from pdfinfo, must be installed in ubuntu - sudo apt-get install pdfinfo
+			 */
 			if (defined('ENVIRONMENT') && (ENVIRONMENT != 'development')){
 				$command = "pdfinfo $local_file";
 				$output = shell_exec($command);
@@ -61,9 +58,6 @@ class Attachments extends CI_Controller {
 
 				// make all the pages
 				for($page_number = 0; $page_number < $number_of_pages; $page_number++){
-					
-					
-					
 					$page = $local_file."[".$page_number."]";
 					log_message("info", "Working on Contract ".$local_file." page: ".$page);
 					$img = new Imagick();
@@ -72,13 +66,10 @@ class Attachments extends CI_Controller {
 					$img->setResolution( $resolution, $resolution );
 					$img->readImage($page);
 
-
 					// increase the contrast by 2
 					$img->contrastImage(1);
 					$img->contrastImage(2);
 					$img->contrastImage(3);
-					
-					
 					
 					// rescale image to be readable - 816 X 1056 = 8.5 x 11
 					$img->scaleImage($this->config->item('pdf_image_width'),0);
@@ -93,9 +84,6 @@ class Attachments extends CI_Controller {
 					// set the new dpi
 					// resize image to printer resolution
 					$img->setResolution(72,72);
-					 
-   					//$img->setImageCompressionQuality(90); 
-					
 					// strip extraneous data
    					$img->stripImage(); 
 					// set depth to 8
@@ -105,6 +93,8 @@ class Attachments extends CI_Controller {
 					$compressed_name = '/'.($page_number+1).'-c.png';
 					$local_page = $dir.$page_name;
 					$img->writeImage($local_page); // Write to disk
+
+					// clean up image
 					ob_clean(); // clear buffer
 					$img->destroy();
 					
@@ -117,9 +107,10 @@ class Attachments extends CI_Controller {
 					// upload the compressed image to amazon
 					if($this->datastore->put($compressed_file, $remote_path.'/pages/'.$page_name)){
 						// update progress
-						$progress = (($page_number+1) / $number_of_pages)*100;
+						$conversion_percent = (($page_number+1) / $number_of_pages)*100;
 						// record total pages in document
 						$this->attachmentmodel->insert_uploaded_page($page, $upload_id);
+						$this->attachmentmodel->update_document_progress($upload_id, "Page Conversion", $conversion_percent);
 						// delete local image file(s)
 						unlink($local_page);
 						unlink($compressed_file);
@@ -132,7 +123,7 @@ class Attachments extends CI_Controller {
 				
 			}
 
-
+			$this->attachmentmodel->update_document_progress($upload_id, "Completed", 100);
 			log_message("info", "Completed uploading files to s3");
 			// clean up the contract local file
 			unlink($local_file);

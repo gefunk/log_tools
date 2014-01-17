@@ -26,7 +26,7 @@ class Login extends CI_Controller {
 		if($this->auth->admin_login($identity, $password, $remember)){
 			//successful login
 			log_message('debug', 'SUCCESSFUL Login');
-			$redir_link = "admin/contract";
+			$redir_link = "admin/customer";
 		}else{
 			log_message('debug', 'Could not Log You in');
 			//if the login was un-successful

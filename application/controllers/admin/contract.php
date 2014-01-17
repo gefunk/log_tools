@@ -604,6 +604,10 @@ class Contract extends MY_Admin_Controller {
 	function test_customer_get($contract_id){
 		var_dump($this->customermodel->get_customer_id_from_contract($contract_id));
 	}
+	
+	function test_port_groups($contract_id){
+		var_dump($this->portgroupmodel->get_port_groups_for_contract($contract_id));
+	}
 
 	public function emailraw()
 	{
