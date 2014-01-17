@@ -11,54 +11,69 @@ class AttachmentModel extends CI_Model
 	/**
 	* once a contract is uploaded 
 	* we want to save it in the db to pull it again
+	* @param $remote_path - where it is stored on aws
+	* @param $file_name - filename of the contract
+	* @return $document - the inserted document
 	*/
-	function insert_uploaded_document($contract_id, $remote_path, $file_name)
+	function insert_uploaded_document($file_name)
 	{
-		$query = array("_id" => intval($contract_id));
-		$document_id = new MongoId();
-		$update = array(
-					'$addToSet' => array(
-						"documents" =>array(
-							"_id" => $document_id, 
-							"path" => $remote_path, 
-							"file_name" => $file_name,
-							"date" => new MongoDate()
-						)
-					)
-				);
-		$this->mongo->db->contracts->update($query, $update);
-		return $document_id;
+		$document = array("file_name" => $file_name,"date" => new MongoDate());
+		$this->mongo->db->documents->insert($document);
+		return $document;
+	}
+	
+	/**
+	 * set the remote path for the document
+	 * @param $document_id - the id of the document
+	 * @param $remote_path - the path where the document is set
+	 */
+	function set_remote_path_for_document($document_id, $remote_path){
+		$query = array("_id" => new MongoId($document_id));
+		$update = array('path' => $remote_path);
+		$this->mongo->db->documents->update($query, $update);	
 	}
 	
 	/**
 	* save the image of each page of the contract
 	* @param $page_number the page number that corresponds to the page number on the contract
-	* @param $upload_id corresponds to the version of the contract uploaded
+	* @param $document_id corresponds to the document id
 	*/
-	function insert_uploaded_page($page, $upload_id)
+	function insert_uploaded_page($page, $document_id)
 	{
-		$query = array("document._id" => $upload_id);
-		$update = array('$addToSet' => array("documents" => array("pages" => array("name" => $page, "progress" => 0))));
-		$this->mongo->db->contracts->update($query, $update);
-	}
-	
-	function update_document_process_progress($upload_id, $page, $progress)
-	{
-		$query = array("documents._id" => $upload_id, "documents.pages.name" => $page);
-		$update = array('$addToSet' => array("documents" => array("pages" => array("progress" => $progress))));
-		$this->mongo->db->contracts->update($query, $update);
+		$query = array("_id" => new MongoId($document_id));
+		$update = array('$addToSet' => array("pages" => array("name" => $page)));
+		$this->mongo->db->documents->update($query, $update);
 	}
 	
 	
-	
-	public function get_latest_upload_for_contract($contract_id)
+	/**
+	 * @param $document_id the id of the document
+	 */
+	function update_document_progress($document_id, $status, $percent)
 	{
-		$sql = "SELECT status, filename, number_of_pages FROM contract_uploads".
-		" where contract = $contract_id".
-		" order by upload_time desc LIMIT 1";
-		$query = $this->db->query($sql);
-		return $query->result();
+		$query = array("_id" => new MongoId($document_id));
+		$update = array("progress" => array("status" => $status, "percent"=> $percent));
+		$this->mongo->db->documents->update($query, $update);
 	}
 	
+	function get_document_process_progress($document_id){
+		$query = array("_id" => new MongoId($document_id));
+		$projection =  array("_id" => false, "progress" => true);
+		$progress = $this->mongo->db->documents->find_one($query, $projection);
+		return $progress;
+	}
+	
+	/**
+	 * Documents which have not been assigned to a customer
+	 * This signifies that they are in the "Inbox"
+	 * @return MongoCursor sorted by most recently uploaded date
+	 */
+	function get_inbox_docs(){
+		$query = array("customer" => array('$exists' => false));
+		$cursor = $this->mongo->db->documents->find($query);
+		$cursor->sort(array('date' => -1));
+		return $cursor;
+	}
+
 }
 /** end model **/
