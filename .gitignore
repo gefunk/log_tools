@@ -17,3 +17,5 @@ logtools.*
 application/libraries/fake
 
 .DS_Store
+
+*.pdf

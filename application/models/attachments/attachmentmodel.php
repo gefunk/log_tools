@@ -18,7 +18,8 @@ class AttachmentModel extends CI_Model
 	function insert_uploaded_document($file_name)
 	{
 		$document = array("file_name" => $file_name,"date" => new MongoDate());
-		$this->mongo->db->documents->insert($document);
+		// we want to make sure this gets written to MongoDB, get acknowledgement that it is written to the db
+		$this->mongo->db->documents->insert($document, array("w" => 1));
 		return $document;
 	}
 	
@@ -30,7 +31,7 @@ class AttachmentModel extends CI_Model
 	function set_remote_path_for_document($document_id, $remote_path){
 		$query = array("_id" => new MongoId($document_id));
 		$update = array('path' => $remote_path);
-		$this->mongo->db->documents->update($query, $update);	
+		$this->mongo->db->documents->update($query, $update, array("w" => 1));	
 	}
 	
 	/**
@@ -42,7 +43,7 @@ class AttachmentModel extends CI_Model
 	{
 		$query = array("_id" => new MongoId($document_id));
 		$update = array('$addToSet' => array("pages" => array("name" => $page)));
-		$this->mongo->db->documents->update($query, $update);
+		$this->mongo->db->documents->update($query, $update, array("w" => 1));
 	}
 	
 	
