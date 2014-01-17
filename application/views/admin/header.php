@@ -39,9 +39,7 @@
 					Customers
 				 </a>
 			  </li>
-		      <li><a href="<?php echo site_url(); ?>/admin/contract">Contracts</a></li>
-		      <li><a href="#">Currencies</a></li>
-		 	  <li><a href="#">Carriers</a></li>
+		      <li><a href="<?php echo site_url(); ?>/admin/inbox">Inbox</a></li>
 		    </ul>
 		  </div>
 		</div>

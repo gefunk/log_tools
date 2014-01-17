@@ -93,6 +93,11 @@ function convert_sqldate_to_date (sqldate) {
 	return new Date(sqldatearr[0], sqldatearr[1]-1, sqldatearr[2]);
 }
 
+function convert_date_to_str_datetime(date){
+	var formatted_date = (date.getMonth()+1)+"/"+date.getDay()+"/"+date.getFullYear()+" "+date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
+	return formatted_date;
+}
+
 
 /**
  * Increment the number of times a port was used in a search

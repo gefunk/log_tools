@@ -55,4 +55,16 @@ class Async {
 	    fclose($fp);
 	}
 
+	/**
+	 * get random strings for upload paths on remote data store
+	 * @param $length - optional size of the random string
+	 */
+	function generate_random_path($length = 10) {
+    	$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    	$randomString = '';
+    	for ($i = 0; $i < $length; $i++) {
+        	$randomString .= $characters[rand(0, strlen($characters) - 1)];
+    	}
+    	return $randomString;
+}
 }
