@@ -7,7 +7,7 @@ function check_document_conversion_status(document_id){
 function handle_upload_event(e){
 	console.log("Handle Upload Event", e.event);
 	if(e.event == 'progress'){
-		$("div#file-upload-messages div.bar").css("width", e.data);
+		$("div#file-upload-messages div.bar").css("width", e.data+"%");
 	}else if(e.event == 'success'){
 		$("div#file-upload-messages div.bar").css("width", "100%");
 		var doc = (e.data.document);
