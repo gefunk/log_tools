@@ -1,3 +1,28 @@
+
+var docreader =  docreader || {};
+
+
+
+(function(){
+	// id of the document
+	var id = 0;
+	// url to get the document images
+	var url = ""; 
+	
+	/**
+	 * 
+	 * @param docId - the id of the document
+	 */
+	this.initialize = function(docId, docUrl){
+		id = docId;
+		url = docUrl;
+	};
+	
+	
+	
+	
+}).apply(docreader);
+
 var contractDocument = {
 	initialize: function(contract_id, customer_id, total_pages, callback){
 		contractDocument.contract_id = contract_id;
