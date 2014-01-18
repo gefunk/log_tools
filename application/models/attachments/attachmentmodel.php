@@ -42,7 +42,7 @@ class AttachmentModel extends CI_Model
 	function insert_uploaded_page($page, $document_id)
 	{
 		$query = array("_id" => new MongoId($document_id));
-		$update = array('$addToSet' => array("pages" => array("name" => $page)));
+		$update = array('$push' => array("pages" => $page));
 		$this->mongo->db->documents->update($query, $update, array("w" => 1));
 	}
 	
