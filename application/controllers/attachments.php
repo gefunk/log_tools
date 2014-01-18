@@ -108,8 +108,8 @@ class Attachments extends CI_Controller {
 					if($this->datastore->put($compressed_file, $remote_path.'/pages/'.$page_name)){
 						// update progress
 						$conversion_percent = (($page_number+1) / $number_of_pages)*100;
-						// record total pages in document
-						$this->attachmentmodel->insert_uploaded_page($page, $upload_id);
+						// record total pages in document, remove leading '/' and insert the page name
+						$this->attachmentmodel->insert_uploaded_page(substr($page_name,1), $upload_id);
 						$this->attachmentmodel->update_document_progress($upload_id, "Page Conversion", $conversion_percent);
 						// delete local image file(s)
 						unlink($local_page);
