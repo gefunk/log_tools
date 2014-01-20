@@ -125,7 +125,7 @@ var pageViewer = pageViewer || {};
 	 */
 	this.initialize = function(){
 		var html = new EJS({url: base_url+"assets/templates/documents/overlay.ejs"}).render();
-		$("body").append(html);
+		$(html).prependTo("body");
 		$("html, body").css("overflow","hidden");
 		$("body").addClass('background-off');
 		$("div#overlay-body").scrollTop(0);
@@ -138,7 +138,9 @@ var pageViewer = pageViewer || {};
 	
 	this.loadPage = function(imgUrl, page_num, callback){
 		$("div#overlay-body-img").append(
+			"<a href='"+imgUrl+"' target='_blank'>"+ 
 			"<img class='cpage' id='full-page' data-page="+page_num+" src='"+imgUrl+"' />"
+			+"</a>"
 		).data({page: page_num});
 		// set the page number
 		$("div#overlay-body > p > span#page_number").html(page_num);
