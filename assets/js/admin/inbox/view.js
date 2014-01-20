@@ -1,9 +1,4 @@
 
-
-function check_document_conversion_status(document_id){
-	
-}
-
 function handle_upload_event(e){
 	console.log("Handle Upload Event", e.event);
 	if(e.event == 'progress'){
@@ -22,6 +17,9 @@ function handle_upload_event(e){
 
 $(document).ready(function(){
 	
+	/**
+	 * Handle Uploading of documents
+	 */
 	uploader.addSubscriber(handle_upload_event);
 	
 	// when file change validate
@@ -44,4 +42,10 @@ $(document).ready(function(){
 	   		uploader.upload(file);
 	    }
 	});
+	
+	
+	/**
+	 * Handle click into view a specific document
+	 */
+	
 });

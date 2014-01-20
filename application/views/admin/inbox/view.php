@@ -22,8 +22,12 @@
 				foreach($docs as $doc):
 					
 			?>
-			<tr id="<?php echo (string) $doc["_id"]; ?>">
-				<td><?php echo $doc["file_name"]; ?></td>
+			<tr>
+				<td>
+					<a href='<?php echo site_url()."/admin/document/view/".$doc["_id"]; ?>'>
+						<?php echo $doc["file_name"]; ?>
+					</a>
+				</td>
 				<td><?php echo date('m/d/Y h:i:s', $doc["date"]->sec); ?></td>
 				<td>
 				<?php if(isset($doc['progress'])): ?>

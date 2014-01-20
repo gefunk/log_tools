@@ -265,8 +265,8 @@ class AwsInterface{
 		error_log("Request object: ".$request);
 
 		// Create a signed URL from a completely custom HTTP request that
-		// will last for 10 minutes from the current time
-		$signedUrl = $this->s3Client->createPresignedUrl($request, '+10 minutes');
+		// will last for 60 minutes from the current time
+		$signedUrl = $this->s3Client->createPresignedUrl($request, '+60 minutes');
 		
 		error_log("Signed Url: ".$signedUrl);
 		
