@@ -1,87 +1,107 @@
 
-var docreader =  docreader || {};
+/**
+ * represents a Document stored on Amazon
+ */
+function StoredDocument(id, url, pages){
+	/* 
+	* the url supplied should be 'url/<page_num>', 
+	* the result of this should be json {success:true, page:<url to page>}
+	* 
+	*/
+	this.id = id;
+	this.url = url;
+}
+
+StoredDocument.prototype = {
+	getUrl: function() {
+		return this.url;
+	},
+	/**
+	 * get a page based on page number
+	 * @param page_num - the page number to get
+	 */
+	getPage: function(page, callback){
+		$.get(
+			this.url+"/"+this.id+"/"+page,
+			function(data){
+				if(data.success){
+					data.number = page;
+					callback(data);
+				}else{
+					callback(data.success);
+				}
+			}
+		);
+	}
+};
 
 
+/**
+ * Document Reader 
+ * this will allow encapsulate all functionality of showing a document
+ */
+
+var docReader =  docReader || {};
 
 (function(){
-	// id of the document
-	var id = 0;
-	// url to get the document images
-	var url = ""; 
+	var storedDocument = null; 
+	var subscribers = null;
+	var currentPage = 0;
 	
 	/**
-	 * 
+	 * Constructor for the document reader
 	 * @param docId - the id of the document
+	 * @param docUrl - the url for the 
+	 * @param pages - an array of all the pages
 	 */
-	this.initialize = function(docId, docUrl){
-		id = docId;
-		url = docUrl;
+	this.initialize = function(docId, docUrl, tPages){
+		subscribers = new Array();
+		storedDocument = new StoredDocument(docId, docUrl);
+		totalPages = tPages;
+	};
+	
+	/**
+	 * Add a subscriber to recieve events
+	 * @param subscriber - a function to call back once new page or any 
+	 * other event is received 
+	 */
+	this.addSubscriber = function(subscriber){
+		subscribers.push(subscriber);
+	};
+	
+	/**
+	 * broadcast information to all subscribers
+ 	* @param {Object} data, will be in format: TODO
+	 */
+	function broadcast(data){
+		for(var i = 0; i < subscribers.length; i++){
+			subscribers[i](data);
+		}
+	}
+	
+
+	/**
+	 * get the url for the next page
+	 */
+	this.nextPage = function(){
+		if(currentPage <= totalPages){
+			currentPage += 1;
+			storedDocument.getPage(currentPage, broadcast);
+		}
+			
+	};
+	
+	/**
+	 * get the url for the previous page
+	 */
+	this.previousPage = function(){
+		if(currentPage > 1){
+			currentPage -= 1;
+			storedDocument.getPage(currentPage, broadcast);
+		}
+			
 	};
 	
 	
-	
-	
-}).apply(docreader);
+}).apply(docReader);
 
-var contractDocument = {
-	initialize: function(contract_id, customer_id, total_pages, callback){
-		contractDocument.contract_id = contract_id;
-		contractDocument.customer_id = customer_id;
-		contractDocument.total_pages = total_pages+1;
-		contractDocument.page_count = 0;
-		contractDocument.callbacks = new Array();
-		contractDocument.pageOnlyCallbacks = new Array();
-	},
-	addSubscriber: function(callback_func){
-		
-		contractDocument.callbacks.push(callback_func);
-	},
-	addPageSubscriber: function(callback_func){
-		contractDocument.pageOnlyCallbacks.push(callback_func);
-	},
-	getPage: function(){
-		if(contractDocument.page_count <= 0){
-			contractDocument.page_count = 1;
-		}
-		$.get(
-			site_url+"/contract/page/"+contractDocument.contract_id+'/'+contractDocument.customer_id+"/"+contractDocument.page_count,
-			function(data){
-				if(data.success){
-					for(var i = 0; i < contractDocument.callbacks.length; i++){
-						contractDocument.callbacks[i](data.page, contractDocument.page_count);
-					}
-					for(var i = 0; i < contractDocument.pageOnlyCallbacks.length; i++){
-						contractDocument.pageOnlyCallbacks[i](contractDocument.page_count);
-					}
-				}
-			}
-		);	
-	},
-	getNextPage: function(){
-		if(contractDocument.page_count < contractDocument.total_pages){
-			contractDocument.page_count = parseInt(contractDocument.page_count) + 1;
-			contractDocument.getPage();	
-		}else{
-			return false;
-		}
-	},
-	getPreviousPage: function(){
-		if(contractDocument.page_count > 1){
-			contractDocument.page_count = parseInt(contractDocument.page_count) - 1;
-			contractDocument.getPage();
-		}else{
-			return false;
-		}
-	},
-	goToPage: function(page){
-		if(page > 0 && page < contractDocument.total_pages){
-			contractDocument.page_count = page;
-			contractDocument.getPage();
-		}
-	},
-	destroy: function(){
-		contractDocument.callbacks = null;
-		contractDocument.pageOnlyCallbacks = null;
-	}
-	
-};
