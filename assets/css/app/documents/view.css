@@ -21,24 +21,12 @@ div.doc-thumbnail:hover{
 	border-color: #000000;
 }
 
-div.doc-thumbnail > img{
-	
-	
-	
-}
-
-
-div.doc-thumbnail > img:hover{
-	
-	
-	
-}
 
 div.doc-thumbnail > div.page-number{
 	font-size: 400%;
 	position: absolute;
-	left: 40%;
-	top: 40%;
+	top: 10%;
+	right: 5%;
 	opacity: 0.65;
 }
 

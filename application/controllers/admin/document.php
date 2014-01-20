@@ -40,7 +40,7 @@ class Document extends MY_Admin_Controller {
 		
 		
 		$header_data['title'] = "View Document";
-		$header_data['page_css'] = array("app/documents/view.css");
+		$header_data['page_css'] = array("app/documents/view.css", "app/documents/overlay.css");
 		// pass javascript to footer
 		$footer_data["scripts"] = array("admin/contract/document/docreader.js", "admin/contract/document/view.js");
 		
