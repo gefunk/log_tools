@@ -1,6 +1,8 @@
 
 function renderPage(pageData){
-	$("div#page-"+pageData.number+" > img").attr('src', pageData.page);
+	$("div#page-"+pageData.number+" > img").one("load", function(){
+		$(this).parents("div.doc-thumbnail").css("display", "inline-block");
+	}).attr('src', pageData.page);
 }
 
 
