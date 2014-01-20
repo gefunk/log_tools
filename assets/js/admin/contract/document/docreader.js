@@ -41,7 +41,7 @@ StoredDocument.prototype = {
  * this will allow encapsulate all functionality of showing a document
  */
 
-var docReader =  docReader || {};
+var thumbViewer =  thumbViewer || {};
 
 (function(){
 	var storedDocument = null; 
@@ -103,5 +103,52 @@ var docReader =  docReader || {};
 	};
 	
 	
-}).apply(docReader);
+}).apply(thumbViewer);
+
+
+var pageViewer = pageViewer || {};
+
+(function(){
+	
+	/**
+	 * private function destroy
+	 */
+	function destroy(){
+		$("html, body").css("overflow","auto");
+		$("div#overlay-content").remove();
+		$("div#overlay").hide();
+		$("body").removeClass('background-off');
+	};
+	
+	/**
+	 * Initialize overlay
+	 */
+	this.initialize = function(){
+		var html = new EJS({url: base_url+"assets/templates/documents/overlay.ejs"}).render();
+		$("body").append(html);
+		$("html, body").css("overflow","hidden");
+		$("body").addClass('background-off');
+		$("div#overlay-body").scrollTop(0);
+		$("div#overlay-body > p").html("<span id='page_number'></span>");
+		$("div#overlay").show();
+		$("div#close-overlay").click(function(e){
+			destroy();
+		});
+	};
+	
+	this.loadPage = function(imgUrl, page_num, callback){
+		$("div#overlay-body-img").append(
+			"<img class='cpage' id='full-page' data-page="+page_num+" src='"+imgUrl+"' />"
+		).data({page: page_num});
+		// set the page number
+		$("div#overlay-body > p > span#page_number").html(page_num);
+    				
+	};
+	
+	this.destroy = destroy();
+	
+	
+	
+	
+}).apply(pageViewer);
 
