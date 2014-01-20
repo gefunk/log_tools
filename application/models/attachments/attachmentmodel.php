@@ -75,6 +75,16 @@ class AttachmentModel extends CI_Model
 		$cursor->sort(array('date' => -1));
 		return $cursor;
 	}
+	
+	/**
+	 * return the stored representation of the document
+	 * @param $document_id - the id of the document
+	 */
+	function get_document($document_id){
+		$query = array("_id" => new MongoId($document_id));
+		$document = $this->mongo->db->documents->findOne($query);
+		return $document;
+	}
 
 }
 /** end model **/

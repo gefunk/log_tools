@@ -5,7 +5,7 @@ class Document extends MY_Admin_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->helper(array('form'));
+		$this->load->helper(array('form', ));
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('<div class="alert alert-error fade in"><button type="button" class="close" data-dismiss="alert">&times;</button>', '</div>');
 		// model used in multiple places, used to load charge rules
@@ -30,18 +30,22 @@ class Document extends MY_Admin_Controller {
 	}
 	
 	
-	public function manage($contract_id){
-		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
-		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
-		$data['page'] = 'contracts';
-		$header_data['title'] = "Manage Documents";
+	public function view($doc_id){
+		
+		// get the document from the db
+		$document = $this->attachmentmodel->get_document($doc_id);
+		
+		$data['doc_id'] = $doc_id;
+		$data['total_pages'] = count($document['pages']);
+		
+		
+		$header_data['title'] = "View Document";
+		$header_data['page_css'] = array("app/documents/view.css");
 		// pass javascript to footer
-		$footer_data["scripts"] = array("admin/contract/ports.js");
+		$footer_data["scripts"] = array("admin/contract/document/docreader.js", "admin/contract/document/view.js");
 		
 		$this->load->view('admin/header', $header_data);
-		$this->load->view("admin/customers/manager-header", $data);
-		$this->load->view('admin/contract/document/manage', $data);
-		$this->load->view("admin/customers/manager-footer");
+		$this->load->view('admin/contract/document/view', $data);
 		$this->load->view('admin/footer', $footer_data);
 		
 	}
@@ -63,11 +67,31 @@ class Document extends MY_Admin_Controller {
 	}
 	
 	
+	/**
+	 * retrieve page from document store
+	 * @param $document_id - the mongo document id, used to lookup where the document is stored
+	 * @param $page - which page to retrieve from the datastore
+	 */
+	public function page($document_id, $page)
+	{
+		
+		// standard path to retrieve documents	
+		$page_url = $this->datastore->get($document_id."/pages/".$page.".png");
+		if($page_url){
+			$this->output
+		    ->set_content_type('application/json')
+		    ->set_output( json_encode(array("success" => true,"page" => $page_url))); 
+		}else{
+			$this->output
+		    ->set_content_type('application/json')
+		    ->set_output( json_encode(array("success" => false)));
+		}
+	}
+	
 	
 	/**
 	 * upload contract document to the system
-	 * @param contract_id the contract id for which this upload belongs to
-	 * @param customer_id the customer for which this contract belongs to
+	 * @param $_FILES['file'], should be passed in binary format to upload the file
 	 */
 	public function upload()
 	{
