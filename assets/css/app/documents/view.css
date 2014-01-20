@@ -1,0 +1,44 @@
+div.doc-thumbnail{
+	display: inline-block;
+	position: relative;
+	opacity: 0.3;
+	margin: 3px;
+	
+	
+	-webkit-box-shadow: 0 8px 6px -6px black;
+	-moz-box-shadow: 0 8px 6px -6px black;
+	box-shadow: 0 8px 6px -6px black;
+	
+	border-style:solid;
+	border-width:1px;
+	border-color: #FFFFFF;
+	
+}
+
+div.doc-thumbnail:hover{
+	opacity: 1;
+	cursor: pointer;
+	border-color: #000000;
+}
+
+div.doc-thumbnail > img{
+	
+	
+	
+}
+
+
+div.doc-thumbnail > img:hover{
+	
+	
+	
+}
+
+div.doc-thumbnail > div.page-number{
+	font-size: 400%;
+	position: absolute;
+	left: 40%;
+	top: 40%;
+	opacity: 0.65;
+}
+
