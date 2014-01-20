@@ -1,6 +1,10 @@
+
+.background-off{
+	background-color: #2E2E2E;
+	color: #2E2E2E;
+}
+
 div#overlay-content{
-	z-index: 1006;
-	opacity: 1;
 	position: absolute;
 	top: 0;
 	left: 0;
