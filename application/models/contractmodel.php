@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class ContractModel extends CI_Model 
+class ContractModel extends Base_Model 
 {
     function __construct()
     {
@@ -46,15 +46,7 @@ class ContractModel extends CI_Model
 	{
 		$key = 'get_contract_from_number-'.$contract_number;
 		if(! $result = $this->cache->get($key)){
-			
-			/*
-			$this->db->select("customers.name as customer, customers.id as customer_id, contracts.id as contract_id, ref_carriers.name as carrier, ref_carriers.id as carrier_id, contracts.number as contract_number, contracts.end_date, contracts.start_date");
-			$this->db->from("contracts");
-			$this->db->join('ref_carriers', 'contracts.carrier = ref_carriers.id');
-			$this->db->join('customers', 'contracts.customer = customers.id');
-			$this->db->where("contracts.number", $contract_number);
-			*/
-			
+
 			$query = array('number' => $contract_number);
 			$result = (object) $this->mongo->db->contracts->findOne($query);
 			
@@ -74,16 +66,8 @@ class ContractModel extends CI_Model
 	{
 		$key = 'get_contract_from_id-'.$contract_id;
 		if(! $result = $this->cache->get($key)){
-			/*
-			$this->db->select("customers.name as customer, customers.id as customer_id, contracts.id as id, ref_carriers.name as carrier, ref_carriers.id as carrier_id, contracts.number as number, contracts.end_date, contracts.start_date");
-			$this->db->from("contracts");
-			$this->db->join('ref_carriers', 'contracts.carrier = ref_carriers.id');
-			$this->db->join('customers', 'contracts.customer = customers.id');
-			$this->db->where("contracts.id", $contract_id);
-			$query = $this->db->get();
-			*/
 			$query = array('_id' => new MongoId($contract_id));
-			$result = (object) $this->mongo->db->contracts->findOne($query);
+			$result = $this->convert_mongo_result_to_object($this->mongo->db->contracts->findOne($query));
 			if($result){
 				$this->cache->save($key, $result, DAY_IN_SECONDS);
 			}	
@@ -96,41 +80,10 @@ class ContractModel extends CI_Model
 	*/
 	function get_contracts_for_customer($customer_id)
 	{
-		$key = 'get_contracts_for_customer-'.$customer_id;
-		if(! $result = $this->cache->get($key)){
-			$query = array("customer" => $customer_id);
-			$result = $this->mongo->db->contracts->find($query);
-			// retrieve references to carrier with contract
-			if($result){
-				$this->cache->save($key, $result, DAY_IN_SECONDS);
-			}
-		}
-		return $result;
+		$query = array("customer" =>$customer_id);
+		return $this->convert_mongo_result_to_object($this->mongo->db->contracts->find($query));
 	}
 
-	/*
-	* get all contracts for a customer
-	*/
-	function get_uploaded_contracts_for_customer($customer_id)
-	{
-		$key = 'get_contracts_for_customer-'.$customer_id;
-		if(! $result = $this->cache->get($key)){
-			$this->db->select("c.id, start_date, end_date, number, rcarriers.name as carrier_name, rcarriers.image, cu.number_of_pages");
-			$this->db->from("contracts c");
-			$this->db->join('ref_carriers rcarriers', 'rcarriers.id = c.carrier');
-			$this->db->join('contract_uploads cu', 'c.id = cu.contract');
-			$this->db->where("c.customer", $customer_id);
-			$this->db->where("c.deleted", "0");
-			$this->db->order_by("cu.upload_time");
-			$this->db->limit(1);		
-			$query = $this->db->get();
-			$result = $query->result();
-			$this->cache->save($key, $result, WEEK_IN_SECONDS);
-		}
-		return $result;
-	}
-
-	
 	
 	function get_contract_dates($contract_number)
 	{

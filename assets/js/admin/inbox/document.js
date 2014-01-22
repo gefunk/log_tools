@@ -31,4 +31,33 @@ $(document).ready(function(){
 		
 	});
 	
+	
+	/**
+	 * set up form
+	 */
+	$.get(
+		site_url+"/admin/customer/all",
+		function(data){
+			for(var i=0; i < data.length; i++){
+				var customer = data[i];
+				$("<option value='"+customer.id+"'>"+customer.name+"</option>")
+					.appendTo("select#customer");
+			}
+		}
+	);
+	
+	$("select#customer").change(function(e){
+		$("select#contract").html("");
+		$.get(
+			site_url+"/admin/contract/all/"+this.value+"/true",
+			function(data){
+				for(var i=0; i < data.length; i++){
+				var contract = data[i];
+				$("<option value='"+contract.id+"'>"+contract.carrier.name + " - " +contract.number+"</option>")
+					.appendTo("select#contract");
+				}
+			}
+		);
+	});
+	
 });

@@ -34,11 +34,14 @@ function curhostname() {
  	$pageURL = 'http';
 	 if ($_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
 	 $pageURL .= "://";
-	 if ($_SERVER["SERVER_PORT"] != "80") {
-	 	$pageURL .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"];
-	 } else {
-	  $pageURL .= $_SERVER["HTTP_HOST"];
+	 if(isset($_SERVER['HTTP_HOST'])){
+	 	if ($_SERVER["SERVER_PORT"] != "80") {
+	 		$pageURL .= $_SERVER["HTTP_HOST"].":".$_SERVER["SERVER_PORT"];
+	 	} else {
+	  		$pageURL .= $_SERVER["HTTP_HOST"];
+	 	}	
 	 }
+	 
 	 return $pageURL;
 }
 

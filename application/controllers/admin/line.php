@@ -29,7 +29,7 @@ class Line extends MY_Admin_Controller {
 	 * Brings up Add New Line Item view
 	 */
 	public function add($contract_id){
-		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
+		$data['customer'] = $this->customermodel->get_from_contract($contract_id);
 		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
 		$data['containers'] = $this->containermodel->get_containers_for_contract($contract_id);
 		$data['cargo_types'] = $this->cargomodel->get_cargo_types_for_contracts($contract_id);
@@ -139,7 +139,7 @@ class Line extends MY_Admin_Controller {
 	 */
 	public function manage($contract_id)
 	{
-		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
+		$data['customer'] = $this->customermodel->get_from_contract($contract_id);
 		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
 		//redirect('admin/line/add/'.$contract_id);
 		$line_items = $this->lineitemmodel->get_line_items_for_contract($contract_id);
