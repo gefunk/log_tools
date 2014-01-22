@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class AttachmentModel extends CI_Model 
+class AttachmentModel extends Base_Model 
 {
     function __construct()
     {
@@ -9,7 +9,7 @@ class AttachmentModel extends CI_Model
     }
 
 	/**
-	* once a contract is uploaded 
+	* once a document is uploaded 
 	* we want to save it in the db to pull it again
 	* @param $remote_path - where it is stored on aws
 	* @param $file_name - filename of the contract
@@ -61,7 +61,7 @@ class AttachmentModel extends CI_Model
 		$query = array("_id" => new MongoId($document_id));
 		$projection =  array("_id" => false, "progress" => true);
 		$progress = $this->mongo->db->documents->find_one($query, $projection);
-		return $progress;
+		return $this->convert_mongo_result_to_object($progress);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ class AttachmentModel extends CI_Model
 		$query = array("customer" => array('$exists' => false));
 		$cursor = $this->mongo->db->documents->find($query);
 		$cursor->sort(array('date' => -1));
-		return $cursor;
+		return $this->convert_mongo_result_to_object($cursor);
 	}
 	
 	/**
@@ -82,8 +82,19 @@ class AttachmentModel extends CI_Model
 	 */
 	function get_document($document_id){
 		$query = array("_id" => new MongoId($document_id));
-		$document = $this->mongo->db->documents->findOne($query);
-		return $document;
+		return $this->convert_mongo_result_to_object($this->mongo->db->documents->findOne($query));
+	}
+
+	/**
+	 * Assign a document to a contract
+	 * @param $document_id - the document id
+	 * @param $contract_id - the contract id to assign this document to
+	 * @param $customer_id - the customer id for this contract
+	 */
+	function assign_document_to_contract($document_id, $contract_id, $customer_id){
+		$query = array("_id" => new MongoId($document_id));
+		$update = array('$set' => array("contract" => new MongoId($contract_id), "customer" => new MongoId($customer_id)));
+		$this->mongo->db->documents->update($query, $update);
 	}
 
 }

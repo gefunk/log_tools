@@ -24,21 +24,21 @@
 			?>
 			<tr>
 				<td>
-					<a href='<?php echo site_url()."/admin/document/view/".$doc["_id"]; ?>'>
-						<?php echo $doc["file_name"]; ?>
+					<a href='<?php echo site_url()."/admin/inbox/document/".$doc->id; ?>'>
+						<?php echo $doc->file_name; ?>
 					</a>
 				</td>
-				<td><?php echo date('m/d/Y h:i:s', $doc["date"]->sec); ?></td>
+				<td><?php echo date('m/d/Y h:i:s', $doc->date->sec); ?></td>
 				<td>
-				<?php if(isset($doc['progress'])): ?>
+				<?php if(isset($doc->progress)): ?>
 					<?php 
-						$status = $doc['progress']['status'];
+						$status = $doc->progress['status'];
 						$bar_class = "progress-info";
 					?>
 					<div><?php echo $status; ?></div>
 					<div class="progress <?php echo $bar_class; ?>">
   						<div class="bar" 
-  						style="width: <?php echo $doc['progress']['percent']; ?>%;"></div>
+  						style="width: <?php echo $doc->progress['percent']; ?>%;"></div>
 					</div>
 				<?php endif; ?>
 				</td>

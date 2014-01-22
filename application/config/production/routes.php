@@ -42,9 +42,9 @@
 * if www is found within the host string, then forward to welcome
 * otherwise its a subdomain, go to the customer site
 */
-if (stripos($_SERVER['HTTP_HOST'], 'admin') != FALSE){
+if (isset($_SERVER['HTTP_HOST']) && stripos($_SERVER['HTTP_HOST'], 'admin') != FALSE){
 	$route['default_controller'] = "admin/contract";
-}elseif (stripos($_SERVER['HTTP_HOST'], 'www') === FALSE) {
+}elseif (isset($_SERVER['HTTP_HOST']) && stripos($_SERVER['HTTP_HOST'], 'www') === FALSE) {
 	$route['default_controller'] = "main";
 }else{
 	$route['default_controller'] = "welcome";

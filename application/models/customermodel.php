@@ -11,10 +11,9 @@ class CustomerModel extends Base_Model
 	/**
 	 * get all customers for amfitir
 	 */
-	function get_customers()
+	function get_all()
 	{		
-		$cursor = $this->mongo->db->customers->find();
-		return $this->convert_mongo_cursor_to_object($cursor);
+		return $this->convert_mongo_result_to_object($this->mongo->db->customers->find());
 
 	}
 	
@@ -27,12 +26,15 @@ class CustomerModel extends Base_Model
 	 * get a customer by id
 	 * @param $customer_id the id of the customer you want to retrieve
 	 */
-	function get_customer_by_id($customer_id){
-		return (object) $this->mongo->db->customers->findOne(array("_id" => new MongoId($customer_id)));		
+	function get_by_id($customer_id){
+		return  $this->convert_mongo_result_to_object($this->mongo->db->customers->findOne(array("_id" => new MongoId($customer_id))));		
 	}
 	
 	
-	function get_customer_id_from_contract($contract_id){
+	/**
+	 * get customer id from contract
+	 */
+	function get_id_from_contract($contract_id){
 		$contract_query = array("_id" => new MongoId($contract_id));
 		$contract_projection = array('customer');
 		$customer_id = $this->mongo->db->contracts->findOne($contract_query, $contract_projection);
@@ -43,8 +45,8 @@ class CustomerModel extends Base_Model
 
 	}
 	
-	function get_customer_from_contract($contract_id){
-		return $this->get_customer_by_id($this->get_customer_id_from_contract($contract_id));
+	function get_from_contract($contract_id){
+		return $this->get_by_id($this->get_id_from_contract($contract_id));
 	}
 	
 	function get_users($customer_id){

@@ -5,65 +5,12 @@ class Document extends MY_Admin_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->helper(array('form', ));
-		$this->load->library('form_validation');
-		$this->form_validation->set_error_delimiters('<div class="alert alert-error fade in"><button type="button" class="close" data-dismiss="alert">&times;</button>', '</div>');
-		// model used in multiple places, used to load charge rules
-		// and associated metadata
+		
 
-		$this->load->model("contractmodel");
-		$this->load->model('customermodel');
-		$this->load->model('lineitem/containermodel');
-		$this->load->model("admin/currencycodes");
-		$this->load->model("referencemodel");
-		$this->load->model("lanemodel");
-		$this->load->model("rulemodel");
-		$this->load->model("portgroupmodel");
-		$this->load->model('assetstorage');
 		$this->load->model("attachments/attachmentmodel");
 		$this->load->model("attachments/datastore");
-		$this->load->model('cargomodel');
-
-		$this->load->library("contracts");
 		$this->load->library("async");
 
-	}
-	
-	
-	public function view($doc_id){
-		
-		// get the document from the db
-		$document = $this->attachmentmodel->get_document($doc_id);
-		
-		$data['doc_id'] = $doc_id;
-		$data['total_pages'] = count($document['pages']);
-		
-		
-		$header_data['title'] = "View Document";
-		$header_data['page_css'] = array("app/documents/view.css", "app/documents/overlay.css");
-		// pass javascript to footer
-		$footer_data["scripts"] = array("admin/contract/document/docreader.js", "admin/contract/document/view.js");
-		
-		$this->load->view('admin/header', $header_data);
-		$this->load->view('admin/contract/document/view', $data);
-		$this->load->view('admin/footer', $footer_data);
-		
-	}
-	
-	public function add($contract_id)
-	{
-		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
-		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
-		$data['page'] = 'contracts';
-		$header_data['title'] = "Manage Documents";
-		// pass javascript to footer
-		$footer_data["scripts"] = array("admin/contract/document/upload.js");
-		
-		$this->load->view('admin/header', $header_data);
-		$this->load->view("admin/customers/manager-header", $data);
-		$this->load->view('admin/contract/document/add', $data);
-		$this->load->view("admin/customers/manager-footer");
-		$this->load->view('admin/footer', $footer_data);
 	}
 	
 	

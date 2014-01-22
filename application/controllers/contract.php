@@ -84,5 +84,9 @@ class Contract extends MY_In_Controller {
 		$id = $this->input->post('id');
 		$this->contracthighlights->delete($id);
 	}
+	
+	
+	
+	
 } // end controller
 		
