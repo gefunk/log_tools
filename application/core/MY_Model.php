@@ -23,15 +23,30 @@ class Base_Model extends MY_Model{
 	}
 
 	/**
-	 * @param $cursor - mongo cur
+	 * Converts a Mongo Cursor to Object
+	 * Also converts Mongo Id to string for convenience
+	 * @param $cursor - mongo cursor or mongo object
 	 */
-	protected function convert_mongo_cursor_to_object($cursor){
-		$results = array();
-		foreach($cursor as $doc){
-			$results[] = (object) $doc; 
+	protected function convert_mongo_result_to_object($mongo_result){
+		if($mongo_result instanceof MongoCursor){
+			$results = array();
+			foreach($mongo_result as $doc){
+				$results[] = $this->convert_id_in_mongo_object($doc);  
+			}
+			# check if results should be set to null
+			return $results;	
+		}else{
+			return $this->convert_id_in_mongo_object($mongo_result);
+		}			
+		
+	}
+	
+	private function convert_id_in_mongo_object($mongo_object){
+		$converted_object = (object) $mongo_object;
+		if(isset($converted_object->_id) && is_object($converted_object->_id) ){
+			$converted_object->id = (string) $converted_object->_id;
 		}
-		# check if results should be set to null
-		return $results;
+		return $converted_object;
 	}
 
 }

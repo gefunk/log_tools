@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Customer extends CI_Controller {
+class Customer extends MY_Admin_Controller {
 
 	public function __construct()
 	{
@@ -9,12 +9,13 @@ class Customer extends CI_Controller {
 		$this->load->model('attachments/datastore');
 		$this->load->helper('form');
 		$this->load->model('customermodel');
+		$this->load->model('contractmodel');
 		$this->load->model("referencemodel");
 	}
 
 	public function index()
 	{
-		$data['customers'] = $this->customermodel->get_customers();
+		$data['customers'] = $this->customermodel->get_all();
 		$data['currency_codes'] = $this->referencemodel->get_currency_codes(FALSE);
 		$header_data['title'] = "Customers";
 		$this->load->view('admin/header', $header_data);
@@ -28,7 +29,7 @@ class Customer extends CI_Controller {
 	public function add()
 	{
 		//$this->output->enable_profiler(TRUE);
-		$data['customers'] = $this->customermodel->get_customers();
+		$data['customers'] = $this->customermodel->get_all();
 		$data['currency_codes'] = $this->referencemodel->get_currency_codes(FALSE);
 		$header_data['title'] = "Add New Customer";
 		$this->load->view('admin/header', $header_data);
@@ -44,7 +45,7 @@ class Customer extends CI_Controller {
 	}
 
 	public function manager($customer_id){
-		$data['customer'] = $this->customermodel->get_customer_by_id($customer_id);
+		$data['customer'] = $this->customermodel->get_by_id($customer_id);
 		$header_data['title'] = "Manage Customer - ".$data['customer']->name;
 		$data['page'] = 'customers';
 		$this->load->view('admin/header', $header_data);
@@ -64,31 +65,15 @@ class Customer extends CI_Controller {
 		
 	}
 
-
-	
-	public function upload()
-	{
-		$this->load->view('admin/customers/upload_form', array('error' => ''));
+	/**
+	 * get all customers
+	 */
+	public function all(){
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($this->customermodel->get_all()));
 	}
 	
-	public function upload_file()
-	{
-		
-		$this->load->library('upload');
-
-		if ( ! $this->upload->do_upload())
-		{
-			$error = array('error' => $this->upload->display_errors());
-			$this->load->view('admin/customers/upload_form', $error);
-		}
-		else
-		{
-			$data = array('upload_data' => $this->upload->data());
-			// upload to data storage (s3)
-			$this->datastore->put($data['upload_data']['full_path'], $data['upload_data']['orig_name']);
-			$this->load->view('admin/customers/upload_success', $data);
-		}
-	}
 	
 }
 
