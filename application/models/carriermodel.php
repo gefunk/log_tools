@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class CarrierModel extends CI_Model 
+class CarrierModel extends Base_Model 
 {
     function __construct()
     {
@@ -23,7 +23,7 @@ class CarrierModel extends CI_Model
 		$key = 'get_carrier_by_id-'.$id;
 		if(! $result = $this->cache->get($key)){
 			$carrier_id = new MongoId($id);
-			$result = $this->mongo->db->carriers->findOne(array('_id' => $carrier_id));
+			$result = $this->convert_mongo_result_to_object($this->mongo->db->carriers->findOne(array('_id' => $carrier_id)));
 			if($result){
 				$this->cache->save($key, $result, WEEK_IN_SECONDS);
 			}

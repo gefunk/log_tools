@@ -30,41 +30,62 @@ class Contract extends MY_Admin_Controller {
 
 	}
 
-	public function all($customer_id)
+	/**
+	 * show all contracts for a customer
+	 * @param $customer_id - the customer you want to retrieve all results for
+	 * @param $json - result in json, or to the admin contract page
+	 */
+	public function all($customer_id, $json=FALSE)
 	{
-		//$this->output->enable_profiler(TRUE);
-		
-		$header_data['title'] = "All Contracts";
-		
-		
+		// retrieve all contracts for a customer	
 		$contracts = $this->contractmodel->get_contracts_for_customer($customer_id);
-		
-		$data['contracts'] = array();
-		
 		foreach($contracts as $contract){
-			$contract['carrier'] = (object) $this->carriermodel->get_carrier_by_id($contract['carrier']);
-			$data['contracts'][] = (object) $contract;
+			$contract->carrier = $this->carriermodel->get_carrier_by_id($contract->carrier);
 		}
 		
-		$data["customer"] =  $this->customermodel->get_customer_by_id($customer_id);
-		
-		$data['page'] = 'contracts';
-		
-		$footer_data["scripts"] = array("admin/contract/view.js");
+		if($json){
+			$this->output
+		    	->set_content_type('application/json')
+		    	->set_output(json_encode($contracts));	
+		}else{
+			$header_data['title'] = "All Contracts";
+			$data['contracts'] = $contracts;
+			$data["customer"] =  $this->customermodel->get_by_id($customer_id);
+			$data['page'] = 'contracts';
+			$footer_data["scripts"] = array("admin/contract/view.js");
 
-		$this->load->view('admin/header', $header_data);
-		$this->load->view("admin/customers/manager-header", $data);
-		$this->load->view('admin/contract/landing', $data);
-		$this->load->view("admin/customers/manager-footer");
-		$this->load->view('admin/footer', $footer_data);
+			$this->load->view('admin/header', $header_data);
+			$this->load->view("admin/customers/manager-header", $data);
+			$this->load->view('admin/contract/landing', $data);
+			$this->load->view("admin/customers/manager-footer");
+			$this->load->view('admin/footer', $footer_data);
+		}
 	}
+	
+
+	/**
+	 * Assign a document to a contract
+	 * this will remove the document from the Inbox
+	 * @param customer - customer id  of the customer 
+	 * @param contract - contract id to assign the document to
+	 * @param doc_id - the document id to assign
+	 */
+	public function assign_document(){
+		$customer = $this->input->post("customer");
+		$contract = $this->input->post("contract");
+		$doc_id = $this->input->post("doc_id");
+		$this->attachmentmodel->assign_document_to_contract($doc_id, $contract, $customer);
+		redirect('/admin/manage/'+$contract);
+	}
+	
+	
 
 	
 	public function manage($contract_id){
 		$contract = (object) $this->contractmodel->get_contract_from_id($contract_id);
 		$contract->carrier = (object) $this->carriermodel->get_carrier_by_id($contract->carrier);
 		$data['contract'] = $contract;
-		$data["customer"] =  $this->customermodel->get_customer_by_id($data['contract']->customer);
+		$data["customer"] =  $this->customermodel->get_by_id($data['contract']->customer);
 		$data['page'] = 'contracts';
 		
 		$header_data['title'] = "Contract - ".$data['contract']->number;
@@ -85,7 +106,7 @@ class Contract extends MY_Admin_Controller {
 		
 		
 		$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
-		$data["customer"] =  $this->customermodel->get_customer_by_id($customer_id);
+		$data["customer"] =  $this->customermodel->get_by_id($customer_id);
 		$data["carriers"] = $this->referencemodel->get_carriers();
 		$data['page'] = 'contracts';
 		
@@ -124,7 +145,7 @@ class Contract extends MY_Admin_Controller {
 	
 	public function containers($contract_id){
 		//$this->output->enable_profiler(TRUE);
-		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
+		$data['customer'] = $this->customermodel->get_from_contract($contract_id);
 		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
 		$data['container_types'] = $this->containermodel->get_ref_container_types();
 		$data['containers'] = $this->containermodel->get_containers_for_contract($contract_id);
@@ -162,7 +183,7 @@ class Contract extends MY_Admin_Controller {
 	 * @param $contract_id - the contract for the cargo manager
 	 */
 	public function cargo($contract_id){
-		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
+		$data['customer'] = $this->customermodel->get_from_contract($contract_id);
 		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
 		$data['page'] = 'contracts';
 		$header_data['title'] = "Manage Cargo";
