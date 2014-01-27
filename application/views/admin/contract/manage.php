@@ -1,6 +1,6 @@
 <ul class="breadcrumb">
 	<li><a href="<?php echo site_url().'/admin/contract/all/'.$customer->_id; ?>">All Contracts</a><span class="divider">/</span></li>
-	<li class="active"><?php echo $contract->_id ?></li>
+	<li class="active"><?php echo $contract->number ?></li>
 </ul>  
 
 <section>
@@ -22,10 +22,13 @@
 
 <ul class="nav nav-pills">
   <li>
-    <a href="<?php echo site_url().'/admin/line/manage/'.$contract->_id ?>">Line Items</a>
+    <a href="<?php echo site_url().'/admin/line/manage/'.$contract->_id ?>">Ocean Rates</a>
+  </li>
+  <li>
+    <a href="#">Inland Rates</a>
   </li>
   <li><a href="#">Adjustments</a></li>
-  <li><a href="<?php echo site_url().'/admin/contract/documents/'.$contract->_id; ?>">Document</a></li>
+  <li><a href="<?php echo site_url().'/admin/contract/documents/'.$contract->_id; ?>">Documents</a></li>
   <li><a href="<?php echo site_url().'/admin/contract/ports/'.$contract->_id; ?>">Port Groups</a></li>
   <li><a href="<?php echo site_url().'/admin/contract/containers/'.$contract->_id; ?>">Containers</a></li>
   <li><a href="<?php echo site_url().'/admin/contract/cargo/'.$contract->_id; ?>">Cargo</a></li>
