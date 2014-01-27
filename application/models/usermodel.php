@@ -1,12 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class UserModel extends CI_Model 
+class UserModel extends Base_Model 
 {
     function __construct()
     {
         // Call the Model constructor
         parent::__construct();
 		$this->load->driver('cache', array('adapter' => 'memcached', 'backup' => 'dummy'));
+		$this->load->library('bcrypt');
     }
 
 	/**
@@ -15,37 +16,22 @@ class UserModel extends CI_Model
 	* @param $password the password to check against
 	* @param $customer_id the customer id which this user belongs to
 	*/
-	function check_login($identity, $password, $customer_id)
+	function check_login($identity, $input_password, $customer_id)
 	{
-		
-		$encrypted_password = $this->encrypt_password($password);
-		$query = array("active" => true, "email" => $identity, "password" => $encrypted_password, 'customer' => intval($customer_id));
+		$query = array("active" => true, "email" => $identity, "password" => $encrypted_password, 'customer' => $customer_id);
 		$projection = array("password" => 1);
 		$doc = $this->mongo->db->users->findOne($query, $projection);
 		/**
-		 * return the encrypted password 
-		 */
-		if($doc['password'] == $encrypted_password){
-			return $encrypted_password;
+		 * verify the password with the hash
+		 */  
+		if($this->bcrypt->verify($input_password,$doc['password'])){
+			return $doc['password'];
 		}
 		
 		return FALSE;
 	}
 	
-	/**
-	 * verify admin login info vs database table
-	 */
-	function check_admin_login($identity, $password)
-	{
-		$encrypted_password = $this->encrypt_password($password);
-		$where_data = array("email" => $identity, 'password' => $encrypted_password);
-		$query = $this->db->get_where('admin_users', $where_data);
-		if($query->num_rows() == 1){
-			return $encrypted_password;
-		}	
-		return FALSE;
-	}
-	
+
 	
 	
 	/**
@@ -55,8 +41,8 @@ class UserModel extends CI_Model
 	{
 		$user_data = array(
 			"email" => $identity,
-			"password" => $this->encrypt_password($password),
-			"customer" => intval($customer_id),
+			"password" => $this->bcrypt->hash($password),
+			"customer" => $customer_id,
 			"name" => $name,
 			"phone" => $phone,
 			"notes" => $notes,
@@ -99,7 +85,7 @@ class UserModel extends CI_Model
 	 */
 	function reset_password($identity, $customer_id, $new_password){
 		$query = array("email"=>$identity, "customer" => $customer_id);
-		$update = array('$set' => array("password" => $this->encrypt_password($new_password)));
+		$update = array('$set' => array("password" => $this->bcrypt->hash($new_password)));
 		return $this->mongo->db->users->update($query, $update);
 	}
 	
@@ -110,7 +96,7 @@ class UserModel extends CI_Model
 	*/
 	function is_customer_valid_for_login_hash($hash, $customer_id)
 	{
-		$query = array("customer" => intval($customer_id), "password" => $hash, "active" => TRUE);
+		$query = array("customer" => $customer_id, "password" => $hash, "active" => TRUE);
 		$projection = array("customer" => 1);
 		$doc = $this->mongo->db->users->findOne($query, $projection);
 		// if the customer id is equal to the one passed in return true
@@ -120,24 +106,7 @@ class UserModel extends CI_Model
 		return FALSE;
 	}
 	
-	/**
-	* check the admin login status
-	* @param $hash the hash stored in the cookie
-	*/
-	function is_admin_valid_for_login_hash($hash)
-	{
-		
-			$this->db->select("id")->from("admin_users")->where("password", $hash);
-			$query = $this->db->get();
-			// should only be one result for a hash
-			if($query->num_rows() == 1){
-				return TRUE;
-			}
-		
-		return FALSE;
-	}
-	
-	
+
 	/**
 	 * get the user name based on user hash
 	 * @param $hash the login hash for the user
@@ -174,34 +143,13 @@ class UserModel extends CI_Model
 	 * @param $customer_id - the customer id that you want the users for
 	 */
 	function get_users_for_customer($customer_id){
-		$query = array("customer" => intval($customer_id));
+		$query = array("customer" => $customer_id);
 		$projection = array("active" => 1, "reset" => 1, "role" => 1, "email" => 1);
-		return $this->mongo->db->users->find($query, $projection);
+		return $this->convert_mongo_result_to_object($this->mongo->db->users->find($query, $projection));
 	}
 	
 	
-	/**
-	 * function used to generate temporary password
-	 */
-	function generatePassword ($length = 8)
-	{
-	  // given a string length, returns a random password of that length
-	  $password = "";
-	  // define possible characters
-	  $possible = "0123456789abcdfghjkmnpqrstvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	  $i = 0;
-	  // add random characters to $password until $length is reached
-	  while ($i < $length) {
-	    // pick a random character from the possible ones
-	    $char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
-	    // we don't want this character if it's already in the password
-	    if (!strstr($password, $char)) {
-	      $password .= $char;
-	      $i++;
-	    }
-	  }
-	  return $password;
-	}
+
 	
 	
 	/**
@@ -210,12 +158,18 @@ class UserModel extends CI_Model
 	 * @param $customer_id - the customer id for which the user belongs to 
 	 * @param $status - boolean value of status
 	 */
-	function set_user_status($identity, $customer_id, $status){
-		$query = array("email"=>$identity, "customer" => $customer_id);
+	function set_user_status($status, $identity=NULL, $customer_id=NULL,$user_id=NULL){
+		
+		$query = NULL;
+		if(isset($user_id))
+			$query = array("_id"=> new MongoId($user_id));
+		else{
+			$query = array("email"=>$identity, "customer" => $customer_id);	
+		}
 		$update = array('$set' => array("active" => $status));
 		return $this->mongo->db->users->update($query, $update);
-	} 
-	
+	}
+
 	/**
 	 * Set the Role for a user 
 	 *
@@ -223,22 +177,17 @@ class UserModel extends CI_Model
 	 * @param $customer_id - the customer the user blongs to
 	 * @param $role - the sting role you want to set for this user 'admin' or 'regular'
 	 */
-	function set_user_role($identity, $customer_id, $role){
-		$query = array("email"=>$identity, "customer" => $customer_id);
+	function set_user_role($role, $identity=null, $customer_id=null, $user_id=null){
+		$query = NULL;	
+		if(isset($user_id))
+			$query = array("_id"=> new MongoId($user_id));
+		else{
+			$query = array("email"=>$identity, "customer" => $customer_id);	
+		}
 		$update = array('$set' => array("role" => $role));
 		return $this->mongo->db->users->update($query, $update);
 	}
 	
-	
-	/**
-	* takes a normal string password and encrypts
-	* @return string encrypted password
-	*/
-	protected function encrypt_password($password){
-		$salt = sha1(md5($password));
-		$password = md5($password.$salt);
-		return $password;
-	}
 	
 	
 }
