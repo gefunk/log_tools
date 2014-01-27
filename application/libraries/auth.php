@@ -20,6 +20,7 @@ class Auth
 		}
 		
 		$this->load->model('usermodel');
+		$this->load->model('admin/adminusermodel');
 	}
 	
 	
@@ -120,7 +121,7 @@ class Auth
 		* check if this login hash is valid for this customer
 		*/
 		if($login_hash !== FALSE){
-			if($this->usermodel->is_admin_valid_for_login_hash($login_hash)){
+			if($this->adminusermodel->is_admin_valid_for_login_hash($login_hash)){
 				return TRUE;
 			}else{
 				// this user doesn't match for the customer, log them out
@@ -191,7 +192,7 @@ class Auth
 	public function admin_login($identity, $password, $remember)
 	{
 		log_message("debug", "Passed into Auth: ".$identity." Password: ".$password);
-		$login_hash = $this->usermodel->check_admin_login($identity, $password);
+		$login_hash = $this->adminusermodel->check_admin_login($identity, $password);
 		log_message('debug', 'REMEMBER: '.$remember);
 		$login_result = !empty($login_hash);
 		log_message('debug', "login_hash: ".$login_hash." login_result: ".$login_result);
@@ -252,6 +253,29 @@ class Auth
 		//$this->session->sess_create();
 	}
 	
+	
+	/**
+	 * function used to generate temporary password
+	 */
+	function generatePassword ($length = 8)
+	{
+	  // given a string length, returns a random password of that length
+	  $password = "";
+	  // define possible characters
+	  $possible = "0123456789abcdfghjkmnpqrstvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	  $i = 0;
+	  // add random characters to $password until $length is reached
+	  while ($i < $length) {
+	    // pick a random character from the possible ones
+	    $char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
+	    // we don't want this character if it's already in the password
+	    if (!strstr($password, $char)) {
+	      $password .= $char;
+	      $i++;
+	    }
+	  }
+	  return $password;
+	}
 	
 	/**
 	 * __get
