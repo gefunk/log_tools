@@ -156,7 +156,7 @@ class Contract extends MY_Admin_Controller {
 	 */
 	public function ports($contract_id)
 	{
-		$data['customer'] = $this->customermodel->get_customer_from_contract($contract_id);
+		$data['customer'] = $this->customermodel->get_from_contract($contract_id);
 		$data['port_groups'] = $this->portgroupmodel->get_port_groups_for_contract($contract_id);
 		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
 		$header_data['title'] = "Manage Ports";
