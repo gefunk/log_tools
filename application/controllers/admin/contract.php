@@ -27,6 +27,7 @@ class Contract extends MY_Admin_Controller {
 
 		$this->load->library("contracts");
 		$this->load->library("async");
+		$this->load->library("Bcrypt");
 
 	}
 
@@ -656,6 +657,16 @@ class Contract extends MY_Admin_Controller {
 	
 	function test_port_groups($contract_id){
 		var_dump($this->portgroupmodel->get_port_groups_for_contract($contract_id));
+	}
+	
+	function show_hash(){
+		echo $this->bcrypt->hash("Rupinder724");
+	}
+	
+	function verify_hash(){
+		$existingHash = '$2a$07$IUaNRyGWcIHMY4ucbR0fbOLlQLLvz9HdcHOG2QR4BotY/ix./0Bwu';
+		$input="Rupinder724";
+		echo $this->bcrypt->verify($input, $existingHash);
 	}
 
 	public function emailraw()

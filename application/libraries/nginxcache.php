@@ -29,13 +29,16 @@ class NginxCache {
 	 * @param $method - the HTTP method POST or GET, by default it will always be get
 	 */
 	function expire($customer_subdomain,$uri_path, $method='GET'){
-		// construct cache key - used by nginx to expire
-		$cache_key = "$method$customer_subdomain.amfitir.com/$uri_path";
-		// send a message to all the prod cache servers to expire this url	
-		$servers = $this->config->item('amfitir_servers');
-		// expire cache on all the amfitir servers - stored in config
-		foreach($servers as $server){
-			$this->async->get("http://$server/purge/$cache_key");
+		// only if we are in prod or testing	
+		if (defined('ENVIRONMENT') && ENVIRONMENT != 'development'){
+			// construct cache key - used by nginx to expire
+			$cache_key = "$method$customer_subdomain.amfitir.com/$uri_path";
+			// send a message to all the prod cache servers to expire this url	
+			$servers = $this->config->item('amfitir_servers');
+			// expire cache on all the amfitir servers - stored in config
+			foreach($servers as $server){
+				$this->async->get("http://$server/purge/$cache_key");
+			}	
 		}
 	}
 	
