@@ -25,7 +25,7 @@
     <a href="<?php echo site_url().'/admin/line/manage/'.$contract->_id ?>">Line Items</a>
   </li>
   <li><a href="#">Adjustments</a></li>
-  <li><a href="<?php echo site_url().'/admin/document/manage/'.$contract->_id; ?>">Document</a></li>
+  <li><a href="<?php echo site_url().'/admin/contract/documents/'.$contract->_id; ?>">Document</a></li>
   <li><a href="<?php echo site_url().'/admin/contract/ports/'.$contract->_id; ?>">Port Groups</a></li>
   <li><a href="<?php echo site_url().'/admin/contract/containers/'.$contract->_id; ?>">Containers</a></li>
   <li><a href="<?php echo site_url().'/admin/contract/cargo/'.$contract->_id; ?>">Cargo</a></li>

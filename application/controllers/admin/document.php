@@ -35,6 +35,19 @@ class Document extends MY_Admin_Controller {
 		}
 	}
 	
+	/**
+	 * get total pages for document 
+	 * @param $document_id - the document id to get the total pages for
+	 */
+	public function get_total_pages($document_id){
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output( json_encode(array("total"=>$this->attachmentmodel->get_total_pages($document_id))));
+	}
+	
+	/**
+	 * UPLOAD Section
+	 */
 	
 	/**
 	 * upload contract document to the system
@@ -102,6 +115,31 @@ class Document extends MY_Admin_Controller {
 	}
 
 
+	/**
+	 * add a tag to the document
+	 */
+	function add_tag(){
+		$document_id = $this->input->post("document_id");
+		$tag = $this->input->post("tag");
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode(
+				$this->attachmentmodel->add_tag($document_id, $tag)
+			));
+	}
+
+	/**
+	 * remove a tag from the document
+	 */
+	function remove_tag(){
+		$document_id = $this->input->post("document_id");
+		$tag = $this->input->post("tag");
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode(
+				$this->attachmentmodel->remove_tag($document_id, $tag)
+			));
+	}
 
 	
 }

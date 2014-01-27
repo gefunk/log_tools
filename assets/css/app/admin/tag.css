@@ -1,0 +1,15 @@
+span.doc-tag{
+	border: 1px solid #C1CEC1;
+	border-radius: 3px;
+	padding: 3px 6px;
+	color: #6C6C6C;
+	margin-left: 2px;
+}
+
+span.doc-tag :nth-child(1){
+	margin-left: 0px;
+}
+
+span.doc-tag > i{
+	cursor: pointer;
+}

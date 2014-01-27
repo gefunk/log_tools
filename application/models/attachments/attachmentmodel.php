@@ -85,16 +85,64 @@ class AttachmentModel extends Base_Model
 		return $this->convert_mongo_result_to_object($this->mongo->db->documents->findOne($query));
 	}
 
+	function get_total_pages($document_id){
+		$query = array("_id" => new MongoId($document_id));
+		$projection = array("_id" => false, "pages" => true);
+		$result = $this->mongo->db->documents->findOne($query, $projection);
+		return count($result['pages']);
+	}
+
 	/**
 	 * Assign a document to a contract
 	 * @param $document_id - the document id
 	 * @param $contract_id - the contract id to assign this document to
 	 * @param $customer_id - the customer id for this contract
 	 */
-	function assign_document_to_contract($document_id, $contract_id, $customer_id){
+	function assign_to_contract($document_id, $contract_id, $customer_id){
 		$query = array("_id" => new MongoId($document_id));
-		$update = array('$set' => array("contract" => new MongoId($contract_id), "customer" => new MongoId($customer_id)));
+		$update = array('$set' => array("contract" => $contract_id, "customer" => $customer_id));
 		$this->mongo->db->documents->update($query, $update);
+		
+		$query = array("_id" => new MongoId($contract_id));
+		$update = array('$push' => array("documents" => array("_id" => $document_id)));
+		$this->mongo->db->contracts->update($query, $update);
+		
+	}
+	
+	/**
+	 * get all documents for a contract
+	 * @param $contract_id - contract id to get the documents for
+	 * @return all contract documents sorted by last uploaded date, descending
+	 */
+	function get_for_contract($contract_id){
+		$query = array("contract" => $contract_id);
+		return $this->convert_mongo_result_to_object(
+			$this->mongo->db->documents->find($query)->sort(array("date" => -1))
+		);
+	}
+	
+	/**
+	 * Add a new tag to the document
+	 * @param $document_id - the document id to add the tag to
+	 * @param $tag - the tag to add to the document
+	 * @return boolean if the update succeeded
+	 */
+	function add_tag($document_id, $tag){
+		$query = array("_id" => new MongoId($document_id));
+		$update = array('$push' => array("tags" => $tag));
+		return $this->mongo->db->documents->update($query, $update);
+	}
+	
+	/**
+	 * Remove tag from document
+	 * @param $document_id - the document id to add the tag to
+	 * @param $tag - the tag to remove from the document
+	 * @return boolean if the update succeeded
+	 */
+	function remove_tag($document_id, $tag){
+		$query = array("_id" => new MongoId($document_id));
+		$update = array('$pull' => array("tags" => $tag));
+		return $this->mongo->db->documents->update($query, $update);
 	}
 
 }
