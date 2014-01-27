@@ -81,33 +81,4 @@ class Login extends MY_Out_Controller {
 		redirect($redir_link, 'refresh');
 	}
 	
-
-	
-	public function register()
-	{
-		// session information already contains customer data
-		$this->load->view("register");
-	}
-	
-	/**
-	* register user
-	*/
-	public function register_user(){
-
-		$customer_id = $this->session->userdata("customer_id");
-		$password = $this->input->post("password");
-		$email = $this->input->post("email");
-		$first_name = $this->input->post("first_name");
-		$last_name = $this->input->post("last_name");
-		$phone_no = $this->input->post("phone_no");
-		$additional_data = array(
-			'first_name' => $first_name,
-			'last_name' => $last_name,
-			'phone' => $phone_no
-		);
-
-		// add user to db
-		$this->usermodel->add($email, $this->encrypt_password($password), $customer_id, $additional_data);
-	}
-	
 }
