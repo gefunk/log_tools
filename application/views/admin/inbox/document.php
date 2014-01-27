@@ -1,7 +1,7 @@
 
 <div class="row">
 	<div id="assign" class="span12">
-		<?php echo form_open('admin/document/assign'); ?>
+		<?php echo form_open('admin/contract/assign_document'); ?>
 			
 		<h2>Assign to Contract</h2>
 		<div id="customer-select">
