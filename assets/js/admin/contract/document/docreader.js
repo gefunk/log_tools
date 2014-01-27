@@ -21,11 +21,13 @@ StoredDocument.prototype = {
 	 * @param page_num - the page number to get
 	 */
 	getPage: function(page, callback){
+		var doc_id = this.id;
 		$.get(
 			this.url+"/"+this.id+"/"+page,
 			function(data){
 				if(data.success){
 					data.number = page;
+					data.doc_id = doc_id;
 					callback(data);
 				}else{
 					callback(data.success);
@@ -41,69 +43,69 @@ StoredDocument.prototype = {
  * this will allow encapsulate all functionality of showing a document
  */
 
-var thumbViewer =  thumbViewer || {};
 
-(function(){
-	var storedDocument = null; 
-	var subscribers = null;
-	var currentPage = 0;
+/**
+ * Constructor for the document viewer
+ * @param docId - the id of the document
+ * @param docUrl - the url for the 
+ * @param pages - an array of all the pages
+ */
+function ThumbViewer(docId, docUrl, tPages){
+	this.storedDocument = new StoredDocument(docId, docUrl);
+	//this.subscribers = new Array();
+	this.currentPage = 0;
+	this.totalPages = tPages;
+}
+
+ThumbViewer.prototype = {
 	
-	/**
-	 * Constructor for the document reader
-	 * @param docId - the id of the document
-	 * @param docUrl - the url for the 
-	 * @param pages - an array of all the pages
-	 */
-	this.initialize = function(docId, docUrl, tPages){
-		subscribers = new Array();
-		storedDocument = new StoredDocument(docId, docUrl);
-		totalPages = tPages;
-	};
-	
+
 	/**
 	 * Add a subscriber to recieve events
 	 * @param subscriber - a function to call back once new page or any 
 	 * other event is received 
-	 */
-	this.addSubscriber = function(subscriber){
-		subscribers.push(subscriber);
-	};
+	 
+	addSubscriber: function(subscriber){
+		console.log("Add Subscriber:", this);
+		this.subscribers.push(subscriber);
+	},
 	
 	/**
 	 * broadcast information to all subscribers
  	* @param {Object} data, will be in format: TODO
-	 */
-	function broadcast(data){
-		for(var i = 0; i < subscribers.length; i++){
-			subscribers[i](data);
-		}
-	}
 	
+	broadcast: function(data){
+		console.log("Broadcast This:", this);
+		for(var i = 0; i < this.subscribers.length; i++){
+			this.subscribers[i](data);
+		}
+	},
+	*/
 
 	/**
 	 * get the url for the next page
 	 */
-	this.nextPage = function(){
-		if(currentPage <= totalPages){
-			currentPage += 1;
-			storedDocument.getPage(currentPage, broadcast);
+	nextPage: function(callback){
+		if(this.currentPage <= this.totalPages){
+			this.currentPage += 1;
+			this.storedDocument.getPage(this.currentPage, callback);
 		}
 			
-	};
+	},
 	
 	/**
 	 * get the url for the previous page
 	 */
-	this.previousPage = function(){
-		if(currentPage > 1){
-			currentPage -= 1;
-			storedDocument.getPage(currentPage, broadcast);
+	previousPage: function(callback){
+		if(this.currentPage > 1){
+			this.currentPage -= 1;
+			this.storedDocument.getPage(this.currentPage, callback);
 		}
 			
-	};
+	}
 	
 	
-}).apply(thumbViewer);
+};
 
 
 var pageViewer = pageViewer || {};
@@ -125,10 +127,10 @@ var pageViewer = pageViewer || {};
 	 */
 	this.initialize = function(){
 		var html = new EJS({url: base_url+"assets/templates/documents/overlay.ejs"}).render();
-		$(html).prependTo("body");
-		$("html, body").css("overflow","hidden");
+		$(html).appendTo("body");
+		//$("html, body").css("overflow","hidden");
 		$("body").addClass('background-off');
-		$("div#overlay-body").scrollTop(0);
+		//$("div#overlay-body").scrollTop(0);
 		$("div#overlay-body > p").html("<span id='page_number'></span>");
 		$("div#overlay").show();
 		$("div#close-overlay").click(function(e){

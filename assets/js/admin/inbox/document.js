@@ -1,6 +1,6 @@
 
 function renderPage(pageData){
-	$("div#page-"+pageData.number+" > img").one("load", function(){
+	$("div.page-"+pageData.number+" > img").one("load", function(){
 		$(this).parents("div.doc-thumbnail").css("display", "inline-block");
 	}).attr('src', pageData.page);
 }
@@ -10,13 +10,14 @@ $(document).ready(function(){
 	/**
 	 * Draw all the document pages
 	 */
-	thumbViewer.initialize(docId, site_url+"/admin/document/page", totalPages);
-	thumbViewer.addSubscriber(renderPage);
+	
+	var thumbViewer = new ThumbViewer(docId, site_url+"/admin/document/page", totalPages);
+	
 	for(var i=0; i < totalPages; i++){
-		var data = {page_number: (i+1)};
+		var data = {page_number: (i+1), doc_id: docId};
 		var html = new EJS({url: base_url+'assets/templates/documents/thumbnail.ejs'}).render(data);
 		$("div#doc-images").append(html);
-		thumbViewer.nextPage();
+		thumbViewer.nextPage(renderPage);
 	}
 	
 	/**
@@ -24,11 +25,14 @@ $(document).ready(function(){
 	 *  
 	 */
 	$("div.doc-thumbnail").click(function(){
-		pageViewer.initialize();
+		/**
+		* TODO - Fix page viewer to show large size page overlay
+		* pageViewer.initialize();
+		* pageViewer.loadPage(page_url, page_number);
+		*/
 		var page_number = $(this).data('page-num');
 		var page_url = $(this).children("img").attr("src");
-		pageViewer.loadPage(page_url, page_number);
-		
+		window.open(page_url);
 	});
 	
 	

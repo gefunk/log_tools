@@ -62,25 +62,6 @@ class Contract extends MY_Admin_Controller {
 		}
 	}
 	
-
-	/**
-	 * Assign a document to a contract
-	 * this will remove the document from the Inbox
-	 * @param customer - customer id  of the customer 
-	 * @param contract - contract id to assign the document to
-	 * @param doc_id - the document id to assign
-	 */
-	public function assign_document(){
-		$customer = $this->input->post("customer");
-		$contract = $this->input->post("contract");
-		$doc_id = $this->input->post("doc_id");
-		$this->attachmentmodel->assign_document_to_contract($doc_id, $contract, $customer);
-		redirect('/admin/manage/'+$contract);
-	}
-	
-	
-
-	
 	public function manage($contract_id){
 		$contract = (object) $this->contractmodel->get_contract_from_id($contract_id);
 		$contract->carrier = (object) $this->carriermodel->get_carrier_by_id($contract->carrier);
@@ -97,6 +78,53 @@ class Contract extends MY_Admin_Controller {
 		$this->load->view("admin/customers/manager-footer");
 		$this->load->view('admin/footer', $footer_data);
 	}
+
+	/**
+	 * Assign a document to a contract
+	 * this will remove the document from the Inbox
+	 * @param customer - customer id  of the customer 
+	 * @param contract - contract id to assign the document to
+	 * @param doc_id - the document id to assign
+	 */
+	public function assign_document(){
+		$customer = $this->input->post("customer");
+		$contract = $this->input->post("contract");
+		$doc_id = $this->input->post("doc_id");
+		$this->attachmentmodel->assign_to_contract($doc_id, $contract, $customer);
+		$url = "/admin/contract/manage/$contract";
+		redirect($url, "refresh");
+	}
+	
+	/**
+	 * show view of all documents for a contract
+	 * @param $contract - contract id
+	 */
+	public function documents($contract){
+		$data['contract'] =  (object) $this->contractmodel->get_contract_from_id($contract);
+		$data["customer"] =  $this->customermodel->get_from_contract($contract);
+		$data["carriers"] = $this->referencemodel->get_carriers();
+		$data["documents"] = $this->attachmentmodel->get_for_contract($contract);
+		$data['page'] = 'contracts';
+		
+		$header_data['title'] = "Documents Associated With Contract ".$data['contract']->number;
+		$header_data['page_css'] = array(
+			"app/documents/thumbnail.css", 
+			"app/documents/overlay.css", 
+			"app/admin/contract/document/list.css",
+			"app/admin/tag.css");
+		
+		$footer_data["scripts"] = array("admin/contract/document/docreader.js", "admin/contract/document/list.js");
+
+		$this->load->view('admin/header', $header_data);
+		$this->load->view("admin/customers/manager-header", $data);
+		$this->load->view('admin/contract/document/list', $data);
+		$this->load->view("admin/customers/manager-footer");
+		$this->load->view('admin/footer', $footer_data);
+	}
+	
+
+	
+	
 	
 	
 	/**
@@ -110,8 +138,8 @@ class Contract extends MY_Admin_Controller {
 		$data["carriers"] = $this->referencemodel->get_carriers();
 		$data['page'] = 'contracts';
 		
-		$header_data['title'] = "All Contracts";
-		$footer_data["scripts"] = array("admin/contract/view.js", "admin/contract/upload.js");
+		$header_data['title'] = "All Documents";
+		$footer_data["scripts"] = array("admin/contract/view.js");
 
 		$this->load->view('admin/header', $header_data);
 		$this->load->view("admin/customers/manager-header", $data);
