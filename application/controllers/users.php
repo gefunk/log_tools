@@ -113,12 +113,12 @@ class Users extends MY_In_Controller {
 	public function changerole(){
 		$email = $this->input->post("user_identity");
 		$role =  $this->input->post("role");
-		$customer_id = intval($this->session->userdata("customer_id"));
+		$customer_id = $this->session->userdata("customer_id");
 		// expire nginx cache after role change
 		$customer = $this->customermodel->get_customer_by_id($customer_id);
 		$this->nginxcache->expire($customer->subdomain, 'users');
 		
-		return $this->usermodel->set_user_role($email, $customer_id, $role);
+		return $this->usermodel->set_user_role($role,$email, $customer_id);
 		
 	}
 	
@@ -128,12 +128,12 @@ class Users extends MY_In_Controller {
 	public function changestatus(){
 		$email = $this->input->post("user_identity");
 		$status = (boolean) $this->input->post("status");
-		$customer_id = intval($this->session->userdata("customer_id"));
+		$customer_id = $this->session->userdata("customer_id");
 		// expire nginx cache after status change
 		$customer = $this->customermodel->get_customer_by_id($customer_id);
 		$this->nginxcache->expire($customer->subdomain, 'users');
 		
-		return $this->usermodel->set_user_status($email, $customer_id, $status);
+		return $this->usermodel->set_user_status($status,$email, $customer_id);
 		
 	}
 

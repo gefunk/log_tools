@@ -12,7 +12,7 @@
 	  				<a href="<?php echo site_url().'/admin/contract/all/'.$customer->_id; ?>">Contracts</a>
 	  			</li>
 	  			<li class="<?php echo ($page == 'users') ? 'active' : ''; ?>">
-	  				<a href="#">Users</a>
+	  				<a href="<?php echo site_url().'/admin/users/all/'.$customer->_id; ?>">Users</a>
 	  			</li>
 			</ul>
 		</div>
