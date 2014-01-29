@@ -83,9 +83,25 @@ class UserModel extends Base_Model
 	/**
 	 * reset a user's password
 	 */
-	function reset_password($identity, $customer_id, $new_password){
-		$query = array("email"=>$identity, "customer" => $customer_id);
+	function change_password($new_password, $customer_id, $identity=NULL, $user_id=NULL){
+		$query = NULL;
+		if(isset($user_id)){
+			$query = array("_id"=>new MongoId($user_id));
+		}else{
+			$query = array("email"=>$identity, "customer" => $customer_id);	
+		}
 		$update = array('$set' => array("password" => $this->bcrypt->hash($new_password)));
+		return $this->mongo->db->users->update($query, $update);
+	}
+	
+	function change_password_on_next_signin($customer_id=NULL, $identity=NULL, $user_id=NULL){
+		$query = NULL;
+		if(isset($user_id)){
+			$query = array("_id"=>new MongoId($user_id));
+		}else{
+			$query = array("email"=>$identity, "customer" => $customer_id);	
+		}
+		$update = array('$set' => array("reset_on_signon" => true));
 		return $this->mongo->db->users->update($query, $update);
 	}
 	
@@ -106,6 +122,15 @@ class UserModel extends Base_Model
 		return FALSE;
 	}
 	
+	/**
+	 * get a user by user id
+	 * @param $user_id - user id for the user you are trying to get
+	 */
+	function get_by_id($user_id){
+		$query = array("_id" => new MongoId($user_id));
+		$doc = $this->mongo->db->users->findOne($query);
+		return $this->convert_mongo_result_to_object($doc);
+	}
 
 	/**
 	 * get the user name based on user hash
@@ -145,7 +170,7 @@ class UserModel extends Base_Model
 	function get_users_for_customer($customer_id){
 		$query = array("customer" => $customer_id);
 		$projection = array("active" => 1, "reset" => 1, "role" => 1, "email" => 1);
-		return $this->convert_mongo_result_to_object($this->mongo->db->users->find($query, $projection));
+		return $this->convert_mongo_result_to_object($this->mongo->db->users->find($query, $projection)->sort(array("email"=>1)));
 	}
 	
 	

@@ -44,5 +44,20 @@ class AdminuserModel extends Base_Model
 	}
 	
 	
+	/**
+	 * get the first name , last name from the hash
+	 * @param $hash - the hash saved in the session, usually associated with the password
+	 */
+	function get_from_hash($hash){
+		$this->db->select("first_name,last_name")->from("admin_users")->where("password", $hash);
+		$query = $this->db->get();
+		// should only be one result for a hash
+		if($query->num_rows() == 1){
+			return $query->row();
+		}
+		return FALSE;
+	}
+	
+	
 	
 }
