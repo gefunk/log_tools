@@ -68,7 +68,7 @@ class Users extends MY_In_Controller {
 			$notes = $this->input->post("notes");
 			$customer_id = $this->session->userdata("customer_id");
 			$logged_in_user = $this->usermodel->get_user_for_hash($this->session->userdata('amfitir_loggedin'));
-			$customer = $this->customermodel->get_customer_by_id($customer_id);
+			$customer = $this->customermodel->get_by_id($customer_id);
 			// generate temporary password
 			$password = $this->usermodel->generatePassword();
 			// save the user
