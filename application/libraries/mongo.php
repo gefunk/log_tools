@@ -13,12 +13,18 @@ class CI_Mongo extends Mongo
 
         // Fetch Mongo server and database configuration
         $server = $ci->config->item('mongo_server');
+		$username = $ci->config->item('mongo_username');
+		$password = $ci->config->item('mongo_password');
         $dbname = $ci->config->item('mongo_dbname');
 
         // Initialise Mongo
         if ($server)
         {
-            parent::__construct($server);
+        	if($username && $password) {
+            	parent::__construct("mongodb://$username:$password@$server");
+			} else {
+				parent::__construct("mongodb://$server");
+			}
         }
         else
         {
