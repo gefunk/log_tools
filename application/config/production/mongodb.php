@@ -19,3 +19,5 @@
  
 $config['mongo_server'] = "mongo.amfitir.com:27017";
 $config['mongo_dbname'] = 'ratemgt';
+$config['mongo_username'] = 'amfitir_application';
+$config['mongo_password'] = "4gq5F5tWjpJEAwN";
