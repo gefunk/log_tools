@@ -21,9 +21,9 @@ class CI_Mongo extends Mongo
         if ($server)
         {
         	if($username && $password) {
-            	parent::__construct("mongodb://$username:$password@$server");
+            	parent::__construct("mongodb://$username:$password@$server/$dbname");
 			} else {
-				parent::__construct("mongodb://$server");
+				parent::__construct("mongodb://$server/$dbname");
 			}
         }
         else
