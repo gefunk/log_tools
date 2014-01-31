@@ -18,7 +18,7 @@ class UserModel extends Base_Model
 	*/
 	function check_login($identity, $input_password, $customer_id)
 	{
-		$query = array("active" => true, "email" => $identity, "password" => $encrypted_password, 'customer' => $customer_id);
+		$query = array("active" => true, "email" => $identity, 'customer' => $customer_id);
 		$projection = array("password" => 1);
 		$doc = $this->mongo->db->users->findOne($query, $projection);
 		/**

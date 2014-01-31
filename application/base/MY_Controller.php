@@ -25,16 +25,16 @@ class MY_Controller extends CI_Controller {
 				if($customer != null){
 					// set customer information into session and cookie
 					$customer_data = array(
-						"customer_id" => $customer["id"],
-						"customer_name" => $customer["name"]
+						"customer_id" => $customer->id,
+						"customer_name" => $customer->name
 					);
-					log_message('debug', 'Customer: '.$customer["id"]." Name: ".$customer["name"]);
+					log_message('debug', 'Customer: '.$customer->id." Name: ".$customer->name);
 					// set customer session data
 					$this->session->set_userdata($customer_data);
 					// set the cookie for the customer
 					$customer_cookie = array(
 			    		'name'   => 'amfitir_customer',
-			    		'value'  => $customer["id"],
+			    		'value'  => $customer->id,
 			    		'expire' => '86500', // set to 24 hours
 			    		'secure' => TRUE
 					);
