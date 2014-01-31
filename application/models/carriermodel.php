@@ -19,8 +19,8 @@ class CarrierModel extends Base_Model
 	    return $result;
 	}
 	
-	function get_carrier_by_id($id){
-		$key = 'get_carrier_by_id-'.$id;
+	function get_by_id($id){
+		$key = 'carriermodel->get_by_id->'.$id;
 		if(! $result = $this->cache->get($key)){
 			$carrier_id = new MongoId($id);
 			$result = $this->convert_mongo_result_to_object($this->mongo->db->carriers->findOne(array('_id' => $carrier_id)));
