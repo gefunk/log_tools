@@ -72,18 +72,9 @@ class CustomerModel extends Base_Model
 	{
 		$key = 'get_customer_by_domain-'.$domain;
 		if(! $customer = $this->cache->get($key)){
-		
-			$this->db->select("id, name")->from("customers")->where("subdomain", $domain);
-			$query = $this->db->get();
-			$customer = array();
-			if ($query->num_rows() > 0)
-			{
-			   foreach ($query->result() as $row)
-			   {
-					$customer["id"] = $row->id;
-					$customer["name"] = $row->name;
-				}
-			}
+			$query = array("subdomain" => $domain);
+			$result = $this->mongo->db->customers->findOne($query);
+			$customer = $this->convert_mongo_result_to_object($result);
 			$this->cache->save($key, $customer, WEEK_IN_SECONDS);
 		}
 		return $customer;
@@ -91,20 +82,14 @@ class CustomerModel extends Base_Model
 	
 	function get_subdomain_from_id($id)
 	{
-		$key = 'get_subdomain_from_id-'.$domain;
+		$key = 'get_subdomain_from_id-'.$id;
 		if(! $result = $this->cache->get($key)){
-			$this->db->select("subdomain")->from("customers")->where("id", $id);
-			$query = $this->db->get();
-			$result = NULL;
-			if ($query->num_rows() > 0)
-			{
-			   foreach ($query->result() as $row)
-			   {
-					$result = $row->group;
-				}
-			}
+			$query = array("_id" => new MongoId($id));
+			$projection = array("subdomain" => 1);
+			$result = $this->convert_mongo_result_to_object($this-$this->mongo->db->customers->findOne($query, $projection));
+			 
 			if(isset($result))
-				$this->cache->save($key, $result, WEEK_IN_SECONDS);
+				$this->cache->save($key, $result->subdomain, WEEK_IN_SECONDS);
 		}
 		return $result;
 	}
