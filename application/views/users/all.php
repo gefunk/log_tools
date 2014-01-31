@@ -14,12 +14,12 @@
 			</tr>
 			<?php foreach($users as $user): ?>
 			<tr>
-				<td><?php echo $user['email']; ?></td>
+				<td><?php echo $user->email; ?></td>
 				<td>
 					<div class="btn-group">
 					  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 					  	<span class="text">
-					    	<?php echo ($user['active']) ? "Active" : "Inactive"; ?>
+					    	<?php echo ($user->active) ? "Active" : "Inactive"; ?>
 					    </span>
 					    <span class="caret"></span>
 					  </a>
@@ -27,10 +27,10 @@
 					    <li>
 					    	<a 
 					    		class="user-status"
-					    		data-id="<?php echo $user['email']; ?>"
-					    		data-status="<?php echo ($user['active']) ? "0" : "1"; ?>"
+					    		data-id="<?php echo $user->email; ?>"
+					    		data-status="<?php echo ($user->active) ? "0" : "1"; ?>"
 					    		href="#">
-					    		<?php echo ($user['active']) ? "Deactivate" : "Activate"; ?>
+					    		<?php echo ($user->active) ? "Deactivate" : "Activate"; ?>
 					    	</a>
 					    </li>
 					  </ul>
@@ -40,7 +40,7 @@
 					<div class="btn-group">
 					  <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
 					  	<span class="text">
-					    	<?php echo ($user['role']); ?>
+					    	<?php echo ($user->role); ?>
 					    </span>
 					    <span class="caret"></span>
 					  </a>
@@ -48,7 +48,7 @@
 					    <li>
 					    	<a 
 					    		class="role-change"
-					    		data-id="<?php echo $user['email']; ?>"
+					    		data-id="<?php echo $user->email; ?>"
 					    		data-role="admin"
 					    		href="#">
 					    		admin
@@ -57,7 +57,7 @@
 					    <li>
 					    	<a 
 					    		class="role-change"
-					    		data-id="<?php echo $user['email']; ?>"
+					    		data-id="<?php echo $user->email; ?>"
 					    		data-role="regular"
 					    		href="#">
 					    		regular
