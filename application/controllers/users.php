@@ -11,6 +11,7 @@ class Users extends MY_In_Controller {
 		$this->load->model("customermodel");
 		$this->load->library('form_validation');
 		$this->load->library('nginxcache');
+		$this->load->library('auth');
 	}
 
 	public function index(){
@@ -70,7 +71,7 @@ class Users extends MY_In_Controller {
 			$logged_in_user = $this->usermodel->get_user_for_hash($this->session->userdata('amfitir_loggedin'));
 			$customer = $this->customermodel->get_by_id($customer_id);
 			// generate temporary password
-			$password = $this->usermodel->generatePassword();
+			$password = $this->auth->generatePassword();
 			// save the user
 			$this->usermodel->add($email, $password, $name, $phone, $notes, $customer_id);
 			// send email to user
