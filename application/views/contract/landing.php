@@ -7,11 +7,12 @@
 	<div class="span12">
 	<?php foreach($contracts as $contract): ?>
 	<div class="span3">
-		<img 
+		<div 
 			class="carrier-img" 
-			src="<?php echo base_url().'assets/img/carriers/'.$contract->image; ?>" 
-			data-contract-id="<?php echo $contract->_id; ?>"
-			data-pages="<?php echo $contract->number_of_pages; ?>" />
+			data-contract-id="<?php echo $contract->_id; ?>">
+			<div class="carrier-sprite <?php echo $contract->carrier->sprite; ?>">
+			</div>
+		</div>
 	</div>
 	<?php endforeach; ?>
 	</div>
