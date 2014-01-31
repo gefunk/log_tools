@@ -53,7 +53,7 @@ class Users extends MY_In_Controller {
 		
 		
 		$header_data['title'] = "Add User";
-		$header_data['page_css'] = array('new-user.css','main/main.css');
+		$header_data['page_css'] = array('new-user.css','app/main/main.css');
 		$footer_data['selected_link'] = "users";
 		$footer_data['scripts'] = array('main/main.js');
 		$user_header_data["user_link"] = "new";
