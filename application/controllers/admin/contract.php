@@ -41,7 +41,7 @@ class Contract extends MY_Admin_Controller {
 		// retrieve all contracts for a customer	
 		$contracts = $this->contractmodel->get_contracts_for_customer($customer_id);
 		foreach($contracts as $contract){
-			$contract->carrier = $this->carriermodel->get_carrier_by_id($contract->carrier);
+			$contract->carrier = $this->carriermodel->get_by_id($contract->carrier);
 		}
 		
 		if($json){
@@ -65,7 +65,7 @@ class Contract extends MY_Admin_Controller {
 	
 	public function manage($contract_id){
 		$contract = (object) $this->contractmodel->get_contract_from_id($contract_id);
-		$contract->carrier = (object) $this->carriermodel->get_carrier_by_id($contract->carrier);
+		$contract->carrier = $this->carriermodel->get_by_id($contract->carrier);
 		$data['contract'] = $contract;
 		$data["customer"] =  $this->customermodel->get_by_id($data['contract']->customer);
 		$data['page'] = 'contracts';
