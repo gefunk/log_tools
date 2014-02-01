@@ -116,7 +116,7 @@ class Users extends MY_In_Controller {
 		$role =  $this->input->post("role");
 		$customer_id = $this->session->userdata("customer_id");
 		// expire nginx cache after role change
-		$customer = $this->customermodel->get_customer_by_id($customer_id);
+		$customer = $this->customermodel->get_by_id($customer_id);
 		$this->nginxcache->expire($customer->subdomain, 'users');
 		
 		return $this->usermodel->set_user_role($role,$email, $customer_id);
@@ -131,7 +131,7 @@ class Users extends MY_In_Controller {
 		$status = (boolean) $this->input->post("status");
 		$customer_id = $this->session->userdata("customer_id");
 		// expire nginx cache after status change
-		$customer = $this->customermodel->get_customer_by_id($customer_id);
+		$customer = $this->customermodel->get_by_id($customer_id);
 		$this->nginxcache->expire($customer->subdomain, 'users');
 		
 		return $this->usermodel->set_user_status($status,$email, $customer_id);
