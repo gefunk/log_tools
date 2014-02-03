@@ -185,12 +185,14 @@ class Services extends CI_Controller {
 		    ->set_output(json_encode($result));
 	}
 	
-	public function get_ports_for_group($group_id)
+	public function get_ports_for_group($contract_id, $group_id)
 	{
-		$result = $this->portgroupmodel->get_ports_for_group($group_id);
+		$result = $this->portgroupmodel->get_ports_for_group($contract_id, urldecode($group_id));
 		$this->output
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($result));
+		    
+		//echo ($result);	    
 	}
 	
 	public function list_of_charge_codes($carrier_id)
