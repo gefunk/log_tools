@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class PortGroupModel extends CI_Model 
+class PortGroupModel extends Base_Model 
 {
     function __construct()
     {
@@ -13,7 +13,7 @@ class PortGroupModel extends CI_Model
 	function add_port_group($name, $contract)
 	{
 			
-		$group = array('_id' => new MongoId(), 'name' =>$name);
+		$group = array('name' =>$name);
 		$query = array("_id"=> new MongoId($contract));
 		$update = array('$addToSet' => array('port_groups' => $group));
 		$this->mongo->db->contracts->update($query, $update);
@@ -26,17 +26,16 @@ class PortGroupModel extends CI_Model
 	/*
 	* add a port group to this contract
 	*/
-	function add_port_to_group($port_id, $group_id)
+	function add_port_to_group($contract_id, $port_id, $group_name)
 	{
-		$data = array(
-			
-			"port_id" => $port_id,
-			"group_id" => $group_id
-		);
-		
-		$this->db->insert("contract_entry_port_groups", $data);
 		// clear the cache, so it is refreshed with the latest
-		$this->cache->delete('get_ports_for_group-'.$group_id);
+		$key = 'get_ports_for_group-'.$contract_id."-".$group_name;
+		$this->cache->delete($key);
+		
+		$query = array("_id" => new MongoId($contract_id), "port_groups.name" => $group_name);
+		$update = array('$addToSet' => array('port_groups.$.ports' => intval($port_id)));
+		$this->mongo->db->contracts->update($query, $update);
+		
 		$this->db->select("rp.id, rp.name, rp.country_code, rp.port_code, rcc.name as country_name, rp.rail, rp.road, rp.airport, rp.ocean, rp.found, ruscrc.name as state, rp.state_code as state_code");
 		$this->db->from('ref_ports rp');
 		$this->db->join('ref_country_codes rcc', 'rcc.code = rp.country_code');
@@ -54,10 +53,11 @@ class PortGroupModel extends CI_Model
 	 * @param $port_id the port to remove from the group
 	 * @param $group_id the group to remove the port from
 	 */
-	function remove_port_from_group($port_id, $group_id)
+	function remove_port_from_group($contract_id, $port_id, $group_name)
 	{
-		$this->db->delete('contract_entry_port_groups', array('port_id' => $port_id, 'group_id' => $group_id)); 
-		$this->cache->delete('get_ports_for_group-'.$group_id);
+		$query = array("_id" => new MongoId($contract_id), "port_groups.name" => $group_name);
+		$update = array('$pull' => array('port_groups.$.ports' => intval($port_id)));
+		$this->mongo->db->contracts->update($query, $update);
 	}
 	
 	/**
@@ -69,13 +69,9 @@ class PortGroupModel extends CI_Model
 		if(! $result = $this->cache->get($key)){
 			
 			$query = array('_id' => new MongoId($contract_id));
-			$projection = array("port_groups" => 1);
-			$cursor = $this->mongo->db->contracts->find($query, $projection);
+			$projection = array( "_id"=> 0, "port_groups" => 1);
+			$result = $this->convert_mongo_result_to_object($this->mongo->db->contracts->findOne($query, $projection));
 			
-			$result = array();
-			foreach($cursor as $doc){
-				$result[] = (object) $doc['port_groups'];
-			}
 			
 			if(!empty($results))
 				$this->cache->save($key, $results, WEEK_IN_SECONDS);
@@ -83,45 +79,24 @@ class PortGroupModel extends CI_Model
 		return $result;
 	}
 	
-	/*
-	* @param $group_id the id of the port group to retrieve
-	* @return the result with the port group if found
-	*/
-	function get_port_group($group_id)
-	{
-		$key = "get_port_groups-".$group_id;
-		if(! $result = $this->cache->get($key)){
-			$this->db->select("name");
-			$this->db->from("contract_entry_port_group_name");
-			$this->db->where("id", $group_id);
-			$query = $this->db->get();
-			$result = NULL;
-			if ($query->num_rows() > 0)
-			{
-			   $result = $query->row();
-			   $this->cache->save($key, $result, WEEK_IN_SECONDS);
-		   	}
-		}
-		return $result;
-	}
-	
+
 	/**
 	 * get all ports in a group
 	 */
-	function get_ports_for_group($group_id)
+	function get_ports_for_group($contract_id, $group_name)
 	{
-		$key = 'get_ports_for_group-'.$group_id;
+		
+		$key = 'get_ports_for_group-'.$contract_id."-".$group_name;
 		if(! $data = $this->cache->get($key)){
 		
-			$this->db->select("port_id");
-			$this->db->from("contract_entry_port_groups");
-			$this->db->where("group_id", $group_id);
-			$query = $this->db->get();
+			$query = array('_id' => new MongoId($contract_id));
+			$projection = array("port_groups"=> array('$elemMatch' => array("name" => $group_name)));
+			$group_result = $this->convert_mongo_result_to_object($this->mongo->db->contracts->findOne($query, $projection));
 			
-			if($query->num_rows() > 0){
+			if($group_result && isset($group_result->port_groups[0]['ports'])){
 				$port_in_clause = ""; 
-				foreach ($query->result() as $row) {
-					$port_in_clause .= $row->port_id.",";
+				foreach ($group_result->port_groups[0]['ports'] as $port) {
+					$port_in_clause .= $port.",";
 				}
 				
 				$port_in_clause = rtrim($port_in_clause, ",");

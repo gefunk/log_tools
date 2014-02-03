@@ -28,9 +28,10 @@ $(document).ready(function(){
 	$.get(
 		site_url+'/services/get_port_groups/'+contract_id,
 		function(data){
-			for(var i in data){
-				var html = new EJS({url: base_url+'assets/templates/admin/contract/port_options.ejs'}).render(data[i]);
-				$("#port-groups").append(html);
+			for(var i in data.port_groups){
+				var template_data = {id: data.port_groups[i].name, name: data.port_groups[i].name};
+				var html = new EJS({url: base_url+'assets/templates/admin/contract/port_options.ejs'}).render(template_data);
+				$("select#port-groups").append(html);
 			}
 		}
 	);
@@ -51,10 +52,10 @@ $(document).ready(function(){
 	});
 	
 	
-	$("#port-groups").change(function(){
+	$("select#port-groups").change(function(){
 		$("ul#ports-list li").remove();
 		$.get(
-			site_url+"/services/get_ports_for_group/"+$(this).val(),
+			site_url+"/services/get_ports_for_group/"+contract_id+"/"+$(this).val(),
 			function(data){
 				var html = " ";
 				for(var i in data.results){
@@ -78,9 +79,8 @@ $(document).ready(function(){
 	$("button#add-port-to-group").click(function(){
 		var port_id = $("input#port-input").data("value");
 		if(port_id != null && port_id.length > 0){
-			$.post(site_url+"/admin/contract/save_new_port_to_group", {port_id: port_id, group_id: $("#port-groups").val()})
+			$.post(site_url+"/admin/contract/save_new_port_to_group", {contract_id: contract_id, port_id: port_id, group_id: $("#port-groups").val()})
 			.done(function(data){
-				console.log(data[0]);
 				var html = new EJS({url: base_url+'assets/templates/admin/contract/port-admin-li.ejs'}).render(data[0]);
 				$("ul#ports-list").append(html);
 			});
@@ -93,7 +93,7 @@ $(document).ready(function(){
 		var $li = $(this).parent("li");
 		$.post(
 			site_url+"/admin/contract/delete_port_from_group",
-			{group_id: $("#port-groups").val(), port_id: $li.data("port-id")}
+			{contract_id: contract_id, group_id: $("#port-groups").val(), port_id: $li.data("port-id")}
 		).done(function(){
 			$li.remove();	
 		});
