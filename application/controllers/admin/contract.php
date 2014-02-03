@@ -80,6 +80,91 @@ class Contract extends MY_Admin_Controller {
 		$this->load->view('admin/footer', $footer_data);
 	}
 
+
+	
+	/**
+	 * Add contract view
+	 */
+	public function add($customer_id){
+		
+		
+		$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
+		$data["customer"] =  $this->customermodel->get_by_id($customer_id);
+		$data["carriers"] = $this->referencemodel->get_carriers();
+		$data['page'] = 'contracts';
+		
+		$header_data['title'] = "All Documents";
+		$footer_data["scripts"] = array("admin/contract/view.js");
+
+		$this->load->view('admin/header', $header_data);
+		$this->load->view("admin/customers/manager-header", $data);
+		$this->load->view('admin/contract/new', $data);
+		$this->load->view("admin/customers/manager-footer");
+		$this->load->view('admin/footer', $footer_data);
+	}
+	
+		/**
+	* add a new contract into the system
+	* accessible via /admin/contract/add
+	*/
+	public function save($customer_id)
+	{
+		//retrieve post variables
+		$customer = $customer_id;
+		$carrier = $this->input->post('carrier');
+		$contract_number = $this->input->post('contract_number');
+		$start_date = $this->input->post('start_date');
+		$end_date = $this->input->post('end_date');
+			// add contract to database
+		$this->contractmodel->
+				add_contract(
+					$contract_number,
+					$this->get_mongo_date($start_date),
+					$this->get_mongo_date($end_date),
+					$customer,
+					$carrier
+				);
+				
+			
+			
+		redirect("admin/contract/all/".$customer_id);
+
+	}
+
+	/**
+	* delete a contract from the system
+	*/
+	public function delete($customer_id, $contract_id)
+	{
+
+		// delete contract
+		$this->contractmodel->delete($contract_id);
+
+
+		$header_data['title'] = "View Contracts";
+		// pass javascript to footer
+		$footer_data["scripts"] = array("admin/contract/view.js");
+		// load data from database
+		$data["customer_id"] = $customer_id;
+		$data["carriers"] = $this->referencemodel->get_carriers();
+		$data['customers'] = $this->customermodel->get_customers();
+		$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
+		// reload the view with success message;
+		$message['type'] = "success";
+		$message["body"] = "Deleted Contract Successfully!";
+		$header_data["messages"] = array($message);
+		$this->load->view('admin/header', $header_data);
+		$this->load->view('admin/contract/view', $data);
+		$this->load->view('admin/footer', $footer_data);
+	}
+	
+	
+	/**
+	 * ------------------------------------------------------------------------
+	 * DOCUMENTS SECTION
+	 * ------------------------------------------------------------------------
+	 */
+	
 	/**
 	 * Assign a document to a contract
 	 * this will remove the document from the Inbox
@@ -125,53 +210,14 @@ class Contract extends MY_Admin_Controller {
 	
 
 	
-	
-	
-	
-	/**
-	 * Add contract view
+	/** 
+	 * ------------------------------------------------------------------------
+	 * CONTAINER's section
+	 * ------------------------------------------------------------------------
 	 */
-	public function add($customer_id){
-		
-		
-		$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
-		$data["customer"] =  $this->customermodel->get_by_id($customer_id);
-		$data["carriers"] = $this->referencemodel->get_carriers();
-		$data['page'] = 'contracts';
-		
-		$header_data['title'] = "All Documents";
-		$footer_data["scripts"] = array("admin/contract/view.js");
+	
+	
 
-		$this->load->view('admin/header', $header_data);
-		$this->load->view("admin/customers/manager-header", $data);
-		$this->load->view('admin/contract/new', $data);
-		$this->load->view("admin/customers/manager-footer");
-		$this->load->view('admin/footer', $footer_data);
-	}
-	
-	
-	
-	/**
-	 * Manage ports view
-	 */
-	public function ports($contract_id)
-	{
-		$data['customer'] = $this->customermodel->get_from_contract($contract_id);
-		$data['port_groups'] = $this->portgroupmodel->get_port_groups_for_contract($contract_id);
-		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
-		$header_data['title'] = "Manage Ports";
-		$header_data['page_css'] = array('lib/famfamflag.css', "admin/contract/port_groups.css");
-		// pass javascript to footer
-		$footer_data["scripts"] = array("admin/contract/ports.js");
-		$data['page'] = 'contracts';
-		$this->load->view('admin/header', $header_data);
-		$this->load->view("admin/customers/manager-header", $data);
-		$this->load->view('admin/contract/ports', $data);
-		$this->load->view("admin/customers/manager-footer");
-		$this->load->view('admin/footer', $footer_data);
-		
-	}
-	
 	public function containers($contract_id){
 		//$this->output->enable_profiler(TRUE);
 		$data['customer'] = $this->customermodel->get_from_contract($contract_id);
@@ -206,6 +252,14 @@ class Contract extends MY_Admin_Controller {
 		$rational_container_id =$this->input->post('type');
 		$this->containermodel->remove_container_from_contract($contract_id, $rational_container_id);
 	}
+	
+	
+	/** 
+	 * ------------------------------------------------------------------------
+	 * CARGO section
+	 * ------------------------------------------------------------------------
+	 */
+	 
 	
 	/**
 	 * load the cargo management screen
@@ -262,66 +316,33 @@ class Contract extends MY_Admin_Controller {
 	}
 	
 
-	/**
-	* add a new contract into the system
-	* accessible via /admin/contract/add
-	*/
-	public function save($customer_id)
-	{
-		//retrieve post variables
-		$customer = $customer_id;
-		$carrier = $this->input->post('carrier');
-		$contract_number = $this->input->post('contract_number');
-		$start_date = $this->input->post('start_date');
-		$end_date = $this->input->post('end_date');
-			// add contract to database
-		$this->contractmodel->
-				add_contract(
-					$contract_number,
-					$this->get_mongo_date($start_date),
-					$this->get_mongo_date($end_date),
-					$customer,
-					$carrier
-				);
-				
-			
-			
-		redirect("admin/contract/all/".$customer_id);
-
-	}
+	/** 
+	 * ------------------------------------------------------------------------
+	 * PORTS section
+	 * ------------------------------------------------------------------------
+	 */
 
 	/**
-	* delete a contract from the system
-	*/
-	public function delete($customer_id, $contract_id)
+	 * Manage ports view
+	 */
+	public function ports($contract_id)
 	{
-
-		// delete contract
-		$this->contractmodel->delete($contract_id);
-
-
-		$header_data['title'] = "View Contracts";
+		$data['customer'] = $this->customermodel->get_from_contract($contract_id);
+		$data['port_groups'] = $this->portgroupmodel->get_port_groups_for_contract($contract_id);
+		$data['contract'] = $this->contractmodel->get_contract_from_id($contract_id);
+		$header_data['title'] = "Manage Ports";
+		$header_data['page_css'] = array('lib/famfamflag.css', "app/admin/contract/port_groups.css");
 		// pass javascript to footer
-		$footer_data["scripts"] = array("admin/contract/view.js");
-		// load data from database
-		$data["customer_id"] = $customer_id;
-		$data["carriers"] = $this->referencemodel->get_carriers();
-		$data['customers'] = $this->customermodel->get_customers();
-		$data['contracts'] = $this->contractmodel->get_contracts_for_customer($customer_id);
-		// reload the view with success message;
-		$message['type'] = "success";
-		$message["body"] = "Deleted Contract Successfully!";
-		$header_data["messages"] = array($message);
+		$footer_data["scripts"] = array("admin/contract/ports.js");
+		$data['page'] = 'contracts';
 		$this->load->view('admin/header', $header_data);
-		$this->load->view('admin/contract/view', $data);
+		$this->load->view("admin/customers/manager-header", $data);
+		$this->load->view('admin/contract/ports', $data);
+		$this->load->view("admin/customers/manager-footer");
 		$this->load->view('admin/footer', $footer_data);
+		
 	}
-
-
-
-	/**
-	* SECTION - PORT GROUPS
-	*/
+	
 
 	/*
 	* save port groups in table
@@ -330,10 +351,7 @@ class Contract extends MY_Admin_Controller {
 	{
 		$name = $this->input->post("name");
 		$contract = $this->input->post("contract");
-
-		
 		$group_id =	$this->portgroupmodel->add_port_group($name, $contract);
-		
 
 		$response_data = array(
 			"name" => $name,
@@ -345,22 +363,33 @@ class Contract extends MY_Admin_Controller {
 		    ->set_output(json_encode($response_data));
 	}
 
-	
+	/**
+	 * save new port to an existing group
+	 * @param port_id - which port is to be added
+	 * @param group_id - which port group to add the port to
+	 */
 	public function save_new_port_to_group()
 	{
+		$contract_id = $this->input->post("contract_id"); 
 		$port_id = $this->input->post("port_id");
 		$group_id = $this->input->post('group_id');
 		
 		$this->output
 		    ->set_content_type('application/json')
-		    ->set_output(json_encode($this->portgroupmodel->add_port_to_group($port_id, $group_id)));
+		    ->set_output(json_encode($this->portgroupmodel->add_port_to_group($contract_id, $port_id, $group_id)));
 	}
 
+	/**
+	 * delete port from an existing group
+	 * @param port_id - which port is to be removed
+	 * @param group_id - which port group to remove port from
+	 */
 	public function delete_port_from_group()
 	{
+		$contract_id = $this->input->post("contract_id");
 		$port_id = $this->input->post("port_id");
 		$group_id = $this->input->post('group_id');
-		$this->portgroupmodel->remove_port_from_group($port_id, $group_id);
+		$this->portgroupmodel->remove_port_from_group($contract_id, $port_id, $group_id);
 	}
 
 
