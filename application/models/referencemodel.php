@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class ReferenceModel extends CI_Model 
+class ReferenceModel extends Base_Model 
 {
     function __construct()
     {
@@ -28,7 +28,7 @@ class ReferenceModel extends CI_Model
 	{
 		$key = 'get_carriers';
 		if(! $result = $this->cache->get($key)){
-			$result = (object) $this->mongo->db->carriers->find();
+			$result = $this->convert_mongo_result_to_object($this->mongo->db->carriers->find());
 			if($result){
 				$this->cache->save($key, $result, DAY_IN_SECONDS);
 			}
