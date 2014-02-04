@@ -11,7 +11,7 @@
 			<select id="carrier" name="carrier">
 				<option value="0">-- Please Select Carrier --</option>
 				<?php foreach($carriers as $carrier): ?>
-					<option value="<?php echo $carrier['_id'] ?>"><?php echo $carrier['name']; ?></option>
+					<option value="<?php echo $carrier->_id; ?>"><?php echo $carrier->name; ?></option>
 				<?php endforeach; ?>
 			</select>
 			<span class="help-block">The carrier which wrote this contract.</span>
