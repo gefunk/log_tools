@@ -202,8 +202,8 @@
     <div class="row footer">
         <div class="span12">
             <ul class="links">
-                <li><a href="#"><img src="<?php echo base_url(); ?>assets/img/icons/twitter.png" alt="twitter" /></a></li>
-                <li><a href="#"><img src="<?php echo base_url(); ?>assets/img/icons/facebook.png" alt="fb" /></a></li>
+                <li><a href="https://twitter.com/amfitir"><img src="<?php echo base_url(); ?>assets/img/icons/twitter.png" alt="twitter" /></a></li>
+                <li><a href="http://www.facebook.com/amfitir"><img src="<?php echo base_url(); ?>assets/img/icons/facebook.png" alt="fb" /></a></li>
                 <li><a href="#">Support</a></li>
                 <li><a href="#">Privacy Policy</a></li>
                 <li><a href="#">Jobs</a></li>
