@@ -54,8 +54,9 @@ $(document).ready(function(){
 	
 	$("select#port-groups").change(function(){
 		$("ul#ports-list li").remove();
-		$.get(
-			site_url+"/services/get_ports_for_group/"+contract_id+"/"+$(this).val(),
+		$.post(
+			site_url+"/services/get_ports_for_group",
+			{contract_id: contract_id, group_id: $(this).val()},
 			function(data){
 				var html = " ";
 				for(var i in data.results){
