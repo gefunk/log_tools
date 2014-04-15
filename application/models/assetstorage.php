@@ -5,8 +5,6 @@ class Assetstorage extends CI_Model{
 	public function __construct()
 	{
 		parent::__construct();
-		// Load Amazon library
-		$this->load->library('awslib');
 		// Define a mebibyte
 		define('MB', 1048576);
 
