@@ -5,7 +5,6 @@ class Customer extends MY_Admin_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('awslib');
 		$this->load->model('attachments/datastore');
 		$this->load->helper('form');
 		$this->load->model('customermodel');
