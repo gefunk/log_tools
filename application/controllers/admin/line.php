@@ -153,7 +153,7 @@ class Line extends MY_Admin_Controller {
 		
 		
 		$line_items = array();
-		$cursor = $this->lineitemmodel->get_line_items_for_contract(intval($contract_id));
+		$cursor = $this->lineitemmodel->get_line_items_for_contract($contract_id);
 		while ( $cursor->hasNext() )
 		{
 		    $li = $this->convert_li_to_view($cursor->getNext());
